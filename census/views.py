@@ -2,6 +2,7 @@ import csv
 
 from django.forms.models import model_to_dict
 from django.http import StreamingHttpResponse
+from django.shortcuts import render
 
 from . import models
 
@@ -40,3 +41,6 @@ def export_events(request):
     response['Content-Disposition'] = 'attachment; filename="census_events.csv"'
     return response
 
+
+def index(request):
+    return render(request, 'index.html')
