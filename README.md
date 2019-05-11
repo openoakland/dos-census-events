@@ -12,6 +12,13 @@ Find census events and resources near you.
 - Integrate with SwORD via CSV export
 
 
+## Usage
+
+### Create calendar events
+
+[Create an event](http://localhost:8000/admin/census/event/add/).
+
+
 ## Development
 
 
