@@ -31,11 +31,11 @@ Install python dependencies.
 
 Initialize the database.
 
-    $ python census/manage.py migrate
+    $ python manage.py migrate
 
 Create an admin user by following the prompts.
 
-    $ python census/manage.py createsuperuser
+    $ python manage.py createsuperuser
 
 
 ### Working with database migrations
@@ -43,4 +43,4 @@ Create an admin user by following the prompts.
 Anytime you make a change to the models, you should try to run makemigrations to
 generate a database migration.
 
-    $ python census/manage.py makemigrations census
+    $ python manage.py makemigrations census
