@@ -1,4 +1,17 @@
 {% extends '_base.html' %}
 {% block content %}
 <h1>Hello, Events</h1>
+<div class="usa-grid">
+{% for event in events %}
+
+    <div class="usa-width-one-whole">
+        <h4>{{ event.title }}</h4>
+        <p>Organization:{{ event.organization_name}}<br>
+        Description: {{ event.description}}<br>
+        When: {{ event.start_datetime}}<br>
+        Approval Status: {{ event.approval_status }}</p>
+        <button class="usa-button">Approve</button>
+    </div>
+{% endfor %}
+</div>
 {% endblock %}
