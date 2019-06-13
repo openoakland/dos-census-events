@@ -25,16 +25,42 @@ Find census events and resources near you.
 ### Prerequisites
 
 - Python 3
-- virtualenv
+- pipenv
 
-We assume you are installing to a python virtualenv.
+We assume you are installing to a python virtualenv using pipenv.
+
+Check your versions (optional):
+
+    $ python --version
+    $ python3 --version
+    $ pip --version
+    $ pipenv --version
 
 
 ### Setup
 
+ONLY do this in the dos-census-events directory.
+Ensure you are currenty in the project directory.
+
+
+#### Initialize new project virtualenv and enter the environment shell:
+
+Initialize environment.
+
+    $ pipenv --python 3
+
+Enter environment shell.
+
+    $ pipenv shell
+
+Documentation resource: https://docs.python-guide.org/dev/virtualenvs/
+
+
+#### Install the requirements, initialize database and create a super user:
+
 Install python dependencies.
 
-    $ pip install -r requirements.txt
+    $ pipenv install -r requirements.txt
 
 Initialize the database.
 
@@ -43,6 +69,20 @@ Initialize the database.
 Create an admin user by following the prompts.
 
     $ python manage.py createsuperuser
+
+
+### Starting the Django server locally:
+
+    $ python manage.py runserver
+
+
+### Quitting the server and exiting the shell:
+
+Quit the server using CONTROL-C
+
+Exiting the shell using CONTROL-D or
+
+    $ exit
 
 
 ### Working with database migrations
