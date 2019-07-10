@@ -28,3 +28,8 @@ class Event(models.Model):
 
     # If you need pending and active, use Event.with_pending instead of Event.objects
     #with_pending = models.Manager()
+
+class GoogleEvent(models.Model):
+    google_calendar_id = models.CharField(max_length=100)
+    event = models.OneToOneField(Event, on_delete=models.CASCADE, related_name='google_event')
+    published = models.DateTimeField(help_text="Time when the Event was published")
