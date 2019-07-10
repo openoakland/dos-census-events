@@ -99,11 +99,11 @@ def google_publish_event(event):
       'location': event.location,
       'description': event.description,
       'start': {
-        'dateTime': event.start_datetime,
+        'dateTime': event.start_datetime.isoformat(),
         'timeZone': 'America/Los_Angeles',
       },
       'end': {
-        'dateTime': event.end_datetime,
+        'dateTime': event.end_datetime.isoformat(),
         'timeZone': 'America/Los_Angeles',
       },
       #'recurrence': [
@@ -141,5 +141,5 @@ def google_publish_event(event):
     result = service.events().insert(calendarId=settings.GOOGLE_CALENDAR_ID, body=payload).execute()
     print ('Event created: %s' % (result.get('htmlLink')))
 
-    google_event = models.GoogleEvent(event=event, google_calendar_id=result['id'])
+    google_event = models.GoogleEvent(event=event, google_calendar_id=result['id'], published = datetime.datetime.now())
     google_event.save()
