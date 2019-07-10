@@ -1,4 +1,5 @@
 from django.db import models
+from recurrence.fields import RecurrenceField
 
 from . import constants
 
@@ -16,6 +17,7 @@ class Event(models.Model):
     description = models.TextField(blank=True, help_text="Full description of the event")
     start_datetime = models.DateTimeField(help_text="When does this event start?")
     end_datetime = models.DateTimeField(help_text="When does the event end?")
+    recurrences = RecurrenceField(default=None, blank=True)
     organization_name = models.CharField(max_length=100, help_text="Name of the hosting organization")
     event_type = models.CharField(max_length=20, choices=[(t.name, t.value) for t in constants.EventType])
     location = models.CharField(max_length=100, help_text="Location where the event will take place")
