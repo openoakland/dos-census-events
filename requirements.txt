@@ -1,9 +1,27 @@
 -i https://pypi.org/simple
+cachetools==3.1.0
+certifi==2019.3.9
+chardet==3.0.4
 django-admin==1.3.2
 django-excel-response2==2.0.8
 django-six==1.0.4
 django==2.2.1
+google-api-python-client==1.7.8
+google-auth-httplib2==0.0.3
+google-auth-oauthlib==0.3.0
+google-auth==1.6.3
+httplib2==0.12.3
+idna==2.8
+oauthlib==3.0.1
+pyasn1-modules==0.2.5
+pyasn1==0.4.5
 pytz==2019.1
+requests-oauthlib==1.2.0
+requests==2.21.0
+rsa==4.0
 screen==1.0.1
+six==1.12.0
 sqlparse==0.3.0
+uritemplate==3.0.0
+urllib3==1.24.3
 xlwt==1.3.0
