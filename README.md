@@ -34,7 +34,10 @@ to publish events on your behalf.
 1. Create a [Service Account](https://console.developers.google.com/iam-admin/serviceaccounts/create)
    for the project. Don't set any roles, they are not necessary.
 1. Create a (JSON) key for the Service Account and save the JSON file. Treat
-   this file as a secret, please don't commit it to GitHub.
+   this file as a secret, please don't commit it to GitHub. Save it to the
+   project root as `google-service-account.json`. You can save it to an
+   alternative location and set the `GOOGLE_SERVICE_ACCOUNT` environment
+   variable to the alternate path.
 1. Enable the [Calendar API](https://console.developers.google.com/apis/api/calendar-json.googleapis.com/overview)
    for the API Project you just created.
 1. Create a [Google Calendar](https://calendar.google.com/calendar/r/settings)
@@ -42,11 +45,26 @@ to publish events on your behalf.
    find your Service Account's email address in the [IAM
    Admin](https://console.developers.google.com/iam-admin/serviceaccounts).
    Allow the Service Account to "Make changes to events" for your calendar.
+ 1. Copy the Calendar Id from the settings in Google Calendar and set the
+    environment variable `GOOGLE_CALENDAR_ID`.
 
 
 ### Create calendar events
 
 [Create an event](http://localhost:8000/admin/census/event/add/).
+
+
+### Environment variables
+
+For development, you can set these in `.env` and pipenv will load them
+automatically.
+
+Variable | Description | Default
+-------- | ----------- | -------
+`GOOGLE_CALENDAR_ID` | The Google Calendar Id where events will be published. |
+`GOOGLE_SERVICE_ACCOUNT` | The local path to your Service Account JSON credentials. | `./google-service-account.json`
+`LOG_LEVEL` | Logging verbosity. | `INFO`
+`TIME_ZONE` | Set the server TZ to your local timezone.  | `America/Los_Angeles`
 
 
 ## Development
