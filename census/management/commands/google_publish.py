@@ -7,6 +7,7 @@ from django.core.management.base import BaseCommand, CommandError
 from census.models import Event, GoogleEvent
 from census.google_calendar import google_publish_event
 
+log = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -14,6 +15,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # TODO optimize the SQL query
+        log.info('starting publish...')
         for event in Event.objects.all():
             try:
                 event.google_event
@@ -22,19 +24,8 @@ class Command(BaseCommand):
                 pass
             else:
                 # GoogleEvent exists, so it's already published. We should skip.
+                log.debug('event already published event=%s', event.id)
                 continue
 
+            log.info('event not yet published event=%s', event.id)
             google_publish_event(event)
-
-            #google_event = None
-            #try:
-            #    google_event = GoogleEvent.objects.get(event=event)
-            #except ObjectDoesNotExist:
-            #    # This is okay, the GoogleEvent will be created when published.
-            #    pass
-
-            #if google_event:
-            #    # Already published, skip
-            #    continue
-
-            #google_publish_event(event)
