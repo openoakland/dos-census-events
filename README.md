@@ -7,12 +7,42 @@ Find census events and resources near you.
 
 - Events and resources
 - Partners can enter event information through forms
-- Events are published to google calendar
+- Events are published to Google Calendar
 - Export events via CSV
 - Integrate with SwORD via CSV export
 
+Instead of re-creating a calendar tool, we're leveraging a fantastic and proven
+one: Google Calendar.
+
 
 ## Usage
+
+Census Events creates a publishing workflow around Google Calendar. Currently,
+the publishing is one-way, from Census Events to Google Calendar.
+
+
+### Setup Google Calendar
+
+Census Events will publish events to Google Calendar. You need to create
+a Calendar as well as a [Service
+Account](https://developers.google.com/identity/protocols/OAuth2ServiceAccount),
+to publish events on your behalf.
+
+1. Make sure you are logged into Google with your G Suite account (you can also
+   use your personal account if you don't have a G Suite organization).
+1. Create a new [Google API Project](https://console.developers.google.com/apis/credentials).
+1. Create a [Service Account](https://console.developers.google.com/iam-admin/serviceaccounts/create)
+   for the project. Don't set any roles, they are not necessary.
+1. Create a (JSON) key for the Service Account and save the JSON file. Treat
+   this file as a secret, please don't commit it to GitHub.
+1. Enable the [Calendar API](https://console.developers.google.com/apis/api/calendar-json.googleapis.com/overview)
+   for the API Project you just created.
+1. Create a [Google Calendar](https://calendar.google.com/calendar/r/settings)
+   and share the calendar with your Service Account's email address. You can
+   find your Service Account's email address in the [IAM
+   Admin](https://console.developers.google.com/iam-admin/serviceaccounts).
+   Allow the Service Account to "Make changes to events" for your calendar.
+
 
 ### Create calendar events
 

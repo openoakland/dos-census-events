@@ -122,4 +122,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = 'static/'
 
-GOOGLE_CALENDAR_ID = os.environ.get('GOOGLE_CALENDAR_ID', 'openoakland.org_vbrd0poc6su2f6a0notsiu4qr8@group.calendar.google.com');
+# The Id of the calendar to which events will be published.
+GOOGLE_CALENDAR_ID = os.environ.get('GOOGLE_CALENDAR_ID', 'openoakland.org_vbrd0poc6su2f6a0notsiu4qr8@group.calendar.google.com')
+
+# Path to the Google Service Account with read/write access to the Google Calendar.
+GOOGLE_SERVICE_ACCOUNT = os.environ.get('GOOGLE_SERVICE_ACCOUNT', './google-service-account.json')
