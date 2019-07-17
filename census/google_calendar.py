@@ -28,9 +28,9 @@ def google_publish_event(event):
         'dateTime': event.end_datetime.isoformat(),
         'timeZone': 'America/Los_Angeles',
       },
-      #'recurrence': [
-      #  'RRULE:FREQ=DAILY;COUNT=2'
-      #],
+      'recurrence': None if str(event.recurrences) == '' else [
+          str(event.recurrences),
+          ] ,
       'visibility': 'private' if event.approval_status == constants.EventApprovalStatus.PENDING else 'public',
       #"extendedProperties": {
       #  "shared": {
