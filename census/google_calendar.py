@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime, timezone
 import pickle
 import os.path
 
@@ -46,5 +46,5 @@ def google_publish_event(event):
     result = service.events().insert(calendarId=settings.GOOGLE_CALENDAR_ID, body=payload).execute()
     print ('Event created: %s' % (result.get('htmlLink')))
 
-    google_event = models.GoogleEvent(event=event, google_calendar_id=result['id'], published = datetime.datetime.now())
+    google_event = models.GoogleEvent(event=event, google_calendar_id=result['id'], published = datetime.now(tz=timezone.utc))
     google_event.save()
