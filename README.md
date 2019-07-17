@@ -24,7 +24,7 @@ Find census events and resources near you.
 
 ### Prerequisites
 
-- Python 3
+- Python 3.6
 - pipenv
 
 We assume you are installing to a python virtualenv using pipenv.
@@ -60,7 +60,7 @@ Documentation resource: https://docs.python-guide.org/dev/virtualenvs/
 
 Install python dependencies.
 
-    $ pipenv install -r requirements.txt
+    $ pipenv install --dev
 
 Initialize the database.
 
