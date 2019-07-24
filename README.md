@@ -78,7 +78,7 @@ Variable | Description | Default
 
 ### Prerequisites
 
-- Python 3
+- Python 3.6
 - pipenv
 
 We assume you are installing to a python virtualenv using pipenv.
