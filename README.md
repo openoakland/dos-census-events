@@ -114,7 +114,7 @@ Documentation resource: https://docs.python-guide.org/dev/virtualenvs/
 
 Install python dependencies.
 
-    $ pipenv install -r requirements.txt
+    $ pipenv install --dev
 
 Initialize the database.
 
