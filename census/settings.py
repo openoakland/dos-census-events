@@ -107,7 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = os.environ.get('TIME_ZONE', 'America/Los_Angeles')
 
 USE_I18N = True
 
@@ -115,6 +115,32 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'default',
+        },
+    },
+    'formatters': {
+        'default': {
+            'format': '{asctime} [{name}] {levelname} {message}',
+            'style': '{',
+        },
+    },
+    'loggers': {
+        'census': {
+            'handlers': ['console'],
+            'level': os.getenv('LOG_LEVEL', 'INFO'),
+        },
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -122,4 +148,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = 'static/'
 
-GOOGLE_CALENDAR_ID = os.environ.get('GOOGLE_CALENDAR_ID', 'openoakland.org_vbrd0poc6su2f6a0notsiu4qr8@group.calendar.google.com');
+# The Id of the calendar to which events will be published.
+GOOGLE_CALENDAR_ID = os.environ.get('GOOGLE_CALENDAR_ID', 'openoakland.org_vbrd0poc6su2f6a0notsiu4qr8@group.calendar.google.com')
+
+# Path to the Google Service Account with read/write access to the Google Calendar.
+GOOGLE_SERVICE_ACCOUNT = os.environ.get('GOOGLE_SERVICE_ACCOUNT', './google-service-account.json')
