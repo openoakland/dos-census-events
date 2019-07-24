@@ -30,7 +30,9 @@ to publish events on your behalf.
 
 1. Make sure you are logged into Google with your G Suite account (you can also
    use your personal account if you don't have a G Suite organization).
-1. Create a new [Google API Project](https://console.developers.google.com/apis/credentials).
+1. Create a new [Google API
+   Project](https://console.developers.google.com/apis/credentials). Click on
+   "My Project" at the top of the page to create a new project.
 1. Create a [Service Account](https://console.developers.google.com/iam-admin/serviceaccounts/create)
    for the project. Don't set any roles, they are not necessary.
 1. Create a (JSON) key for the Service Account and save the JSON file. Treat
@@ -44,9 +46,13 @@ to publish events on your behalf.
    and share the calendar with your Service Account's email address. You can
    find your Service Account's email address in the [IAM
    Admin](https://console.developers.google.com/iam-admin/serviceaccounts).
-   Allow the Service Account to "Make changes to events" for your calendar.
- 1. Copy the Calendar Id from the settings in Google Calendar and set the
-    environment variable `GOOGLE_CALENDAR_ID`.
+   Allow the Service Account to "Make changes to events" to your calendar. To
+   access sharing settings, open your [Google Calendar
+   settings](https://calendar.google.com/calendar/r/settings) and then click the
+   calendar you just created from the left navigation under "Settings for my
+   calendars".
+1. Copy the Calendar Id from the settings in Google Calendar and set the
+   environment variable `GOOGLE_CALENDAR_ID`.
 
 
 ### Create calendar events
