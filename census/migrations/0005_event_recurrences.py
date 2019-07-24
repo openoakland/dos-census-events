@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='event',
             name='recurrences',
-            field=recurrence.fields.RecurrenceField(blank=True, default=None),
+            field=recurrence.fields.RecurrenceField(blank=True, default=''),
         ),
     ]
