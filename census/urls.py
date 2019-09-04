@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import url
+from django.views.i18n import JavaScriptCatalog
 from .views import index
 
 from . import views
@@ -23,4 +25,12 @@ urlpatterns = [
     path('', index, name='index'),
     path('admin/', admin.site.urls),
     path('export/events/', views.export_events),
+    path('submit/', views.add_event),
+]
+js_info_dict = {
+    'packages': ('recurrence', ),
+}
+urlpatterns += [
+    url(r'^jsi18n/$', JavaScriptCatalog.as_view(packages=['recurrence']),
+         name='javascript-catalog')
 ]

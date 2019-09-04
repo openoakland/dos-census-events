@@ -1,0 +1,15 @@
+{% extends '_base.html' %}
+{% block content %}
+<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
+<script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+<form action="/submit/" method="post">
+    {% csrf_token %}
+    {{ form.media }}
+    {{ form }}
+    </br>
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}
+{% block media %}
+{% endblock %}
