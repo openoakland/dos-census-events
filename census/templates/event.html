@@ -1,4 +1,6 @@
 {% extends '_base.html' %}
+{% load static %}
+{% static 'census/form.css' %}
 {% block content %}
 <script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
 <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
@@ -6,7 +8,25 @@
 <form action="/submit/" method="post">
     {% csrf_token %}
     {{ form.media }}
-    {{ form }}
+    <table>
+      <tbody>
+      {% for field in form %}
+      <tr>
+         <th>
+          {{ field.label_tag }}
+          {{ field.errors }}
+         </th>
+         <td>
+           {{ field }}
+           </br>
+          {% if field.help_text %}
+            <sup>{{ field.help_text }}</sup>
+          {% endif %}
+         </td>
+      </tr>
+      {% endfor %}
+     </tbody
+    </table>
     </br>
     <input type="submit" value="Submit">
 </form>
