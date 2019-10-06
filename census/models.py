@@ -15,7 +15,7 @@ from . import constants
 class Event(models.Model):
     title = models.CharField(max_length=100, help_text="Title or short description of the event")
     description = models.TextField(blank=True, help_text="Full description of the event")
-    recurrences = RecurrenceField(default=None, blank=True, help_text="Enter date of the event or information on a recurring event")
+    date_information  = RecurrenceField(default=None, blank=True, help_text="Add date of the event or rules for a recurring event")
     start_time = models.TimeField(help_text="What time does this event start? HH:MM:AM/PM")
     end_time = models.TimeField(help_text="What time does the event end? HH:MM:AM/PM")
     organization_name = models.CharField(max_length=100, help_text="Name of the hosting organization")
