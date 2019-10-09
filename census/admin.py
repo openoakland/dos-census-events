@@ -4,4 +4,4 @@ from .models import Event
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('title', 'date_information', 'start_time', 'end_time', 'location')
+    list_display = ('title', 'recurrences', 'start_time', 'end_time', 'location')
