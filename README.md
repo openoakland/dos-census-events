@@ -145,3 +145,14 @@ Anytime you make a change to the models, you should try to run makemigrations to
 generate a database migration.
 
     $ python manage.py makemigrations census
+
+
+## Localization
+
+Update the `.po` files for translators.
+
+    $ python manage.py makemessages --locale es
+
+Compile the translations for use in the application.
+
+    $ python manage.py compilemessage
