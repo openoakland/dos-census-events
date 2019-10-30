@@ -145,3 +145,12 @@ Anytime you make a change to the models, you should try to run makemigrations to
 generate a database migration.
 
     $ python manage.py makemigrations census
+    
+ ### Resources
+- [USWDS CSS Framework](https://designsystem.digital.gov/)
+- [Google Calender API Documentation](https://developers.google.com/calendar/)
+- [Django 2.2 Documentation](https://docs.djangoproject.com/en/2.2/)
+- [Pipenv Documentation](https://pipenv.readthedocs.io/en/latest/)
+- [SQLite Documentation](https://www.sqlite.org/docs.html)
+
+
