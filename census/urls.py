@@ -26,6 +26,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('export/events/', views.export_events),
     path('submit/', views.add_event),
+    path('pending/', views.PendingList.as_view(), name = 'pending_list'),
+    path('<int:pk>/update/', views.UpdateEvent.as_view(), name= 'event_update'),
 ]
 js_info_dict = {
     'packages': ('recurrence', ),
