@@ -17,6 +17,9 @@ class Event(models.Model):
     def __str__(self):
         return self.title
 
+    def first_date(self):
+        return self.recurrences.occurrences()[0].date()
+
     title = models.CharField(max_length=100, help_text="Title or short description of the event")
     description = models.TextField(blank=True, help_text="Full description of the event")
     recurrences  = RecurrenceField(default=None, blank=True, verbose_name='Date Information', help_text="Add date of the event or rules for a recurring event")
