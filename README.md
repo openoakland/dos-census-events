@@ -155,6 +155,10 @@ Create an admin user by following the prompts.
 
     $ python manage.py loaddata --app census events
 
+Setup CSS file references with Django
+
+    $ python manage.py collectstatic
+
 
 ### Starting the Django server locally:
 
