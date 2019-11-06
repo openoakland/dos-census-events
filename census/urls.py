@@ -32,6 +32,8 @@ urlpatterns = [
     path('event/<int:pk>/delete/', views.DeleteEvent.as_view(), name= 'event_delete'),
     url(r'^login/$', auth_views.LoginView.as_view(), name='login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
+    # this is to update list of events on the homepage based on datepicker selection
+    url(r'^events/$', views.get_events, name='get_events'),
 ]
 js_info_dict = {
     'packages': ('recurrence', ),

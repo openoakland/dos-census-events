@@ -1,6 +1,66 @@
 {% load static %}
 
 <header class="usa-header usa-header--basic">
+    <div class="grid-container">
+        {#   Banner section for "An official website of the United States government" #}
+        <div class="usa-banner">
+            <div class="usa-accordion">
+                <header class="usa-banner__header">
+                    <div class="usa-banner__inner">
+                        <div class="grid-col-auto">
+                            <img class="usa-banner__header-flag" src="../static/uswds-2.0.2/img/us_flag_small.png"
+                                 alt="U.S. flag">
+                        </div>
+                        <div class="grid-col-fill tablet:grid-col-auto">
+                            <p class="usa-banner__header-text">An official website of the United States
+                                government</p>
+                            <p class="usa-banner__header-action" aria-hidden="true">Here’s how you know</p>
+                        </div>
+                        <button class="usa-accordion__button usa-banner__button"
+                                aria-expanded="false" aria-controls="gov-banner">
+                            <span class="usa-banner__button-text">Here’s how you know</span>
+                        </button>
+                    </div>
+                </header>
+
+                <div class="usa-banner__content usa-accordion__content" id="gov-banner">
+                    <div class="grid-row grid-gap-lg">
+                        <div class="usa-banner__guidance tablet:grid-col-6">
+                            <img class="usa-banner__icon usa-media-block__img"
+                                 src="../static/uswds-2.0.2/img/icon-dot-gov.svg"
+                                 alt="Dot gov">
+                            <div class="usa-media-block__body">
+                                <p>
+                                    <strong>The .gov means it’s official.</strong>
+                                    <br>
+                                    Federal government websites often end in .gov or .mil. Before sharing sensitive
+                                    information, make sure you’re on a federal government site.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="usa-banner__guidance tablet:grid-col-6">
+                            <img class="usa-banner__icon usa-media-block__img"
+                                 src="../static/uswds-2.0.2/img/icon-https.svg" alt="Https">
+                            <div class="usa-media-block__body">
+                                <p>
+                                    <strong>The site is secure.</strong>
+                                    <br>
+                                    The <strong>https://</strong> ensures that you are connecting to the official
+                                    website
+                                    and that any information you provide is encrypted and transmitted securely.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {#  End banner section      #}
+        {#  Census Logo #}
+        <div class="height-10 tablet:grid-col-12 bg-white border-bottom-05 border-gray-30">
+            <img class="height-9" src="../static/census/img/main-logo-sm-2x.png"/>
+        </div>
+    </div>
     <div class="usa-nav-container">
         <div class="usa-navbar">
             <div class="usa-logo" id="basic-logo">
@@ -12,7 +72,7 @@
         </div>
         <nav aria-label="Primary navigation" class="usa-nav">
             <button class="usa-nav__close"><img src="{% static 'uswds-2.0.2/img/close.svg' %}" alt="close"></button>
-            <ul class="usa-nav__primary usa-accordion"> 
+            <ul class="usa-nav__primary usa-accordion">
                 <li class="usa-nav__primary-item">
                     <a class="usa-nav__link" href="javascript:void(0)">
                         <span>Review Events</span>
