@@ -6,6 +6,7 @@ from django.http import StreamingHttpResponse
 from django.shortcuts import render
 from django.views.generic.edit import UpdateView
 from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from . import models
 
@@ -72,10 +73,11 @@ def add_event(request):
 
     return render(request, 'event.html', {'form': form})
 
-class UpdateEvent(UpdateView):
+class UpdateEvent(LoginRequiredMixin, UpdateView):
     model = models.Event
     fields = '__all__'
     success_url = "/pending"
+    login_url = '/login/'
 
 class PendingList(ListView):
     model = models.Event
