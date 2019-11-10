@@ -1,8 +1,14 @@
 {% load static %}
 {% include 'includes/_head.html' %}
 <body>
-{% block content %}
-{% endblock %}
+    <!-- Overlay Needed by USWDS -->
+    <div class="usa-overlay"></div>
+
+    {% include 'includes/_nav.html' %}
+
+    {% block content %}
+    {% endblock %}
+
     <script src="{% static 'uswds-2.0.2/js/uswds.min.js' %}"></script>
     <script src="{% static 'fontawesome/js/all.min.js' %}"></script>
 </body>

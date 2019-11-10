@@ -17,3 +17,7 @@ django-multiselectfield = "*"
 
 [requires]
 python_version = "3.6"
+
+[scripts]
+migrate = "python manage.py migrate"
+runserver = "python manage.py runserver"

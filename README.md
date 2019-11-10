@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/openoakland/dos-census-events.svg?style=svg)](https://circleci.com/gh/openoakland/dos-census-events)
+
 # Census events and resources
 
 Find census events and resources near you.

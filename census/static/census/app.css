@@ -1,0 +1,26 @@
+div.recurrence-widget {
+  float: none !important;
+}
+
+body {
+  background-color: #fcfcfc;
+}
+
+.center-align {
+  text-align: center;
+}
+
+.section-card {
+  max-width: 72ex;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  background-color: #fff;
+  border: 1px solid #f0f0f0;
+}
+
+.checkbox-wrapper {
+  margin-top: 2em;
+}
