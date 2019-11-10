@@ -1,5 +1,6 @@
 from django.db import models
 from recurrence.fields import RecurrenceField
+from multiselectfield import MultiSelectField
 
 from . import constants
 
@@ -25,6 +26,7 @@ class Event(models.Model):
     lon = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, default=None)
     is_census_equipped = models.BooleanField(default=False, help_text="Is this event technologically equipped to allow people to take the census?")
     approval_status = models.CharField(max_length=20, default=constants.EventApprovalStatus.PENDING, choices=[(t.name, t.value) for t in constants.EventApprovalStatus])
+    languages = MultiSelectField(choices=[(t.name, t.value) for t in constants.Languages])
 
     # If you need pending and active, use Event.with_pending instead of Event.objects
     #with_pending = models.Manager()
