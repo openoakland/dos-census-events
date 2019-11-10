@@ -1,0 +1,17 @@
+---
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.6
+    steps:
+      - checkout
+      - run: pipenv sync --dev
+      - run: pipenv run migrate
+
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - build
