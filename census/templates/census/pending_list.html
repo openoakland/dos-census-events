@@ -1,28 +1,40 @@
 {% extends '_base.html' %}
 {% block content %}
-  <h1>Pending Events</h1>
-  Click on event title to approve/update.
-  <table>
-  {% if event_list %}
-  <table style="width:60%">
-      <tr style="border: 3px solid #dddddd; text-align: left">
-        <th>Title</th>
-        <th>Orgnaizer</th>
-        <th>Event Type</th>
-        <th>First Date</th>
-        <th>          </th>
-      </tr>
-      {% for event in event_list %}
-        <tr style="border: 3px solid #dddddd; text-align: left">
-          <td><b><a href="/event/{{ event.id }}/update">{{ event.title }}:</a></b></td>
-          <td>{{event.organization_name}}</td>
-          <td>{{event.event_type}}</td>
-          <td>{{event.first_date}}</td>
-          <td><b><a href="/event/{{ event.id }}/delete">DELETE</a></b></td>
-        </tr>
-      {% endfor %}
-    </table>
-  {% else %}
-    <p>There are no pending events.</p>
-  {% endif %}
+<div class='grid-row'>
+  <div class='grid-col-8 grid-offset-2'>
+    <h1 class='center-align'>Pending Events</h1>
+    {% if event_list %}
+      <table class="grid-col-12 usa-table usa-table--borderless">
+        <thead>
+          <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Organizer</th>
+            <th scope="col">Event Type</th>
+            <th scope="col">Start Date</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        {% for event in event_list %}
+          <tbody>
+            <tr>
+                <th scope="row">{{event.title}}</th>
+                <td>{{event.organization_name}}</td>
+                <td>{{event.event_type}}</td>
+                <td>{{event.first_date}}</td>
+                <td>
+                  <a class="usa-button" href="/event/{{ event.id }}/update">Review</a>
+                </td>
+                <td>
+                  <a class="usa-button usa-button--secondary" href="/event/{{ event.id }}/delete">DELETE</a>
+                </td>
+            </tr>
+          </tbody>
+        {% endfor %}
+      </table>
+    {% else %}
+      <p>There are no pending events.</p>
+    {% endif %}
+  </div>
+</div>
 {% endblock %}

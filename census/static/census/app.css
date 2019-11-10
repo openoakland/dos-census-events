@@ -2,6 +2,14 @@ div.recurrence-widget {
   float: none !important;
 }
 
+body {
+  background-color: #fcfcfc;
+}
+
+.center-align {
+  text-align: center;
+}
+
 .section-card {
   max-width: 72ex;
   margin-bottom: 1rem;
@@ -15,8 +23,4 @@ div.recurrence-widget {
 
 .checkbox-wrapper {
   margin-top: 2em;
-}
-
-body {
-  background-color: #fcfcfc;
 }
