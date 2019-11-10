@@ -5,6 +5,7 @@ from django.forms.models import model_to_dict
 from django.http import StreamingHttpResponse
 from django.shortcuts import render
 from django.views.generic.edit import UpdateView
+from django.views.generic.edit import DeleteView
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -83,4 +84,9 @@ class PendingList(ListView):
     model = models.Event
     queryset = models.Event.objects.filter(approval_status = 'PENDING')
     template_name = 'census/pending_list.html'
+
+class DeleteEvent(LoginRequiredMixin, DeleteView):
+    model = models.Event
+    success_url = "/pending"
+    login_url = '/login/'
 
