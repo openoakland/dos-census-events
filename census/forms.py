@@ -11,4 +11,3 @@ class EventForm(ModelForm):
                 'end_time': forms.TimeInput(attrs={'type': 'time'})
         }
         exclude = ['approval_status', 'lon', 'lat']
-

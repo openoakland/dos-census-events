@@ -2,3 +2,4 @@ db.sqlite3
 .env
 google-service-account.json
 __pycache__
+*.DS_Store
