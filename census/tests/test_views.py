@@ -32,7 +32,7 @@ class CensusPendingViewTest(TestCase):
 
 class CensusUpdateViewTest(TestCase):
     def setUp(self):
-        self.url = "/1/update/"
+        self.url = "/event/1/update/"
 
     def test_url_resolves_to_view(self):
         found = resolve(self.url)
@@ -41,7 +41,7 @@ class CensusUpdateViewTest(TestCase):
 
 class CensusDeleteViewTest(TestCase):
     def setUp(self):
-        self.url = "/1/delete/"
+        self.url = "/event/1/delete/"
 
     def test_url_resolves_to_view(self):
         found = resolve(self.url)
