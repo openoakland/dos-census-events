@@ -13,6 +13,7 @@ google-api-python-client = "~=1.7.9"
 google-auth-httplib2 = "~=0.0.3"
 google-auth-oauthlib = "~=0.4.0"
 django-recurrence = "~=1.9.0"
+django-multiselectfield = "*"
 
 [requires]
 python_version = "3.6"

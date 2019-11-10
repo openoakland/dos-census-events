@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'recurrence',
     'census',
-    'django_pdb'
+    'django_pdb',
+    'multiselectfield'
 ]
 
 MIDDLEWARE = [

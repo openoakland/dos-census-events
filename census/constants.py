@@ -12,3 +12,10 @@ class EventType(Enum):
 class EventApprovalStatus(Enum):
     PENDING = 'Pending'
     APPROVED = 'Approved'
+
+class Languages(Enum):
+    ENGLISH = "English"
+    SPANISH = "Spanish"
+    VIETNAMESE = "Vietnamese"
+    CHINESE = "Chinese"
+    TAGALOG = "Tagalog"
