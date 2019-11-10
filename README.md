@@ -1,5 +1,4 @@
 [![CircleCI](https://circleci.com/gh/openoakland/dos-census-events.svg?style=svg)](https://circleci.com/gh/openoakland/dos-census-events)
-
 # Census events and resources
 
 Find census events and resources near you.
@@ -64,17 +63,23 @@ to publish events on your behalf.
 [Create an event](http://localhost:8000/admin/census/event/add/).
 
 
-### Environment variables
+### Configuration
 
-For development, you can set these in `.env` and pipenv will load them
-automatically.
+The application is configured through environment variables. You may set these
+in `.env` at the project root and they will be loaded automatically. Copy
+`env.sample` to `.env` as a template.
 
-Variable | Description | Default
--------- | ----------- | -------
-`GOOGLE_CALENDAR_ID` | The Google Calendar Id where events will be published. |
-`GOOGLE_SERVICE_ACCOUNT` | The local path to your Service Account JSON credentials. | `./google-service-account.json`
-`LOG_LEVEL` | Logging verbosity. | `INFO`
-`TIME_ZONE` | Set the server TZ to your local timezone.  | `America/Los_Angeles`
+Variable | Description | Required | Example
+-------- | ----------- | -------- | -------
+`ALLOWED_HOSTS` | The list of hostnames to serve requests from. | N | `app.example.com`
+`DATABASE_URL` | The connection settings for the database in URL form.  | N | `postgresql://user:password@hostname/db_name?options`
+`DJANGO_LOG_LEVEL` | Logging verbosity for django module. | N | `INFO`
+`DEBUG` | When true, enable debugging features for development. | N | `1`
+`GOOGLE_CALENDAR_ID` | The Google Calendar Id where events will be published. | N | `m7m16tqeokpbreeljd3m2n5jqg@group.calendar.google.com`
+`GOOGLE_SERVICE_ACCOUNT` | The local path to your Service Account JSON credentials. | N | `./google-service-account.json`
+`LOG_LEVEL` | Logging verbosity. | N | `INFO`
+`SECRET_KEY` | A secret key to provide cryptographic signing for Django. | **Y** | `rHNbX.W^)fw0eS_t]GYm4BsB::Gn?Va8cLA${wtKFvE2RZrR#,`
+`TIME_ZONE` | Set the server TZ to your local timezone.  | N | `America/Los_Angeles`
 
 
 ## Development
