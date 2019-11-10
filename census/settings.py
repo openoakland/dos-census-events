@@ -11,21 +11,31 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import environ
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Read settings from the environment, define some types, and set some defaults.
+env = environ.Env(
+    DEBUG=(bool, False),
+    ALLOWED_HOSTS=(list, []),
+    LOG_LEVEL=(str, 'INFO'),
+    DJANGO_LOG_LEVEL=(str, 'INFO'),
+    TIME_ZONE=(str, 'America/Los_Angeles'),
+)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '0n82!ukdqdw19ebq@2m257ka+8jg=*x%@!0+zkd&i6+xkg(taz'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env('ALLOWED_HOSTS')
 
 
 # Application definition
@@ -39,8 +49,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'recurrence',
     'census',
-    'django_pdb'
 ]
+
+if env('DEBUG'):
+    INSTALLED_APPS.append('django_pdb')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -51,8 +63,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_pdb.middleware.PdbMiddleware',
 ]
+
+if env('DEBUG'):
+    MIDDLEWARE.append('django_pdb.middleware.PdbMiddleware')
 
 ROOT_URLCONF = 'census.urls'
 
@@ -77,12 +91,8 @@ WSGI_APPLICATION = 'census.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': env.db_url(),
 }
 
 
@@ -110,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = os.environ.get('TIME_ZONE', 'America/Los_Angeles')
+TIME_ZONE = env('TIME_ZONE')
 
 USE_I18N = True
 
@@ -136,11 +146,11 @@ LOGGING = {
     'loggers': {
         'census': {
             'handlers': ['console'],
-            'level': os.getenv('LOG_LEVEL', 'INFO'),
+            'level': env('LOG_LEVEL'),
         },
         'django': {
             'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'level': env('DJANGO_LOG_LEVEL'),
         },
     },
 }
@@ -152,15 +162,11 @@ STATIC_URL = '/static/'
 STATIC_ROOT = 'static/'
 
 # The Id of the calendar to which events will be published.
-GOOGLE_CALENDAR_ID = os.environ.get('GOOGLE_CALENDAR_ID', 'openoakland.org_vbrd0poc6su2f6a0notsiu4qr8@group.calendar.google.com')
+GOOGLE_CALENDAR_ID = env('GOOGLE_CALENDAR_ID')
 
-# Path to the Google Service Account with read/write access to the Google Calendar.
+# Path to the Google Service Account with read/write access to the Google
+# Calendar.
 GOOGLE_SERVICE_ACCOUNT = os.environ.get('GOOGLE_SERVICE_ACCOUNT', './google-service-account.json')
-
-# Heroku: Update database configuration from $DATABASE_URL.
-import dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
