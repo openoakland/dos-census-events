@@ -14,11 +14,11 @@
       </tr>
       {% for event in event_list %}
         <tr style="border: 3px solid #dddddd; text-align: left">
-          <td><b><a href="/{{ event.id }}/update">{{ event.title }}:</a></b></td>
+          <td><b><a href="/event/{{ event.id }}/update">{{ event.title }}:</a></b></td>
           <td>{{event.organization_name}}</td>
           <td>{{event.event_type}}</td>
           <td>{{event.first_date}}</td>
-          <td><b><a href="/{{ event.id }}/delete">DELETE</a></b></td>
+          <td><b><a href="/event/{{ event.id }}/delete">DELETE</a></b></td>
         </tr>
       {% endfor %}
     </table>
