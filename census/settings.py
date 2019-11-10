@@ -20,6 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 env = environ.Env(
     DEBUG=(bool, False),
     ALLOWED_HOSTS=(list, []),
+    GOOGLE_CALENDAR_ID=(str, None),
     LOG_LEVEL=(str, 'INFO'),
     DJANGO_LOG_LEVEL=(str, 'INFO'),
     TIME_ZONE=(str, 'America/Los_Angeles'),
