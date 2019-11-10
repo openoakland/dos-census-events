@@ -4,6 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+django-pdb = "*"
 
 [packages]
 django-admin = "~=1.3.2"
