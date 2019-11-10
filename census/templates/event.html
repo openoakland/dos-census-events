@@ -22,11 +22,13 @@
             {% if field.help_text %}
               <span class="usa-hint line-height-body-1 font-body-2xs">{{ field.help_text }}</span>
             {% endif %}
+
             {{ field.errors }}
             {{ field }}
+            
           {% endfor %}
           </br>
-          <input type="submit" value="Submit">
+          <input type="submit" value="Submit" class="usa-button">
         </fieldset>
       </form>
     </div>

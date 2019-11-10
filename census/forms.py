@@ -15,8 +15,7 @@ class EventForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(EventForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
-            # if visible.name in ['title', 'description', 'event_type', 'location', 'approval_status']:
-            #     visible.field.widget.attrs['class'] = 'usa-input'
-            # else:
-            #     visible.field.widget.attrs['class'] = 'usa-input'
-            visible.field.widget.attrs['class'] = 'usa-input'
+            if visible.name in ['title', 'event_type', 'location', 'organization_name']:
+                visible.field.widget.attrs['class'] = 'usa-input'
+            elif visible.name in ['description']:
+                visible.field.widget.attrs['class'] = 'usa-textarea'
