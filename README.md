@@ -20,6 +20,8 @@ one: Google Calendar.
 Census Events creates a publishing workflow around Google Calendar. Currently,
 the publishing is one-way, from Census Events to Google Calendar.
 
+Workflow:
+![Worflow Diagram](https://github.com/openoakland/dos-census-events/blob/master/docs/workflow.jpg)
 
 ### Setup Google Calendar
 
