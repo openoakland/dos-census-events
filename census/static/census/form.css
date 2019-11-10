@@ -1,3 +1,18 @@
 div.recurrence-widget {
   float: none !important;
 }
+
+.section-card {
+  max-width: 72ex;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  background-color: #fff;
+  border: 1px solid #f0f0f0;
+}
+
+body {
+  background-color: #fcfcfc;
+}

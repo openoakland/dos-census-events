@@ -12,3 +12,11 @@ class EventForm(ModelForm):
         }
         exclude = ['approval_status', 'lon', 'lat']
 
+    def __init__(self, *args, **kwargs):
+        super(EventForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            # if visible.name in ['title', 'description', 'event_type', 'location', 'approval_status']:
+            #     visible.field.widget.attrs['class'] = 'usa-input'
+            # else:
+            #     visible.field.widget.attrs['class'] = 'usa-input'
+            visible.field.widget.attrs['class'] = 'usa-input'

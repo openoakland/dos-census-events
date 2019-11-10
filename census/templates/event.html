@@ -1,33 +1,38 @@
 {% extends '_base.html' %}
+{% load app_filters %}
+
 {% block content %}
+
 <script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
 <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
 <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
-<form action="/submit/" method="post">
-    {% csrf_token %}
-    {{ form.media }}
-    <table>
-      <tbody>
-      {% for field in form %}
-      <tr>
-         <th>
-          {{ field.label_tag }}
-          {{ field.errors }}
-         </th>
-         <td>
-           {{ field }}
-           </br>
-          {% if field.help_text %}
-            <sup>{{ field.help_text }}</sup>
-          {% endif %}
-         </td>
-      </tr>
-      {% endfor %}
-      </tbody>
-    </table>
-    </br>
-    <input type="submit" value="Submit">
-</form>
-{% endblock %}
+
+<div class="grid-container">
+  <section class='site-component-section section-card'>
+    <div class='preview usa-prose site-prose '>
+      <form action="/submit/" method="post" class="usa-form">
+        <fieldset class="usa-fieldset">
+          <legend class="usa-legend">New Event</legend>
+
+          {% csrf_token %}
+          {{ form.media }}
+
+          {% for field in form %}
+            {{ field|label_with_classes:"usa-label" }}
+            {% if field.help_text %}
+              <span class="usa-hint line-height-body-1 font-body-2xs">{{ field.help_text }}</span>
+            {% endif %}
+            {{ field.errors }}
+            {{ field }}
+          {% endfor %}
+          </br>
+          <input type="submit" value="Submit">
+        </fieldset>
+      </form>
+    </div>
+  </section>
+</div>
+
+{% endblock content %}
 {% block media %}
-{% endblock %}
+{% endblock media %}
