@@ -1,33 +1,83 @@
 {% extends '_base.html' %}
+
 {% block content %}
+
 <script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
 <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
 <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
-<form action="/submit/" method="post">
-    {% csrf_token %}
-    {{ form.media }}
-    <table>
-      <tbody>
-      {% for field in form %}
-      <tr>
-         <th>
-          {{ field.label_tag }}
-          {{ field.errors }}
-         </th>
-         <td>
-           {{ field }}
-           </br>
-          {% if field.help_text %}
-            <sup>{{ field.help_text }}</sup>
-          {% endif %}
-         </td>
-      </tr>
-      {% endfor %}
-      </tbody>
-    </table>
-    </br>
-    <input type="submit" value="Submit">
-</form>
-{% endblock %}
+
+<div class="grid-container">
+  <section class='site-component-section section-card'>
+    <div class='preview usa-prose site-prose '>
+
+      <form action="/submit/" method="post" class="usa-form">
+        <fieldset class="usa-fieldset">
+          <legend class="usa-legend">New Event</legend>
+
+          {% csrf_token %}
+          {{ form.media }}
+          <div>
+            <label class="usa-label" for="{{ form.title.id_for_label }}">Title:</label>  
+            <span class="usa-hint line-height-body-1 font-body-2xs">{{form.title.help_text}}</span>            
+            <input type="text" name="title" maxlength="100" class="usa-input" required="" id="{{ form.title.id_for_label }}">
+          </div>
+
+          <div>
+            <label class="usa-label" for="{{ form.description.id_for_label }}">Description:</label>
+            <span class="usa-hint line-height-body-1 font-body-2xs">{{form.description.help_text}}</span>
+            <textarea name="description" cols="40" rows="10" class="usa-textarea" id="{{ form.description.id_for_label }}"></textarea>              
+          </div>
+
+          <label class="usa-label" for="{{ form.recurrences.id_for_label }}">Date Information:</label>
+          <span class="usa-hint line-height-body-1 font-body-2xs">{{ form.recurrences.help_text }}</span>
+          {{ form.recurrences }}
+          
+          <label class="usa-label" for="{{form.start_time.id_for_label}}">Start time:</label>
+          <span class="usa-hint line-height-body-1 font-body-2xs">{{form.start_time.help_text}}</span>
+          <input type="time" name="start_time" required="" id="{{form.start_time.id_for_label}}">
+
+          <label class="usa-label" for="{{form.end_time.id_for_label}}">End time:</label>
+          <span class="usa-hint line-height-body-1 font-body-2xs">{{form.end_time.help_text}}</span>
+          <input type="time" name="end_time" required="" id="{{form.end_time.id_for_label}}">
+
+          <label class="usa-label" for="{{form.organization_name.id_for_label}}">Organization name:</label>
+          <span class="usa-hint line-height-body-1 font-body-2xs">{{form.organization_name.help_text}}</span>
+          <input type="text" name="organization_name" maxlength="100" class="usa-input" required="" id="{{form.organization_name.id_for_label}}">
+          
+          <label class="usa-label" for="{{form.event_type.id_for_label}}">Event type:</label>
+          <select name="event_type" class="usa-input" required="" id="{{form.event_type.id_for_label}}">
+              {% for value, display in form.fields.event_type.choices %}
+                <option value="{{ value }}"{% if form.fields.event_type.value == value %} selected{% endif %}>{{ display }}</option>
+              {% endfor %}
+          </select>        
+
+          <div>
+              <label class="usa-label" for="{{form.location.id_for_label}}">Location:</label>
+              <span class="usa-hint line-height-body-1 font-body-2xs">{{form.organization_name.help_text}}</span>
+              <input type="text" name="location" maxlength="100" class="usa-input" required="" id="{{form.organization_name.id_for_label}}">
+          </div>
+          
+          <div class="checkbox-wrapper">
+            <div class="usa-checkbox">
+                <input 
+                  class="usa-checkbox__input" 
+                  id="{{form.is_census_equipped.id_for_label}}"
+                  type="checkbox"
+                  name="is_census_equipped"
+                  value="is_census_equipped"
+                  >
+                <label class="usa-checkbox__label" for="{{form.is_census_equipped.id_for_label}}">Is census equipped?</label>
+                <span class="usa-hint line-height-body-1 font-body-2xs">{{form.is_census_equipped.help_text}}</span>
+            </div>
+          </div>
+          </br>
+          <input type="submit" value="Submit" class="usa-button">
+        </fieldset>
+      </form>
+    </div>
+  </section>
+</div>
+
+{% endblock content %}
 {% block media %}
-{% endblock %}
+{% endblock media %}
