@@ -28,3 +28,5 @@ your pull requests of a reasonable size as large pull requests can take longer
 to review and merge.
 
 For UI changes, please include screenshots to help reviewers.
+
+Once approved, the author may merge the Pull Request.
