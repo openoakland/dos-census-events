@@ -1,0 +1,28 @@
+{% extends '_base.html' %}
+{% block content %}
+  <h1>Pending Events</h1>
+  Click on event title to approve/update.
+  <table>
+  {% if event_list %}
+  <table style="width:60%">
+      <tr style="border: 3px solid #dddddd; text-align: left">
+        <th>Title</th>
+        <th>Orgnaizer</th>
+        <th>Event Type</th>
+        <th>First Date</th>
+        <th>          </th>
+      </tr>
+      {% for event in event_list %}
+        <tr style="border: 3px solid #dddddd; text-align: left">
+          <td><b><a href="/{{ event.id }}/update">{{ event.title }}:</a></b></td>
+          <td>{{event.organization_name}}</td>
+          <td>{{event.event_type}}</td>
+          <td>{{event.first_date}}</td>
+          <td><b><a href="/{{ event.id }}/delete">DELETE</a></b></td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>There are no pending events.</p>
+  {% endif %}
+{% endblock %}

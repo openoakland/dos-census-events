@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from django.urls import path
 from django.conf.urls import url
 from django.views.i18n import JavaScriptCatalog
@@ -26,6 +27,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('export/events/', views.export_events),
     path('submit/', views.add_event),
+    path('pending/', views.PendingList.as_view(), name = 'pending_list'),
+    path('<int:pk>/update/', views.UpdateEvent.as_view(), name= 'event_update'),
+    path('<int:pk>/delete/', views.DeleteEvent.as_view(), name= 'event_delete'),
+    url(r'^login/$', auth_views.LoginView.as_view(), name='login'),
+    url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
 ]
 js_info_dict = {
     'packages': ('recurrence', ),
