@@ -19,8 +19,8 @@ def export_events(request):
     fields = [
         'title',
         'recurrences',
-        'start_time',
-        'end_time',
+        'start_datetime',
+        'end_datetime',
         'location',
         'lat',
         'lon',

@@ -28,35 +28,23 @@
             <textarea name="description" cols="40" rows="10" class="usa-textarea" id="{{ form.description.id_for_label }}"></textarea>              
           </div>
 
-          <label class="usa-label" for="{{ form.recurrences.id_for_label }}">Date Information:</label>
-          <span class="usa-hint line-height-body-1 font-body-2xs">{{ form.recurrences.help_text }}</span>
-          {{ form.recurrences }}
-          
-          <label class="usa-label" for="{{form.start_time.id_for_label}}">Start time:</label>
-          <span class="usa-hint line-height-body-1 font-body-2xs">{{form.start_time.help_text}}</span>
-          <input type="time" name="start_time" required="" id="{{form.start_time.id_for_label}}">
-
-          <label class="usa-label" for="{{form.end_time.id_for_label}}">End time:</label>
-          <span class="usa-hint line-height-body-1 font-body-2xs">{{form.end_time.help_text}}</span>
-          <input type="time" name="end_time" required="" id="{{form.end_time.id_for_label}}">
-
           <label class="usa-label" for="{{form.organization_name.id_for_label}}">Organization name:</label>
           <span class="usa-hint line-height-body-1 font-body-2xs">{{form.organization_name.help_text}}</span>
           <input type="text" name="organization_name" maxlength="100" class="usa-input" required="" id="{{form.organization_name.id_for_label}}">
-          
-          <label class="usa-label" for="{{form.event_type.id_for_label}}">Event type:</label>
-          <select name="event_type" class="usa-input" required="" id="{{form.event_type.id_for_label}}">
-              {% for value, display in form.fields.event_type.choices %}
-                <option value="{{ value }}"{% if form.fields.event_type.value == value %} selected{% endif %}>{{ display }}</option>
-              {% endfor %}
-          </select>        
 
           <div>
               <label class="usa-label" for="{{form.location.id_for_label}}">Location:</label>
               <span class="usa-hint line-height-body-1 font-body-2xs">{{form.organization_name.help_text}}</span>
               <input type="text" name="location" maxlength="100" class="usa-input" required="" id="{{form.organization_name.id_for_label}}">
           </div>
-          
+
+          <label class="usa-label" for="{{form.event_type.id_for_label}}">Event type:</label>
+          <select name="event_type" class="usa-input" required="" id="{{form.event_type.id_for_label}}">
+              {% for value, display in form.fields.event_type.choices %}
+                <option value="{{ value }}"{% if form.fields.event_type.value == value %} selected{% endif %}>{{ display }}</option>
+              {% endfor %}
+          </select>
+
           <div class="checkbox-wrapper">
             <div class="usa-checkbox">
                 <input 
@@ -89,6 +77,18 @@
             {% endfor %}
             <span class="usa-hint line-height-body-1 font-body-2xs">{{form.languages.help_text}}</span>
           </div>
+
+          <label class="usa-label" for="{{form.start_datetime.id_for_label}}">Start time:</label>
+          <span class="usa-hint line-height-body-1 font-body-2xs">{{form.start_datetime.help_text}}</span>
+          <input type="time" name="start_datetime" required="" id="{{form.start_datetime.id_for_label}}">
+
+          <label class="usa-label" for="{{form.end_datetime.id_for_label}}">End time:</label>
+          <span class="usa-hint line-height-body-1 font-body-2xs">{{form.end_datetime.help_text}}</span>
+          <input type="time" name="end_datetime" required="" id="{{form.end_datetime.id_for_label}}">
+
+          <label class="usa-label" for="{{ form.recurrences.id_for_label }}">Recurrences:</label>
+          <span class="usa-hint line-height-body-1 font-body-2xs">{{ form.recurrences.help_text }}</span>
+          {{ form.recurrences }}
 
           </br>
           <input type="submit" value="Submit" class="usa-button">

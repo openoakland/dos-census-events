@@ -4,4 +4,19 @@ from .models import Event
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('title', 'recurrences', 'start_time', 'end_time', 'location')
+    fields = (
+        'title',
+        'description',
+        'organization_name',
+        'location',
+        'event_type',
+        'is_census_equipped',
+        'languages',
+        'start_datetime',
+        'end_datetime',
+        'recurrences',
+        'lat',
+        'lon',
+        'approval_status',
+    )
+    list_display = ('title', 'start_datetime', 'end_datetime', 'recurrences', 'location')

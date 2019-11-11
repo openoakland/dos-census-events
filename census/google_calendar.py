@@ -29,9 +29,7 @@ def google_publish_event(event):
         'dateTime': event.end_datetime.isoformat(),
         'timeZone': 'America/Los_Angeles',
       },
-      'recurrence': None if str(event.recurrences) == '' else [
-          str(event.recurrences),
-          ] ,
+      'recurrence': [str(event.recurrences)] if event.recurrences else None,
       'visibility': 'private' if event.approval_status == constants.EventApprovalStatus.PENDING else 'public',
       #"extendedProperties": {
       #  "shared": {

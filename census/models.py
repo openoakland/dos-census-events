@@ -24,9 +24,9 @@ class Event(models.Model):
 
     title = models.CharField(max_length=100, help_text="Title or short description of the event")
     description = models.TextField(blank=True, help_text="Full description of the event")
-    recurrences  = RecurrenceField(default=None, blank=True, verbose_name='Date Information', help_text="Add date of the event or rules for a recurring event")
-    start_time = models.TimeField(help_text="What time does this event start? HH:MM:AM/PM")
-    end_time = models.TimeField(help_text="What time does the event end? HH:MM:AM/PM")
+    recurrences = RecurrenceField(default=None, blank=True, help_text="This event occurs more than once.")
+    start_datetime = models.DateTimeField(help_text="When does the event start?")
+    end_datetime = models.DateTimeField(help_text="When does the event end?")
     organization_name = models.CharField(max_length=100, help_text="Name of the hosting organization")
     event_type = models.CharField(max_length=20, choices=[(t.name, t.value) for t in constants.EventType])
     location = models.CharField(max_length=100, help_text="Location where the event will take place")
