@@ -39,10 +39,13 @@ to publish events on your behalf.
 1. Create a [Service Account](https://console.developers.google.com/iam-admin/serviceaccounts/create)
    for the project. Don't set any roles, they are not necessary.
 1. Create a (JSON) key for the Service Account and save the JSON file. Treat
-   this file as a secret, please don't commit it to GitHub. Save it to the
-   project root as `google-service-account.json`. You can save it to an
-   alternative location and set the `GOOGLE_SERVICE_ACCOUNT` environment
-   variable to the alternate path.
+   this file as a secret, please don't commit it to GitHub. This JSON string
+   should be provided to the application as the `GOOGLE_SERVICE_ACCOUNT_INFO`
+   environment variable. You can edit by hand into a single line or use
+   [jq](https://stedolan.github.io/jq/).
+
+       $ jq -c . ./google-service-account.json
+
 1. Enable the [Calendar API](https://console.developers.google.com/apis/api/calendar-json.googleapis.com/overview)
    for the API Project you just created.
 1. Create a [Google Calendar](https://calendar.google.com/calendar/r/settings)
@@ -76,7 +79,7 @@ Variable | Description | Required | Example
 `DJANGO_LOG_LEVEL` | Logging verbosity for django module. | N | `INFO`
 `DEBUG` | When true, enable debugging features for development. | N | `1`
 `GOOGLE_CALENDAR_ID` | The Google Calendar Id where events will be published. | N | `m7m16tqeokpbreeljd3m2n5jqg@group.calendar.google.com`
-`GOOGLE_SERVICE_ACCOUNT` | The local path to your Service Account JSON credentials. | N | `./google-service-account.json`
+`GOOGLE_SERVICE_ACCOUNT_INFO` | JSON string containing your Service Account credentials. | N | `{"type": "service_account", ... }`
 `LOG_LEVEL` | Logging verbosity. | N | `INFO`
 `SECRET_KEY` | A secret key to provide cryptographic signing for Django. | **Y** | `rHNbX.W^)fw0eS_t]GYm4BsB::Gn?Va8cLA${wtKFvE2RZrR#,`
 `TIME_ZONE` | Set the server TZ to your local timezone.  | N | `America/Los_Angeles`

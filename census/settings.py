@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import json
+
 import environ
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -21,6 +23,7 @@ env = environ.Env(
     DEBUG=(bool, False),
     ALLOWED_HOSTS=(list, []),
     GOOGLE_CALENDAR_ID=(str, None),
+    GOOGLE_SERVICE_ACCOUNT_INFO=(str, None),
     LOG_LEVEL=(str, 'INFO'),
     DJANGO_LOG_LEVEL=(str, 'INFO'),
     TIME_ZONE=(str, 'America/Los_Angeles'),
@@ -169,7 +172,7 @@ GOOGLE_CALENDAR_ID = env('GOOGLE_CALENDAR_ID')
 
 # Path to the Google Service Account with read/write access to the Google
 # Calendar.
-GOOGLE_SERVICE_ACCOUNT = os.environ.get('GOOGLE_SERVICE_ACCOUNT', './google-service-account.json')
+GOOGLE_SERVICE_ACCOUNT_INFO = json.loads(env('GOOGLE_SERVICE_ACCOUNT_INFO')) if env('GOOGLE_SERVICE_ACCOUNT_INFO') else None
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/

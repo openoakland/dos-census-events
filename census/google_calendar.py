@@ -40,8 +40,8 @@ def google_publish_event(event):
       #}
     }
 
-    credentials = service_account.Credentials.from_service_account_file(
-        settings.GOOGLE_SERVICE_ACCOUNT, scopes=SCOPES)
+    credentials = service_account.Credentials.from_service_account_info(
+        settings.GOOGLE_SERVICE_ACCOUNT_INFO, scopes=SCOPES)
     service = build('calendar', 'v3', credentials=credentials)
 
     log.debug('event insert calendar=%s payload=%s', settings.GOOGLE_CALENDAR_ID, payload)
