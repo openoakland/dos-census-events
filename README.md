@@ -87,6 +87,10 @@ Variable | Description | Required | Example
 
 ## Development
 
+Thank you for considering a contribution to our project! Follow these
+instructions to get setup for development. Read over our
+[CONTRIBUTING](./CONTRIBUTING.md) for more information on how we work.
+
 
 ### Prerequisites
 
@@ -120,6 +124,17 @@ Enter environment shell.
     $ pipenv shell
 
 Documentation resource: https://docs.python-guide.org/dev/virtualenvs/
+
+#### Configuration
+
+For development, copy these settings to a `.env` file in the project root
+directory.
+
+```
+DEBUG=1
+DATABASE_URL=sqlite:///db.sqlite3
+SECRET_KEY=not-a-secret
+```
 
 
 #### Install the requirements, initialize database and create a super user:
