@@ -1,6 +1,7 @@
 from django.db import models
 from recurrence.fields import RecurrenceField
 from multiselectfield import MultiSelectField
+from phonenumber_field.modelfields import PhoneNumberField
 
 from . import constants
 
@@ -34,6 +35,9 @@ class Event(models.Model):
     is_census_equipped = models.BooleanField(default=False, help_text="Is this event technologically equipped to allow people to take the census?")
     approval_status = models.CharField(max_length=20, default=constants.EventApprovalStatus.PENDING, choices=[(t.name, t.value) for t in constants.EventApprovalStatus])
     languages = MultiSelectField(choices=[(t.name, t.value) for t in constants.Languages], help_text="Add languages supported at the event")
+    contact_name = models.CharField(max_length=100, null=True, help_text="Name of contact for event")
+    contact_email = models.EmailField(max_length=60, null=True, help_text="Email for contact")
+    contact_phone = PhoneNumberField(null=True, help_text="Phone number for contact")
 
     # If you need pending and active, use Event.with_pending instead of Event.objects
     #with_pending = models.Manager()

@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'recurrence',
     'census',
     'multiselectfield',
+    'phonenumber_field'
 ]
 
 if env('DEBUG'):
@@ -133,6 +134,9 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+PHONENUMBER_DB_FORMAT = 'NATIONAL'
+PHONENUMBER_DEFAULT_REGION = 'US'
 
 LOGGING = {
     'version': 1,
