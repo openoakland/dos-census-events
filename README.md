@@ -4,6 +4,8 @@
 
 Find census events and resources near you.
 
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 
 ## "Goals"
 
