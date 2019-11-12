@@ -60,10 +60,17 @@ def index(request):
     # Uncomment this if we need to call the homepage in the future using AJAX
     # if request.is_ajax():
     #     return get_events()
-    events = models.Event.objects.all()
-    request.events = events
-    # current_date = datetime.now()
-    # request.events_title = f'{current_date.strftime("%B")} {current_date.strftime("%Y")} Events'
+    if request.method == 'POST':
+        import pdb
+        pdb.set_trace()
+        search_query = request.POST.dict().get('search')
+        query_set = models.Event.objects.filter(title__icontains=search_query) | models.Event.objects.filter(description__icontains=search_query)
+        request.events = query_set
+    else:
+        events = models.Event.objects.all()
+        request.events = events
+        # current_date = datetime.now()
+        # request.events_title = f'{current_date.strftime("%B")} {current_date.strftime("%Y")} Events'
     return render(request, 'index.html')
 
 

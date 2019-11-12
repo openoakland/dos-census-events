@@ -10,7 +10,8 @@
 
         <div class="grid-row bg-white" style="padding-bottom: 150px">
             <div class="grid-col-10 margin-5">
-                <form class="usa-search usa-search--big">
+                <form class="usa-search usa-search--big" action="/" method="post">
+                    {% csrf_token %}
                     <div class="grid-offset-2" role="search">
                         <label class="usa-sr-only" for="search-field-big">Search</label>
                         <input class="usa-input" id="search-field-big" type="search" name="search">
