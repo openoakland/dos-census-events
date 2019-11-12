@@ -151,6 +151,10 @@ Create an admin user by following the prompts.
 
     $ python manage.py createsuperuser
 
+(Optional) for development you can load in some initial data.
+
+    $ python manage.py loaddata --app census events
+
 
 ### Starting the Django server locally:
 
@@ -172,12 +176,17 @@ Anytime you make a change to the models, you should try to run makemigrations to
 generate a database migration.
 
     $ python manage.py makemigrations census
-    
- ### Resources
+
+If any modifications were made to the Event model, you might need to update the
+initial data sample.
+
+    $ python manage.py dumpdata --indent 4 census.Event > census/fixtures/events.json
+
+
+### Resources
+
 - [USWDS CSS Framework](https://designsystem.digital.gov/)
 - [Google Calender API Documentation](https://developers.google.com/calendar/)
 - [Django 2.2 Documentation](https://docs.djangoproject.com/en/2.2/)
 - [Pipenv Documentation](https://pipenv.readthedocs.io/en/latest/)
 - [SQLite Documentation](https://www.sqlite.org/docs.html)
-
-
