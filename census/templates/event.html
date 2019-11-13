@@ -9,7 +9,7 @@
 <div class="grid-container">
   <section class='site-component-section section-card'>
     <div class='preview usa-prose site-prose '>
-
+      {{ form.errors }}
       <form action="/submit/" method="post" class="usa-form">
         <fieldset class="usa-fieldset">
           <legend class="usa-legend">New Event</legend>
@@ -70,6 +70,26 @@
                 <span class="usa-hint line-height-body-1 font-body-2xs">{{form.is_census_equipped.help_text}}</span>
             </div>
           </div>
+
+          <div class="checkbox-wrapper">
+            {% for value, text in form.languages.field.choices %}
+            <div class="usa-checkbox">
+                <input
+                  class="usa-checkbox__input"
+                  id="{{form.languages.id_for_label}}_{{ forloop.counter }}"
+                  type="checkbox"
+                  name="{{ form.languages.name }}"
+                  value="{{ value }}"
+                  {% if value in selected_languages %}
+                  checked="checked"
+                  {% endif %}
+                  >
+                  <label class="usa-checkbox__label" for="{{form.languages.id_for_label}}_{{ forloop.counter }}">{{ text }}</label>
+            </div>
+            {% endfor %}
+            <span class="usa-hint line-height-body-1 font-body-2xs">{{form.languages.help_text}}</span>
+          </div>
+
           </br>
           <input type="submit" value="Submit" class="usa-button">
         </fieldset>
