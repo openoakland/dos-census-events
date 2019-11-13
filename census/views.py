@@ -9,7 +9,7 @@ from django.views.generic.edit import DeleteView
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from . import models
+from . import constants, models
 
 
 def export_events(request):
@@ -70,9 +70,15 @@ def add_event(request):
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = EventForm()
+        form = EventForm(initial={'languages': [constants.Languages.ENGLISH]})
 
-    return render(request, 'event.html', {'form': form})
+    # Not sure if there is a better way to handle which options are selected
+    # for the MultiSelectField
+    selected_languages = [language.name for language in form['languages'].value()]
+    return render(request, 'event.html', {
+        'form': form,
+        'selected_languages': selected_languages,
+    })
 
 class UpdateEvent(LoginRequiredMixin, UpdateView):
     model = models.Event
