@@ -1,4 +1,5 @@
 import csv
+from datetime import datetime
 import io
 
 from django.forms.models import model_to_dict
@@ -70,15 +71,18 @@ def add_event(request):
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = EventForm(initial={'languages': [constants.Languages.ENGLISH]})
+        form = EventForm(initial={
+            'languages': [constants.Languages.ENGLISH.name],
+            'start_datetime': datetime.today().replace(hour=18, minute=0, second=0, microsecond=0),
+            'end_datetime': datetime.today().replace(hour=19, minute=0, second=0, microsecond=0),
+        })
 
-    # Not sure if there is a better way to handle which options are selected
-    # for the MultiSelectField
-    selected_languages = [language.name for language in form['languages'].value()]
+    enable_recurrence = request.GET.get('enable_recurrence', False)
     return render(request, 'event.html', {
         'form': form,
-        'selected_languages': selected_languages,
+        'enable_recurrence': enable_recurrence,
     })
+
 
 class UpdateEvent(LoginRequiredMixin, UpdateView):
     model = models.Event

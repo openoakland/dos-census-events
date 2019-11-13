@@ -60,7 +60,7 @@
           </div>
 
           <div class="checkbox-wrapper">
-            {% for value, text in form.languages.field.choices %}
+            {% for value, name in form.languages.field.choices %}
             <div class="usa-checkbox">
                 <input
                   class="usa-checkbox__input"
@@ -68,27 +68,31 @@
                   type="checkbox"
                   name="{{ form.languages.name }}"
                   value="{{ value }}"
-                  {% if value in selected_languages %}
+                  {% if value in form.languages.value %}
                   checked="checked"
                   {% endif %}
                   >
-                  <label class="usa-checkbox__label" for="{{form.languages.id_for_label}}_{{ forloop.counter }}">{{ text }}</label>
+                  <label class="usa-checkbox__label" for="{{form.languages.id_for_label}}_{{ forloop.counter }}">{{ name }}</label>
             </div>
             {% endfor %}
             <span class="usa-hint line-height-body-1 font-body-2xs">{{form.languages.help_text}}</span>
           </div>
 
-          <label class="usa-label" for="{{form.start_datetime.id_for_label}}">Start time:</label>
+          <label class="usa-label" for="{{form.start_datetime.id_for_label}}">Event start:</label>
           <span class="usa-hint line-height-body-1 font-body-2xs">{{form.start_datetime.help_text}}</span>
-          <input type="time" name="start_datetime" required="" id="{{form.start_datetime.id_for_label}}">
+          <input type="text" name="start_datetime" required="" id="{{form.start_datetime.id_for_label}}" value="{{form.start_datetime.value | date:'Y-m-d H:i'}}">
 
-          <label class="usa-label" for="{{form.end_datetime.id_for_label}}">End time:</label>
+          <label class="usa-label" for="{{form.end_datetime.id_for_label}}">Event end:</label>
           <span class="usa-hint line-height-body-1 font-body-2xs">{{form.end_datetime.help_text}}</span>
-          <input type="time" name="end_datetime" required="" id="{{form.end_datetime.id_for_label}}">
+          <input type="text" name="end_datetime" required="" id="{{form.end_datetime.id_for_label}}" value="{{form.end_datetime.value | date:'Y-m-d H:i'}}">
 
+          {% if enable_recurrence %}
           <label class="usa-label" for="{{ form.recurrences.id_for_label }}">Recurrences:</label>
           <span class="usa-hint line-height-body-1 font-body-2xs">{{ form.recurrences.help_text }}</span>
           {{ form.recurrences }}
+          {% else %}
+          <input type="hidden" name="recurrences" value="" />
+          {% endif %}
 
           </br>
           <input type="submit" value="Submit" class="usa-button">
