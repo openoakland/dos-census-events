@@ -1,8 +1,9 @@
 from django.urls import reverse, resolve
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.contrib.auth import views as auth_views
 
 from census import views
+from census import constants
 
 class CensusExportViewTest(TestCase):
     def setUp(self):
@@ -22,12 +23,25 @@ class CensusSubmitViewTest(TestCase):
 
 
 class CensusPendingViewTest(TestCase):
+    fixtures = ["census/fixtures/events.json"]
     def setUp(self):
         self.url = "/pending/"
 
     def test_url_resolves_to_view(self):
         found = resolve(self.url)
         self.assertEqual(found.func.view_class, views.PendingList.as_view().view_class)
+
+    def test_get_pending(self):
+        factory = RequestFactory()
+        request = factory.get(self.url)
+        results = views.PendingList.as_view()(request)
+        pending_events = results.context_data["event_list"]
+        
+        # Assumes 1 pending event in initial test data
+        self.assertEqual(len(pending_events), 1)
+        for event in pending_events:
+            self.assertEqual(event.approval_status, constants.EventApprovalStatus.PENDING.name)
+
 
 
 class CensusUpdateViewTest(TestCase):
