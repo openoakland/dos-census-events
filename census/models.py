@@ -20,7 +20,10 @@ class Event(models.Model):
         return self.title
 
     def first_date(self):
-        return self.recurrences.occurrences()[0].date()
+        try:
+            return self.recurrences.occurrences()[0].date()
+        except IndexError:
+            return None
 
     title = models.CharField(max_length=100, help_text="Title or short description of the event")
     description = models.TextField(blank=True, help_text="Full description of the event")
