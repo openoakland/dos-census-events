@@ -1,9 +1,10 @@
 from django.urls import reverse, resolve
-from django.test import TestCase, RequestFactory
+from django.test import TestCase, RequestFactory, Client
 from django.contrib.auth import views as auth_views
 
 from census import views
 from census import constants
+from census.models import Event
 
 class CensusExportViewTest(TestCase):
     def setUp(self):
@@ -26,6 +27,7 @@ class CensusPendingViewTest(TestCase):
     fixtures = ["census/fixtures/events.json"]
     def setUp(self):
         self.url = "/pending/"
+        self.client = Client()
 
     def test_url_resolves_to_view(self):
         found = resolve(self.url)
@@ -42,7 +44,12 @@ class CensusPendingViewTest(TestCase):
         for event in pending_events:
             self.assertEqual(event.approval_status, constants.EventApprovalStatus.PENDING.name)
 
-
+    def test_template_content(self):
+        event = Event.objects.filter(approval_status=constants.EventApprovalStatus.PENDING.name).first()
+        response = self.client.get(self.url)
+        
+        # Response contains the title of a pending event
+        self.assertContains(response, event.title)
 
 class CensusUpdateViewTest(TestCase):
     def setUp(self):
