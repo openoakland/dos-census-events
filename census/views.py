@@ -72,9 +72,10 @@ def add_event(request):
     else:
         form = EventForm(initial={'languages': [constants.Languages.ENGLISH]})
 
-    # Not sure if there is a better way to handle which options are selected
-    # for the MultiSelectField
-    selected_languages = [language.name for language in form['languages'].value()]
+    selected_languages = []
+    # Uncomment the below when languages is no longer excluded from the form
+    # selected_languages = [language.name for language in form['languages'].value()]
+    
     return render(request, 'event.html', {
         'form': form,
         'selected_languages': selected_languages,
