@@ -59,10 +59,10 @@ def index(request):
     """
     # Uncomment this if we need to call the homepage in the future using AJAX
     # if request.is_ajax():
-    #     return get_events()
+
+    # import pdb
+    # pdb.set_trace()
     if request.method == 'POST':
-        import pdb
-        pdb.set_trace()
         search_query = request.POST.dict().get('search')
         query_set = models.Event.objects.filter(title__icontains=search_query) | models.Event.objects.filter(description__icontains=search_query)
         request.events = query_set
@@ -82,18 +82,25 @@ def get_events(data):
     :param data: Request object
     :return: HttpResponse object containing event data. Populate
     """
+    # import pdb
+    # pdb.set_trace()
     query_params = data.GET.dict()
     if 'isMonthly' in query_params and query_params['isMonthly'] == 'true':
         # get monthly events
-        # TODO: Fetch Event objects based on start and end dates
+        # TODO: Fetch database Event objects based on start and end dates when
+        #       they are available in the model again
         month = query_params['month']
         return HttpResponse(json.dumps(dict(request={'events': [
             dict(id=4, title='Title4', description='SSS', start_time='123', end_time='433'),
             dict(id=5, title='Title5', description='SSS', start_time='123', end_time='433')
         ]})))
+    elif not query_params:
+        events = models.Event.objects.all()
+        return HttpResponse(json.dumps(dict(request={'events':[event for event in events.values()]})))
     else:
         # Get events for a selected date
-        # TODO: Fetch Event objects based on start and end dates
+        # TODO: Fetch database Event objects based on start and end dates when
+        #       they are available in the model again
         day = query_params['day']
         return HttpResponse(json.dumps(dict(request={'events': [
             dict(id=2, title='Title2', description='SSS', start_time='123', end_time='433'),
@@ -113,6 +120,10 @@ def add_event(request):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/submit/')
+        else:
+            import pdb
+            pdb.set_trace()
+            print('form not valid')
 
     # if a GET (or any other method) we'll create a blank form
     else:

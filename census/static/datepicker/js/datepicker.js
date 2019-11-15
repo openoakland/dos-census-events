@@ -1,4 +1,23 @@
 $(function () {
+    // $.ajax({
+    //     url: '/events/',
+    //     method: 'GET',
+    //     // data: {
+    //     //     isMonthly: false,
+    //     //     day: inst.selectedDay,
+    //     //     month: inst.selectedMonth,
+    //     //     year: inst.selectedYear,
+    //     // },
+    //     dataType: 'json',
+    //     success: function (data) {
+    //         console.log(data);
+    //         var events = data.request.events;
+    //         render_events(events);
+    //
+    //
+    //     }
+    // });
+
     $('#datepicker').datepicker({
         inline: true,
         //nextText: '&rarr;',
@@ -10,6 +29,7 @@ $(function () {
         // buttonImage: "img/calendar-blue.png",
         // buttonImageOnly: true,
         onSelect: function (dateText, inst) {
+            console.log(inst);
             $.ajax({
                 url: '/events/',
                 method: 'GET',
