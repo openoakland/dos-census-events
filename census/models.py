@@ -15,13 +15,6 @@ from . import constants
 
 
 class Event(models.Model):
-
-    def __str__(self):
-        return self.title
-
-    def first_date(self):
-        return self.recurrences.occurrences()[0].date()
-
     title = models.CharField(max_length=100, help_text="Title or short description of the event")
     description = models.TextField(blank=True, help_text="Full description of the event")
     recurrences = RecurrenceField(default=None, blank=True, help_text="This event occurs more than once.")
@@ -41,6 +34,10 @@ class Event(models.Model):
 
     # If you need pending and active, use Event.with_pending instead of Event.objects
     #with_pending = models.Manager()
+
+    def __str__(self):
+        return self.title
+
 
 class GoogleEvent(models.Model):
     google_calendar_id = models.CharField(max_length=100)
