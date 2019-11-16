@@ -92,7 +92,7 @@ class UpdateEvent(LoginRequiredMixin, UpdateView):
 
 class PendingList(ListView):
     model = models.Event
-    queryset = models.Event.objects.filter(approval_status = 'PENDING')
+    queryset = models.Event.objects.filter(approval_status = constants.EventApprovalStatus.PENDING.name)
     template_name = 'census/pending_list.html'
 
 class DeleteEvent(LoginRequiredMixin, DeleteView):
