@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 
 from django.urls import reverse, resolve
 from django.test import TestCase, RequestFactory, Client
@@ -14,6 +15,15 @@ from census.tests import factory
 los_angeles = pytz.timezone('America/Los_Angeles')
 
 
+#TODO should this live somewhere else?
+def setUpModule():
+    logging.disable(logging.WARNING)
+
+
+def tearDownModule():
+    logging.disable(logging.NOTSET)
+
+
 class CensusExportViewTest(TestCase):
     def setUp(self):
         self.url = "/export/events/"
@@ -27,9 +37,23 @@ class CensusSubmitViewTest(TestCase):
         self.url = "/submit/"
         self.client = Client()
 
+
     def test_url_resolves_to_view(self):
         found = resolve(self.url)
         self.assertEqual(found.func.view_class, views.SubmitEventView.as_view().view_class)
+
+
+    def test_required_fields_exist(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'event.html')
+
+        # Maybe there's a more accurate way to test for input elements
+        self.assertContains(response, 'name="languages"')
+        self.assertContains(response, 'name="start_datetime"')
+        self.assertContains(response, 'name="end_datetime"')
+        self.assertContains(response, 'name="recurrences"')
+
 
     def test_submit(self):
         data = dict(
@@ -65,6 +89,72 @@ class CensusSubmitViewTest(TestCase):
         # The event has the right defaults
         self.assertEqual(event.recurrences, recurrence.Recurrence())
         self.assertEqual(event.approval_status, constants.EventApprovalStatus.PENDING.name)
+
+
+    def test_submit_without_start_fails(self):
+        """Given the submit event form is missing start datetime, the submission fails"""
+        data = dict(
+            title="OpenOakland Hack Night",
+            description="Civic technology event",
+            organization_name="OpenOakland",
+            location="City Hall",
+            event_type="WORKSHOP",
+            languages="ENGLISH",
+            end_datetime="2019-11-15 16:00",
+            recurrences="",
+        )
+
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 400)
+
+        form = response.context['form']
+        self.assertIn('start_datetime', form.errors)
+
+
+    def test_submit_without_languages_fails(self):
+        """Given the submit event form is missing languages, the submission fails"""
+        data = dict(
+            title="OpenOakland Hack Night",
+            description="Civic technology event",
+            organization_name="OpenOakland",
+            location="City Hall",
+            event_type="WORKSHOP",
+            languages="",
+            start_datetime="2019-11-15 15:00",
+            end_datetime="2019-11-15 16:00",
+            recurrences="",
+        )
+
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 400)
+
+        form = response.context['form']
+        self.assertIn('languages', form.errors)
+
+
+    def test_submit_with_recurrence(self):
+        """Given the submit event form includes recurrence, the recurrence is added to the database"""
+        data = dict(
+            title="OpenOakland Hack Night",
+            description="Civic technology event",
+            organization_name="OpenOakland",
+            location="City Hall",
+            event_type="WORKSHOP",
+            languages="ENGLISH",
+            start_datetime="2019-11-15 15:00",
+            end_datetime="2019-11-15 16:00",
+            recurrences="RRULE:FREQ=WEEKLY;BYDAY=TU",
+        )
+
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 201)
+
+        # The event was created
+        self.assertEqual(Event.objects.count(), 1)
+        event = Event.objects.all()[0]
+
+        # The event created in the database matches the data we submitted
+        self.assertEqual(str(event.recurrences), data['recurrences'])
 
 
 class CensusPendingViewTest(TestCase):
