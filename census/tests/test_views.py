@@ -1,13 +1,17 @@
+from datetime import datetime
+
 from django.urls import reverse, resolve
 from django.test import TestCase, RequestFactory, Client
 from django.contrib.auth import views as auth_views
-
+import pytz
 import recurrence
 
 from census import views
 from census import constants
 from census.models import Event
 from census.tests import factory
+
+los_angeles = pytz.timezone('America/Los_Angeles')
 
 
 class CensusExportViewTest(TestCase):
@@ -21,10 +25,46 @@ class CensusExportViewTest(TestCase):
 class CensusSubmitViewTest(TestCase):
     def setUp(self):
         self.url = "/submit/"
+        self.client = Client()
 
     def test_url_resolves_to_view(self):
         found = resolve(self.url)
         self.assertEqual(found.func, views.add_event)
+
+    def test_submit(self):
+        data = dict(
+            title="OpenOakland Hack Night",
+            description="Civic technology event",
+            organization_name="OpenOakland",
+            location="City Hall",
+            event_type="WORKSHOP",
+            languages="ENGLISH",
+            start_datetime="2019-11-15 15:00",
+            end_datetime="2019-11-15 16:00",
+            recurrences="",
+        )
+
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 201)
+
+        # The event was created
+        self.assertEqual(Event.objects.count(), 1)
+        event = Event.objects.all()[0]
+
+        # The event created in the database matches the data we submitted
+        self.assertEqual(event.title, data['title'])
+        self.assertEqual(event.description, data['description'])
+        self.assertEqual(event.organization_name, data['organization_name'])
+        self.assertEqual(event.location, data['location'])
+        self.assertEqual(event.event_type, data['event_type'])
+        self.assertEqual(event.languages, [constants.Languages.ENGLISH.name])
+        # There is an implicit assumption server time is America/Los_Angeles
+        self.assertEqual(event.start_datetime.timestamp(), datetime(2019, 11, 15, 15, 0).astimezone(los_angeles).timestamp())
+        self.assertEqual(event.end_datetime.timestamp(), datetime(2019, 11, 15, 16, 0).astimezone(los_angeles).timestamp())
+
+        # The event has the right defaults
+        self.assertEqual(event.recurrences, recurrence.Recurrence())
+        self.assertEqual(event.approval_status, constants.EventApprovalStatus.PENDING.name)
 
 
 class CensusPendingViewTest(TestCase):
