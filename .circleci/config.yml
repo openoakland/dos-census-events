@@ -13,6 +13,7 @@ jobs:
       - run: pipenv sync --dev
       - run: pipenv run python manage.py collectstatic --noinput
       - run: pipenv run migrate
+      - run: pipenv run python manage.py loaddata --app census events
       - run: pipenv run python manage.py test
 
 

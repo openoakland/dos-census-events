@@ -15,6 +15,14 @@ log = logging.getLogger(__name__)
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
+# Helper method to get the service. Mostly to help with testing.
+def get_service():
+    credentials = service_account.Credentials.from_service_account_info(
+        settings.GOOGLE_SERVICE_ACCOUNT_INFO, scopes=SCOPES)
+    service = build('calendar', 'v3', credentials=credentials)
+    return service
+
+
 def google_publish_event(event):
     # Map our event to Google Calendar API v3
     payload = {
@@ -23,15 +31,13 @@ def google_publish_event(event):
       'description': event.description,
       'start': {
         'dateTime': event.start_datetime.isoformat(),
-        'timeZone': 'America/Los_Angeles',
+        'timeZone': settings.TIME_ZONE,
       },
       'end': {
         'dateTime': event.end_datetime.isoformat(),
-        'timeZone': 'America/Los_Angeles',
+        'timeZone': settings.TIME_ZONE,
       },
-      'recurrence': None if str(event.recurrences) == '' else [
-          str(event.recurrences),
-          ] ,
+      'recurrence': [str(event.recurrences)] if event.recurrences else None,
       'visibility': 'private' if event.approval_status == constants.EventApprovalStatus.PENDING else 'public',
       #"extendedProperties": {
       #  "shared": {
@@ -40,9 +46,7 @@ def google_publish_event(event):
       #}
     }
 
-    credentials = service_account.Credentials.from_service_account_info(
-        settings.GOOGLE_SERVICE_ACCOUNT_INFO, scopes=SCOPES)
-    service = build('calendar', 'v3', credentials=credentials)
+    service = get_service()
 
     log.debug('event insert calendar=%s payload=%s', settings.GOOGLE_CALENDAR_ID, payload)
     log.info('event insert event=%s title=%s', event.id, event.title)

@@ -6,11 +6,19 @@ from .models import Event
 class EventForm(ModelForm):
     class Meta:
         model = Event
+        fields = [
+            'title',
+            'description',
+            'organization_name',
+            'location',
+            'event_type',
+            'is_census_equipped',
+            'languages',
+            'start_datetime',
+            'end_datetime',
+            'recurrences',
+        ]
         widgets = {
-                'start_time': forms.TimeInput(attrs={'type': 'time'}),
-                'end_time': forms.TimeInput(attrs={'type': 'time'})
+                'start_datetime': forms.DateTimeInput(attrs={'type': 'datetime'}),
+                'end_datetime': forms.DateTimeInput(attrs={'type': 'datetime'})
         }
-        exclude = ['approval_status', 'lon', 'lat'
-                #temporarily don't include these till the template is ready
-                , 'contact_name', 'contact_email', 'contact_phone', 'languages'
-                ]
