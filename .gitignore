@@ -4,4 +4,3 @@ google-service-account.json
 __pycache__
 *.DS_Store
 staticfiles
-.vscode/*
