@@ -2,6 +2,7 @@ import csv
 from datetime import datetime
 import io
 
+from django.conf import settings
 from django.forms.models import model_to_dict
 from django.http import StreamingHttpResponse
 from django.shortcuts import render
@@ -9,6 +10,7 @@ from django.views.generic.edit import UpdateView
 from django.views.generic.edit import DeleteView
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from pytz import timezone
 
 from . import constants, models
 
@@ -71,10 +73,11 @@ def add_event(request):
 
     # if a GET (or any other method) we'll create a blank form
     else:
+        tz = timezone(settings.TIME_ZONE)
         form = EventForm(initial={
             'languages': [constants.Languages.ENGLISH.name],
-            'start_datetime': datetime.today().replace(hour=18, minute=0, second=0, microsecond=0),
-            'end_datetime': datetime.today().replace(hour=19, minute=0, second=0, microsecond=0),
+            'start_datetime': datetime.today().astimezone(tz).replace(hour=18, minute=0, second=0, microsecond=0),
+            'end_datetime': datetime.today().astimezone(tz).replace(hour=19, minute=0, second=0, microsecond=0),
         })
 
     enable_recurrence = request.GET.get('enable_recurrence', False)

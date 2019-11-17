@@ -3,6 +3,9 @@
 import datetime
 from django.db import migrations, models
 import recurrence.fields
+import pytz
+
+los_angeles = pytz.timezone('America/Los_Angeles')
 
 
 class Migration(migrations.Migration):
@@ -23,13 +26,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='event',
             name='end_datetime',
-            field=models.DateTimeField(default=datetime.datetime(2019, 11, 1, 17, 30), help_text='When does the event end?'),
+            field=models.DateTimeField(default=datetime.datetime(2019, 11, 1, 17, 30).astimezone(los_angeles), help_text='When does the event end?'),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='event',
             name='start_datetime',
-            field=models.DateTimeField(default=datetime.datetime(2019, 11, 1, 16, 0), help_text='When does the event start?'),
+            field=models.DateTimeField(default=datetime.datetime(2019, 11, 1, 16, 0).astimezone(los_angeles), help_text='When does the event start?'),
             preserve_default=False,
         ),
         migrations.AlterField(
