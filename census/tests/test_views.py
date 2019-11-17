@@ -29,7 +29,7 @@ class CensusSubmitViewTest(TestCase):
 
     def test_url_resolves_to_view(self):
         found = resolve(self.url)
-        self.assertEqual(found.func, views.add_event)
+        self.assertEqual(found.func.view_class, views.SubmitEventView.as_view().view_class)
 
     def test_submit(self):
         data = dict(
