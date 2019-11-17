@@ -16,7 +16,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # TODO optimize the SQL query
         log.info('starting publish...')
-        for event in Event.objects.all():
+        for event in Event.objects.filter(approval_status=constants.EventApprovalStatus.APPROVED):
             try:
                 event.google_event
             except ObjectDoesNotExist:
