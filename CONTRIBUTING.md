@@ -85,9 +85,6 @@ that non-functional requirements (NFRs) don't have to be re-litigated for every
 piece of work taken on, cards can be focused on just the relevant details, and
 new team members aren't surprised by assumed expectations of their colleagues.
 
-At our sprint reviews, we demo work that has reached the "Done" column and is of
-interest to our users or teammates.
-
 
 #### Column exit criteria
 
@@ -129,8 +126,8 @@ Work that we are planning on doing and will groom and schedule.
 
 #### Ready
 
-Work that we are planning for the current sprint. Work in this column should be
-well-defined and ready to begin work.
+Prioritized stories ready for a team member to begin work. Stories in this
+column should be well-defined and ready to begin work.
 
 
 ##### Exit criteria
