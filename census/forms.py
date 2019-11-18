@@ -17,6 +17,9 @@ class EventForm(ModelForm):
             'start_datetime',
             'end_datetime',
             'recurrences',
+            'contact_name',
+            'contact_email',
+            'contact_phone',
         ]
         widgets = {
                 'start_datetime': forms.DateTimeInput(attrs={'type': 'datetime'}),

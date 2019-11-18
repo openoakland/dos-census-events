@@ -1,14 +1,124 @@
 {% extends '_base.html' %}
+
 {% block content %}
+
 <script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
 <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
 <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
-<form method="post">
-  {% csrf_token %}
-  {{ form.media }}
-  {{ form.as_p }}
-  <input type="submit" value="Update">
-</form>
-{% endblock %}
+
+<div class="grid-container">
+    <div class="grid-row">
+        <section class='tablet:grid-col-8 tablet:grid-offset-2 section-card padding-x-4 padding-y-2 margin-4'>
+            {{ form.errors }}
+            <form action="/submit/" method="post" class="">
+                <fieldset class="usa-fieldset">
+                    <legend class="usa-legend">New Event</legend>
+                    {% csrf_token %}
+                    {{ form.media }}
+                    <div>
+                      <label class="usa-label" for="{{ form.title.id_for_label }}">Title:</label>  
+                      <span class="usa-hint line-height-body-1 font-body-2xs">{{form.title.help_text}}</span>            
+                      <input type="text" name="{{ form.title.name }}" maxlength="100" class="usa-input" required="" id="{{ form.title.id_for_label }}" value="{{ form.title.value|default_if_none:'' }}">
+                    </div>
+                    <div>
+                      <label class="usa-label" for="{{ form.description.id_for_label }}">Description:</label>
+                      <span class="usa-hint line-height-body-1 font-body-2xs">{{form.description.help_text}}</span>
+                      <textarea name="{{ form.description.name }}" cols="40" rows="10" class="usa-textarea" id="{{ form.description.id_for_label }}" value="{{form.description.value|default_if_none:''}}"></textarea>
+                    </div>
+                    <div>
+                        <label class="usa-label" for="{{form.organization_name.id_for_label}}">Organization name:</label>
+                        <span class="usa-hint line-height-body-1 font-body-2xs">{{form.organization_name.help_text}}</span>
+                        <input type="text" name="{{ form.organization_name.name }}" maxlength="100" class="usa-input" required="" id="{{form.organization_name.id_for_label}}" value="{{form.organization_name.value|default_if_none:''}}">
+                    </div>  
+                    <div>
+                      <label class="usa-label" for="{{form.location.id_for_label}}">Location:</label>
+                      <span class="usa-hint line-height-body-1 font-body-2xs">{{form.location.help_text}}</span>
+                      <input type="text" name="{{ form.location.name }}" maxlength="100" class="usa-input" required="" id="{{form.location.id_for_label}}" value="{{form.location.value|default_if_none:''}}">
+                    </div>
+                    <div>
+                      <label class="usa-label" for="{{ form.contact_name.id_for_label }}">Contact Name:</label>  
+                      <span class="usa-hint line-height-body-1 font-body-2xs">{{form.contact_name.help_text}}</span>            
+                      <input type="text" name="{{ form.contact_name.name }}" maxlength="100" class="usa-input" required="" id="{{ form.contact_name.id_for_label }}"  value="{{form.contact_name.value|default_if_none:''}}">  
+                    </div>
+                    <div>
+                      <label class="usa-label" for="{{ form.contact_email.id_for_label }}">Contact Email:</label>  
+                      <span class="usa-hint line-height-body-1 font-body-2xs">{{form.contact_email.help_text}}</span>            
+                      <input type="email" name="{{ form.contact_email.name }}" maxlength="100" class="usa-input" required="" id="{{ form.contact_email.id_for_label }}" value="{{form.contact_email.value|default_if_none:''}}">
+                    </div>
+                    <div>
+                      <label class="usa-label" for="{{ form.contact_phone.id_for_label }}">Contact Phone:</label>  
+                      <span class="usa-hint line-height-body-1 font-body-2xs">{{form.contact_phone.help_text}}</span>            
+                      <input type="tel" name="{{ form.contact_phone.name }}" maxlength="100" class="usa-input" required="" id="{{ form.contact_phone.id_for_label }}" value="{{form.contact_phone.value|default_if_none:''}}">
+                    </div>
+                    <div>
+                      <label class="usa-label" for="{{form.event_type.id_for_label}}">Event type:</label>
+                      <select name="{{form.event_type.name}}" class="usa-input desktop:grid-col-3 grid-col-6" required="" id="{{form.event_type.id_for_label}}">
+                          {% for value, display in form.fields.event_type.choices %}
+                            <option value="{{ value }}" {% if form.event_type.value == value %}selected{% endif %}>{{ display }}</option>
+                          {% endfor %}
+                      </select>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <div class="usa-label grid-col-12">Census Equipment:</div>
+                        <div class="usa-hint font-body-2xs margin-y-1">{{form.is_census_equipped.help_text}}</div>
+                        <div class="usa-checkbox">
+                          <input 
+                            class="usa-checkbox__input" 
+                            id="{{form.is_census_equipped.id_for_label}}"
+                            type="checkbox"
+                            name="{{form.is_census_equipped.name}}"
+                            value="is_census_equipped"
+                            {% if value in form.is_census_equipped.value %}
+                            checked="checked"
+                            {% endif %}
+                            >
+                          <label class="usa-checkbox__label" for="{{form.is_census_equipped.id_for_label}}">Is census equipped?</label>
+                        </div>
+                    </div>
+                    <div class="checkbox-wrapper grid-row">
+                        <div class="usa-label grid-col-12 margin-bottom-2">{{form.languages.help_text}}</div>
+                        {% for value, name in form.languages.field.choices %}
+                        <div class="usa-checkbox grid-col-6">
+                            <input
+                              class="usa-checkbox__input"
+                              id="{{form.languages.id_for_label}}_{{ forloop.counter }}"
+                              type="checkbox"
+                              name="{{ form.languages.name }}"
+                              value="{{ value }}"
+                              {% if value in form.languages.value %}
+                              checked="checked"
+                              {% endif %}
+                              >
+                              <label class="usa-checkbox__label" for="{{form.languages.id_for_label}}_{{ forloop.counter }}">{{ name }}</label>
+                        </div>
+                        {% endfor %} 
+                    </div>
+                    <div>
+                        <label class="usa-label" for="{{form.start_datetime.id_for_label}}">Event start:</label>
+                        <div class="usa-hint line-height-body-1 font-body-2xs">{{form.start_datetime.help_text}}</div>
+                        <input class="usa-input desktop:grid-col-3 grid-col-6" type="text" name="{{form.start_datetime.name}}" required="" id="{{form.start_datetime.id_for_label}}" value="{{form.start_datetime.value| date:'Y-m-d H:i'}}">
+                    </div>
+                    <div>
+                        <label class="usa-label" for="{{form.end_datetime.id_for_label}}">Event end:</label>
+                        <div class="usa-hint line-height-body-1 font-body-2xs">{{form.end_datetime.help_text}}</div>
+                        <input class="usa-input desktop:grid-col-3 grid-col-6" type="text" name="{{form.end_datetime.name}}" required="" id="{{form.end_datetime.id_for_label}}" value="{{form.end_datetime.value| date:'Y-m-d H:i'}}">
+                    </div>          
+                    {% if enable_recurrence %}
+                    <span class="usa-hint line-height-body-1 font-body-2xs">{{ form.recurrences.help_text }}</span>
+                    <div class="grid-row">
+                        {{ form.recurrences }}
+                    </div>
+                    {% else %}
+                    <input type="hidden" name="{{ form.recurrences.name }}" value="" />
+                    {% endif %}
+                    </br>
+                    <input type="submit" value="Submit" class="usa-button">
+                </fieldset>
+            </form>
+        </section>
+    </div>
+</div>
+
+{% endblock content %}
 {% block media %}
-{% endblock %}
+{% endblock media %}
