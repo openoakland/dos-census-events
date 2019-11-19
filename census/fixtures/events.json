@@ -69,8 +69,8 @@
         "model": "census.event",
         "pk": 4,
         "fields": {
-            "title": "Approved SF Hack Night",
-            "description": "This is an event that is pending",
+            "title": "SF Hack Night",
+            "description": "This is an event that is approved",
             "recurrences": "RRULE:FREQ=WEEKLY;BYDAY=TU",
             "start_datetime": "2019-11-21T18:30:00-0700",
             "end_datetime": "2019-11-21T21:00:00-0700",
