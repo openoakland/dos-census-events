@@ -25,3 +25,27 @@ class EventForm(ModelForm):
                 'start_datetime': forms.DateTimeInput(attrs={'type': 'datetime'}),
                 'end_datetime': forms.DateTimeInput(attrs={'type': 'datetime'})
         }
+
+class EditEventForm(ModelForm):
+    class Meta:
+        model = Event
+        fields = [
+            'title',
+            'description',
+            'organization_name',
+            'location',
+            'event_type',
+            'is_census_equipped',
+            'languages',
+            'start_datetime',
+            'end_datetime',
+            'recurrences',
+            'contact_name',
+            'contact_email',
+            'contact_phone',
+            'approval_status'
+        ]
+        widgets = {
+                'start_datetime': forms.DateTimeInput(attrs={'type': 'datetime'}),
+                'end_datetime': forms.DateTimeInput(attrs={'type': 'datetime'})
+        }

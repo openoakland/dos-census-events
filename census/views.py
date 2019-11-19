@@ -57,6 +57,7 @@ def index(request):
     return render(request, 'index.html')
 
 from .forms import EventForm
+from .forms import EditEventForm
 from django.http import HttpResponseRedirect
 
 def add_event(request):
@@ -87,7 +88,7 @@ class UpdateEvent(LoginRequiredMixin, UpdateView):
     model = models.Event
     success_url = "/pending"
     login_url = '/login/'
-    form_class = EventForm
+    form_class = EditEventForm
 
 class PendingList(ListView):
     model = models.Event

@@ -27,7 +27,7 @@
                     <div>
                       <label class="usa-label" for="{{ form.description.id_for_label }}">Description:</label>
                       <span class="usa-hint line-height-body-1 font-body-2xs">{{form.description.help_text}}</span>
-                      <textarea name="{{ form.description.name }}" cols="40" rows="10" class="usa-textarea" id="{{ form.description.id_for_label }}" value="{{form.description.value|default_if_none:''}}"></textarea>
+                      <textarea name="{{ form.description.name }}" cols="40" rows="10" class="usa-textarea" id="{{ form.description.id_for_label }}">{{form.description.value|default_if_none:''}}</textarea>
                     </div>
                     <div>
                         <label class="usa-label" for="{{form.organization_name.id_for_label}}">Organization name:</label>
@@ -72,7 +72,7 @@
                             type="checkbox"
                             name="{{form.is_census_equipped.name}}"
                             value="is_census_equipped"
-                            {% if value in form.is_census_equipped.value %}
+                            {% if form.is_census_equipped.value %}
                             checked="checked"
                             {% endif %}
                             >
@@ -97,16 +97,18 @@
                         </div>
                         {% endfor %} 
                     </div>
-                    <div>
-                        <label class="usa-label" for="{{form.start_datetime.id_for_label}}">Event start:</label>
-                        <div class="usa-hint line-height-body-1 font-body-2xs">{{form.start_datetime.help_text}}</div>
-                        <input class="usa-input desktop:grid-col-3 grid-col-6" type="text" name="{{form.start_datetime.name}}" required="" id="{{form.start_datetime.id_for_label}}" value="{{form.start_datetime.value| date:'Y-m-d H:i'}}">
+                    <div class="grid-row">
+                      <div class="desktop:grid-col-6">
+                          <label class="usa-label" for="{{form.start_datetime.id_for_label}}">Event start:</label>
+                          <div class="usa-hint line-height-body-1 font-body-2xs">{{form.start_datetime.help_text}}</div>
+                          <input class="usa-input grid-col-6" type="text" name="{{form.start_datetime.name}}" required="" id="{{form.start_datetime.id_for_label}}" value="{{form.start_datetime.value| date:'Y-m-d H:i'}}">
+                      </div>
+                      <div class="desktop:grid-col-6">
+                          <label class="usa-label" for="{{form.end_datetime.id_for_label}}">Event end:</label>
+                          <div class="usa-hint line-height-body-1 font-body-2xs">{{form.end_datetime.help_text}}</div>
+                          <input class="usa-input grid-col-6" type="text" name="{{form.end_datetime.name}}" required="" id="{{form.end_datetime.id_for_label}}" value="{{form.end_datetime.value| date:'Y-m-d H:i'}}">
+                      </div>
                     </div>
-                    <div>
-                        <label class="usa-label" for="{{form.end_datetime.id_for_label}}">Event end:</label>
-                        <div class="usa-hint line-height-body-1 font-body-2xs">{{form.end_datetime.help_text}}</div>
-                        <input class="usa-input desktop:grid-col-3 grid-col-6" type="text" name="{{form.end_datetime.name}}" required="" id="{{form.end_datetime.id_for_label}}" value="{{form.end_datetime.value| date:'Y-m-d H:i'}}">
-                    </div>          
                     {% if enable_recurrence %}
                     <span class="usa-hint line-height-body-1 font-body-2xs">{{ form.recurrences.help_text }}</span>
                     <div class="grid-row">
@@ -115,6 +117,18 @@
                     {% else %}
                     <input type="hidden" name="{{ form.recurrences.name }}" value="" />
                     {% endif %}
+
+                    {% if request.path != "/submit/" %}
+                    <div>
+                        <label class="usa-label" for="{{form.approval_status.id_for_label}}">Approval Status:</label>
+                        <select name="{{form.approval_status.name}}" class="usa-input desktop:grid-col-3 grid-col-6" required="" id="{{form.approval_status.id_for_label}}">
+                            {% for value, display in form.fields.approval_status.choices %}
+                              <option value="{{ value }}" {% if form.approval_status.value == value %}selected{% endif %}>{{ display }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endif %}
+
                     </br>
                     <input type="submit" value="Submit" class="usa-button">
                 </fieldset>
