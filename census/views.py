@@ -58,13 +58,10 @@ def index(request):
 
 from .forms import EventForm
 from django.http import HttpResponseRedirect
-# import pdb
 
 def add_event(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
-        # print(request.POST)
-        # pdb.set_trace()
         # create a form instance and populate it with data from the request:
         form = EventForm(request.POST)
         # check whether it's valid:
@@ -88,10 +85,9 @@ def add_event(request):
 
 class UpdateEvent(LoginRequiredMixin, UpdateView):
     model = models.Event
-    fields = '__all__'
     success_url = "/pending"
     login_url = '/login/'
-    form: EventForm
+    form_class = EventForm
 
 class PendingList(ListView):
     model = models.Event

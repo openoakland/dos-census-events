@@ -10,9 +10,13 @@
     <div class="grid-row">
         <section class='tablet:grid-col-8 tablet:grid-offset-2 section-card padding-x-4 padding-y-2 margin-4'>
             {{ form.errors }}
-            <form action="/submit/" method="post" class="">
+            <form method="post" class="">
                 <fieldset class="usa-fieldset">
+                    {% if request.path == "/submit/" %}
                     <legend class="usa-legend">New Event</legend>
+                    {% else %}
+                    <legend class="usa-legend">Edit Event</legend>
+                    {% endif %}
                     {% csrf_token %}
                     {{ form.media }}
                     <div>
