@@ -63,9 +63,12 @@ function render_event_template(events) {
 }
 
 function render_no_events() {
+    /*
+    Render a dialog box to display a message if no events are found
+     */
+
     $('#event-list').empty();
-    $('#no-events-alert').removeClass('display-none');
-    $('#no-events-alert').addClass('display-block');
+    $('#no-events-alert').show();
 }
 
 function render_events(events) {
@@ -74,8 +77,7 @@ function render_events(events) {
     event boxes (e.g. https://designsystem.digital.gov/components/accordion/)
      */
     $('#event-list').empty();
-    $('#no-events-alert').removeClass('display-block');
-    $('#no-events-alert').addClass('display-none');
+    $('#no-events-alert').hide();
     for (var month in events) {
         if (events.hasOwnProperty(month)) {
             for (var j = 0; j < events[month].length; j++) {
