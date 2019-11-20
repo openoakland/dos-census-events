@@ -1,26 +1,27 @@
 import csv
-from datetime import datetime, timedelta
 import io
+from datetime import datetime, timedelta
 from itertools import groupby
-import json
 
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.forms.models import model_to_dict
-from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse
+from django.http import HttpResponseRedirect, StreamingHttpResponse
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic.edit import DeleteView, UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
 from pytz import timezone
 
 from . import constants, models
 from .forms import EditEventForm, EventForm
 from .google_calendar import google_publish_event, google_delete_event
 
-# TODO: Timezone has been set to US/Pacific, but we should probably
-#       fetch it from the users's browser
-TIMEZONE = 'US/Pacific'
+# TODO: Timezone has been set to America/Los_Angeles, but maybe we should
+#       fetch it from the user's browser settings?
+current_timezone = timezone(settings.TIME_ZONE)
+
 
 def export_events(request):
     '''
@@ -61,101 +62,169 @@ def export_events(request):
     response['Content-Disposition'] = 'attachment; filename="census_events.csv"'
     return response
 
+class HomepageView(View):
+    template_name = 'index.html'
 
-def index(request):
-    """
-    Homepage
-    """
-    return render(request, 'index.html')
+    def get(self, request):
+        """
+        Homepage
+        """
+        request.events = self.make_events_data_response(self.get_events(request))
+        request.has_events = bool(request.events)
+        request.search_query = request.GET.dict().get('search') or None
+        return render(request, self.template_name)
 
+    def get_events(self, data):
+        """
+        This endpoint /events is called by the datepicker (census/static/datepicker/js/datepicker.js)
+        to retrieve a list of filtered events by selected date/month.
 
-def get_events(data):
-    """
-    This endpoint /events is called by the datepicker (census/static/datepicker/js/datepicker.js)
-    to retrieve a list of filtered events by selected date/month.
+        :param data: Request object
+        :return: HttpResponse object containing event data. Populate
+        """
+        filter_args = dict()
+        if data.GET.dict():
+            query_params = self.get_valid_params(data.GET.dict())
+            if query_params.get('search'):
+                filter_args['search'] = query_params.get('search')
+            if query_params.get('isMonthly'):
+                # Fetch events for the whole month
+                # TODO: Test to ensure that timezone differences are properly accounted for
+                #       when using the `__month` filter
+                filter_args['month'] = query_params['month']
+                filter_args['year'] = query_params['year']
+            elif all (key in query_params for key in ('day', 'month', 'year')):
+                # Fetch events for a selected date
+                day = query_params['day']
+                month = query_params['month']
+                year = query_params['year']
+                start_date = datetime.strptime(f"{year}-{month}-{day} 00:00:00",
+                                               "%Y-%m-%d %H:%M:%S")
+                end_date = datetime.strptime(f"{year}-{month}-{day} 23:59:59",
+                                             "%Y-%m-%d %H:%M:%S")
 
-    :param data: Request object
-    :return: HttpResponse object containing event data. Populate
-    """
-    query_params = data.GET.dict()
+                filter_args['start_date'] = start_date
+                filter_args['end_date'] = end_date
+        if not filter_args.get('month'):
+            # If no payload is passed to the request, simply fetch current and
+            # future approved events
+            # filter_args['start_date'] = datetime.now().replace(hour=0, minute=0, second=0)
+            # filter_args['end_date'] = datetime.now() + timedelta(days=7)
+            filter_args['month'] = datetime.now().month
+            filter_args['year'] = datetime.now().year
+        filter_args['user_auth_status'] = data.user.is_authenticated
+        return self.fetch_events_from_db(**filter_args)
 
-    if data.user.is_authenticated:
-        base_events_query = models.Event.objects.filter(approval_status=constants.EventApprovalStatus.APPROVED.name)
-    else:
+    def get_valid_params(self, query_params):
+        """
+        Validate URL Query parameters and convert them to Python friendly values where applicable.
+        Invalid query parameters/values will be ignored.
 
-        base_events_query = models.Event.objects.filter(approval_status=constants.EventApprovalStatus.APPROVED.name, is_private_event=0)
+        :param query_params: Dictionary containing query parameters and corresponding values.
+        :return: Dictionary containing only valid parameters
+        """
+        valid_params = {}
+        for param in query_params:
+            if param == 'day' and query_params['day'].isdigit():
+                valid_params['day'] = int(query_params['day'])
+            elif param == 'month' and query_params['month'].isdigit():
+                valid_params['month'] = int(query_params['month'])
+            elif param == 'year' and query_params['year'].isdigit():
+                valid_params['year'] = int(query_params['year'])
+            elif param == 'search' \
+                    and query_params['search'] \
+                    and not query_params['search'].strip() == "":
+                valid_params['search'] = query_params['search']
+            elif param == 'isMonthly':
+                if query_params['isMonthly'] == 'true':
+                    valid_params['isMonthly'] = True
+                elif query_params['isMonthly'] == 'false':
+                    valid_params['isMonthly'] = False
+        return valid_params
 
-    if not query_params:
+    def fetch_events_from_db(self, **kwargs):
+        """
+        Retrieve matching approved events data.
 
-        # If no payload is passed to the request, simply fetch future approved events
-        start_date = datetime.now(timezone(TIMEZONE))
+        :param kwargs: Arguments containing DB fields and values
+        :return: Query set of matching events
+        """
 
-        # TODO: When the user first visits the homepage, all events occurring
-        #      in the week are fetched. Should this be changed instead to display
-        #      only events for the current day?
-        end_date = datetime.now(timezone(TIMEZONE)) + timedelta(days=7)
+        start_date = kwargs.get('start_date')
+        end_date = kwargs.get('end_date')
+        month = kwargs.get('month')
+        year = kwargs.get('year')
+        search = kwargs.get('search')
+        user_auth_status = kwargs.get('user_auth_status')
 
-        events = base_events_query.filter(start_datetime__range=(start_date, end_date)).order_by('start_datetime')
-        return HttpResponse(json.dumps(make_events_data_response(events)))
+        if user_auth_status:
+            query = Q(approval_status=constants.EventApprovalStatus.APPROVED.name,
+                           is_private_event=0)
+        else:
+            query = Q(approval_status=constants.EventApprovalStatus.APPROVED.name)
 
-    if 'isMonthly' in query_params and query_params['isMonthly'] == 'true':
-        # Fetch events for the whole month
+        if (bool(start_date) ^ bool(end_date)) or (bool(month) ^ bool(year)):
+            # If start date is provided but not end date, or vice-versa, raise error
+            # Month and year should also both be provided or not at all.
+            raise Exception
+        if month:
+            query = query & Q(start_datetime__month=month, start_datetime__year=year)
+        if start_date and end_date:
+            query = query & Q(start_datetime__range=(current_timezone.localize(start_date),
+                                                     current_timezone.localize(end_date)))
+        if search:
+            query = query & (Q(title__icontains=search) | Q(description__icontains=search))
 
-        month = int(query_params['month'])
+        return models.Event.objects.filter(query).order_by('start_datetime')
 
-        # TODO: Ensure that timezone differences are properly accounted for
-        #       when using the `__month` filter
-        events = base_events_query.filter(start_datetime__month=month).order_by('start_datetime')
-        return HttpResponse(json.dumps(make_events_data_response(events)))
+    def make_events_data_response(self, events):
+        """
+        Construct the event response object. Events are grouped by start date to simplify
+        iterating through the object to display on the landing page.
 
-    else:
-        # Fetch events for a selected date
-        day = query_params['day']
-        month = query_params['month']
-        year = query_params['year']
-        start_date = datetime.strptime(f"{year}-{month}-{day} 00:00:00", "%Y-%m-%d %H:%M:%S")
-        end_date = datetime.strptime(f"{year}-{month}-{day} 23:59:59", "%Y-%m-%d %H:%M:%S")
+        :param events: list of Event queryset objects
+        :return: Response object with the following format:
+        [
+            start_date1: [event_dict1, event_dict2],
+            start_date2: [event_dict3, event_dict4],
+        ]
+        """
+        result_set = []
+        parsed_events = [self.parse_event_queryset(event) for event in events]
+        for date, event_data in groupby(parsed_events, key=lambda row: row['start_date']):
+            date_to_display = datetime.strptime(date, '%Y-%m-%d').strftime('%A, %B %d')
+            result_set.append((date_to_display, list(event_data)))
+        return result_set
 
-        current_timezone = timezone(TIMEZONE)
-        events = base_events_query.filter(start_datetime__range=(current_timezone.localize(start_date),
-                                                                    current_timezone.localize(end_date))) \
-            .order_by('start_datetime')
-        return HttpResponse(json.dumps(make_events_data_response(events)))
+    def parse_event_queryset(self, event):
+        """
+        Given an Event object, return a dictionary containing only those attributes
+        that are required to be displayed.
 
+        Note: Django provides a Serializer class which we could use here to simplify
+        things. However, for security considerations, we still probably only want to
+        return attributes that are necessary for front-end display as opposed to the
+        whole model.
 
-def make_events_data_response(events):
-    result_set = {}
-    parsed_events = [parse_event_queryset(event) for event in events]
-    for month, event_data in groupby(parsed_events, key=lambda row: row['month']):
-        result_set[int(month)] = list(event_data)
-    return dict(events=result_set)
-
-
-def parse_event_queryset(event):
-    """
-    Given an Event object, return a dictionary containing only those attributes
-    that are required to be displayed.
-
-    :param event: Event objects
-    :return: A dictionary representation of the event
-    """
-
-    localized_start_datetime = event.start_datetime.astimezone(timezone(TIMEZONE))
-    start_date = datetime.strftime(localized_start_datetime, "%Y-%m-%d")
-    end_date = datetime.strftime(localized_start_datetime, "%Y-%m-%d")
-    month = datetime.strftime(localized_start_datetime, "%m")
-    start_time = datetime.strftime(localized_start_datetime, "%I:%M %p")
-    end_time = datetime.strftime(localized_start_datetime, "%I:%M %p")
-    return dict(id=event.id,
-                title=event.title,
-                description=event.description,
-                month=month,
-                start_date=start_date,
-                end_date=end_date,
-                start_time=start_time,
-                end_time=end_time,
-                is_private_event = event.is_private_event
-                )
+        :param event: Event objects
+        :return: A dictionary representation of the event
+        """
+        localized_start_datetime = event.start_datetime.astimezone(current_timezone)
+        localized_end_datetime = event.end_datetime.astimezone(current_timezone)
+        start_date = datetime.strftime(localized_start_datetime, "%Y-%m-%d")
+        end_date = datetime.strftime(localized_end_datetime, "%Y-%m-%d")
+        start_time = datetime.strftime(localized_start_datetime, "%I:%M %p")
+        end_time = datetime.strftime(localized_end_datetime, "%I:%M %p")
+        return dict(id=event.id,
+                    title=event.title,
+                    description=event.description,
+                    month=localized_start_datetime.month,
+                    is_private_event=event.is_private_event,
+                    start_date=start_date,
+                    end_date=end_date,
+                    start_time=start_time,
+                    end_time=end_time,
+                    )
 
 
 class SubmitEventView(View):

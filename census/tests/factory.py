@@ -18,12 +18,12 @@ def event(**kwargs):
         description="Single day event engaing community and technology",
         organization_name="OpenOakland",
         location="Oakland City Hall",
-        event_type=constants.EventType.WORKSHOP,
+        event_type=constants.EventType.WORKSHOP.name,
         start_datetime=datetime(2019, 11, 5, 18, 0).astimezone(los_angeles),
         end_datetime=datetime(2019, 11, 5, 21, 0).astimezone(los_angeles),
         recurrences=[],
-        approval_status=constants.EventApprovalStatus.APPROVED,
-        languages=[constants.Languages.ENGLISH],
+        approval_status=constants.EventApprovalStatus.APPROVED.name,
+        languages=[constants.Languages.ENGLISH.name],
     )
 
     data.update(kwargs)

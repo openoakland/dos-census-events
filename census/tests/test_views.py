@@ -1,14 +1,15 @@
-from datetime import datetime
 import logging
+from datetime import datetime, timedelta
+from unittest.mock import ANY
 
-from django.urls import reverse, resolve
-from django.test import TestCase, RequestFactory, Client
-from django.contrib.auth import views as auth_views
 import pytz
 import recurrence
+from django.contrib.auth import views as auth_views
+from django.test import TestCase, RequestFactory, Client
+from django.urls import resolve
 
-from census import views
 from census import constants
+from census import views
 from census.models import Event
 from census.tests import factory
 
@@ -285,3 +286,116 @@ class CensusDeleteViewTest(TestCase):
     def test_url_resolves_to_view(self):
         found = resolve(self.url)
         self.assertEqual(found.func.view_class, auth_views.LogoutView.as_view().view_class)
+
+
+class CensusHomepageViewTest(TestCase):
+    def setUp(self):
+        self.url = '/'
+        self.client = Client()
+
+    def test_url_resolves_to_view(self):
+        found = resolve(self.url)
+        self.assertEqual(found.func.view_class, views.HomepageView.as_view().view_class)
+
+    def test_get(self):
+        current_date = datetime.now()
+        localized_time = los_angeles.localize(current_date)
+        self.approved_event = factory.event(start_datetime=localized_time,
+                                            end_datetime=localized_time+timedelta(hours=2))
+        self.approved_event.save()
+
+        response = self.client.get(self.url)
+
+        start_datetime = self.approved_event.start_datetime.astimezone(los_angeles)
+        end_datetime = self.approved_event.end_datetime.astimezone(los_angeles)
+        assert response.context['request'].events == [
+            (self.approved_event.start_datetime.strftime('%A, %B %d'),
+             [{'id': ANY,
+               'title': self.approved_event.title,
+               'description': self.approved_event.description,
+               'month': localized_time.month,
+               'start_date': datetime.strftime(start_datetime, "%Y-%m-%d"),
+               'end_date': datetime.strftime(end_datetime, "%Y-%m-%d"),
+               'start_time': datetime.strftime(start_datetime, "%I:%M %p"),
+               'end_time': datetime.strftime(end_datetime, "%I:%M %p"),
+               'is_private_event': False,
+               }
+              ]),
+        ]
+
+    def test_get_with_query_params(self):
+        current_date = datetime.now()
+        localized_time = los_angeles.localize(current_date)
+        self.approved_event = factory.event(start_datetime=localized_time,
+                                            end_datetime=localized_time + timedelta(hours=2))
+        self.approved_event.save()
+
+        data = {
+            'isMonthly': 'false',
+            'day': current_date.day,
+            'month': current_date.month,
+            'year': current_date.year
+        }
+        response = self.client.get(self.url, data)
+
+        start_datetime = self.approved_event.start_datetime.astimezone(los_angeles)
+        end_datetime = self.approved_event.end_datetime.astimezone(los_angeles)
+        assert response.context['request'].events == [
+            (self.approved_event.start_datetime.strftime('%A, %B %d'),
+             [{'id': ANY,
+               'title': self.approved_event.title,
+               'description': self.approved_event.description,
+               'month': localized_time.month,
+               'start_date': datetime.strftime(start_datetime, "%Y-%m-%d"),
+               'end_date': datetime.strftime(end_datetime, "%Y-%m-%d"),
+               'start_time': datetime.strftime(start_datetime, "%I:%M %p"),
+               'end_time': datetime.strftime(end_datetime, "%I:%M %p"),
+               'is_private_event': False,
+               }]),
+        ]
+
+    def test_get_monthly_results(self):
+        current_date = datetime.now().replace(month=3)
+        localized_time = los_angeles.localize(current_date)
+        self.approved_event = factory.event(start_datetime=localized_time,
+                                            end_datetime=localized_time + timedelta(hours=2))
+        self.approved_event.save()
+
+        data = {
+            'isMonthly': 'true',
+            'month': 3,
+            'year': current_date.year
+        }
+        response = self.client.get(self.url, data)
+
+        start_datetime = self.approved_event.start_datetime.astimezone(los_angeles)
+        end_datetime = self.approved_event.end_datetime.astimezone(los_angeles)
+        assert response.context['request'].events == [
+            (self.approved_event.start_datetime.strftime('%A, %B %d'),
+             [{'id': ANY,
+               'title': self.approved_event.title,
+               'description': self.approved_event.description,
+               'month': localized_time.month,
+               'start_date': datetime.strftime(start_datetime, "%Y-%m-%d"),
+               'end_date': datetime.strftime(end_datetime, "%Y-%m-%d"),
+               'start_time': datetime.strftime(start_datetime, "%I:%M %p"),
+               'end_time': datetime.strftime(end_datetime, "%I:%M %p"),
+               'is_private_event': False,
+               }]),
+        ]
+
+    def test_get_search_query(self):
+        current_date = datetime.now()
+        localized_time = los_angeles.localize(current_date)
+        self.approved_event = factory.event(start_datetime=localized_time,
+                                            end_datetime=localized_time + timedelta(hours=2))
+
+        self.approved_event.save()
+        self.approved_event_two = factory.event(title="some title")
+        self.approved_event_two.save()
+
+        response = self.client.get(self.url, {'search': 'oak'})
+
+        assert len(response.context['request'].events) == 1
+        assert len(response.context['request'].events[0][1]) == 1
+        assert response.context['request'].events[0][1][0]['title'] == self.approved_event.title
