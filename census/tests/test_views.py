@@ -53,6 +53,9 @@ class CensusSubmitViewTest(TestCase):
         self.assertContains(response, 'name="start_datetime"')
         self.assertContains(response, 'name="end_datetime"')
         self.assertContains(response, 'name="recurrences"')
+        self.assertContains(response, 'name="contact_name"')
+        self.assertContains(response, 'name="contact_email"')
+        self.assertContains(response, 'name="contact_phone"')
 
 
     def test_submit(self):
@@ -66,6 +69,9 @@ class CensusSubmitViewTest(TestCase):
             start_datetime="2019-11-15 15:00",
             end_datetime="2019-11-15 16:00",
             recurrences="",
+            contact_email="hi@example.com",
+            contact_name="Kevin Man",
+            contact_phone="510-523-4567",
         )
 
         response = self.client.post(self.url, data)
@@ -102,6 +108,9 @@ class CensusSubmitViewTest(TestCase):
             languages="ENGLISH",
             end_datetime="2019-11-15 16:00",
             recurrences="",
+            contact_email="hi@example.com",
+            contact_name="Kevin Man",
+            contact_phone="510-523-4567",
         )
 
         response = self.client.post(self.url, data)
@@ -123,6 +132,9 @@ class CensusSubmitViewTest(TestCase):
             start_datetime="2019-11-15 15:00",
             end_datetime="2019-11-15 16:00",
             recurrences="",
+            contact_email="hi@example.com",
+            contact_name="Kevin Man",
+            contact_phone="510-523-4567",
         )
 
         response = self.client.post(self.url, data)
@@ -144,6 +156,9 @@ class CensusSubmitViewTest(TestCase):
             start_datetime="2019-11-15 15:00",
             end_datetime="2019-11-15 16:00",
             recurrences="RRULE:FREQ=WEEKLY;BYDAY=TU",
+            contact_email="hi@example.com",
+            contact_name="Kevin Man",
+            contact_phone="510-523-4567",
         )
 
         response = self.client.post(self.url, data)
