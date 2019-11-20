@@ -1,40 +1,47 @@
 {% load static %}
 
 <header class="usa-header usa-header--basic">
-    <div class="grid-container">
-        {#  Census Logo #}
-        <div class="height-10 tablet:grid-col-12 bg-white border-bottom-05 border-gray-30">
-            <img class="height-9" src="../static/census/img/main-logo-sm-2x.png"/>
-        </div>
+  <div class="grid-container">
+    {# Census Logo #}
+    <div
+      class="height-10 tablet:grid-col-12 bg-white border-bottom-05 border-gray-30"
+    >
+      <img class="height-9" src="/static/census/img/main-logo-sm-2x.png" />
     </div>
-    <div class="usa-nav-container">
-        <div class="usa-navbar">
-            <div class="usa-logo" id="basic-logo">
-                <em class="usa-logo__text font-body-xl">
-                    <a href="/" title="Home" aria-label="Home">Census Events</a>
-                </em>
-            </div>
-            <button class="usa-menu-btn">Menu</button>
-        </div>
-        <nav aria-label="Primary navigation" class="usa-nav">
-            <button class="usa-nav__close"><img src="{% static 'uswds-2.0.2/img/close.svg' %}" alt="close"></button>
-            <ul class="usa-nav__primary usa-accordion">
-                <li class="usa-nav__primary-item">
-                    <a class="usa-nav__link" href="javascript:void(0)">
-                        <span>Review Events</span>
-                    </a>
-                </li>
-                <li class="usa-nav__primary-item">
-                    <a class="usa-nav__link" href="javascript:void(0)">
-                        <span>My Events</span>
-                    </a>
-                </li>
-                <li class="usa-nav__primary-item">
-                    <a class="usa-nav__link" href="javascript:void(0)">
-                        <span>Sign Out</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+  </div>
+  <div class="usa-nav-container">
+    <div class="usa-navbar">
+      <div class="usa-logo" id="basic-logo">
+        <em class="usa-logo__text font-body-xl">
+          <a href="/" title="Home" aria-label="Home">Census Events</a>
+        </em>
+      </div>
+      <button class="usa-menu-btn">Menu</button>
     </div>
+    <nav aria-label="Primary navigation" class="usa-nav">
+      <button class="usa-nav__close">
+        <img src="{% static 'uswds-2.0.2/img/close.svg' %}" alt="close" />
+      </button>
+      <ul class="usa-nav__primary usa-accordion">
+        {% if user.is_authenticated %}
+        <li class="usa-nav__primary-item">
+          <a class="usa-nav__link" href="/pending">
+            <span>Review Events</span>
+          </a>
+        </li>
+        <li class="usa-nav__primary-item">
+          <a class="usa-nav__link" href="/logout">
+            <span>Sign Out</span>
+          </a>
+        </li>
+        {% else %}
+        <li class="usa-nav__primary-item">
+          <a class="usa-nav__link" href="/login">
+            <span>Sign In</span>
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
 </header>
