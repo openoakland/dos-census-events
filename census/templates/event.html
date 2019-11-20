@@ -81,14 +81,14 @@
                         <div class="usa-checkbox grid-col-6">
                             <input
                               class="usa-checkbox__input"
-                              id="{{form.languages.id_for_label}}_{{ forloop.counter }}"
+                              id="{{ form.languages.name }}_{{ forloop.counter }}"
                               type="checkbox"
                               name="{{ form.languages.name }}"
                               value="{{ value }}"
                               {% if value in form.languages.value %}
                               checked="checked"
                               {% endif %}
-                              >
+                              />
                               <label class="usa-checkbox__label" for="{{form.languages.id_for_label}}_{{ forloop.counter }}">{{ name }}</label>
                         </div>
                         {% endfor %} 
@@ -96,12 +96,12 @@
                     <div>
                         <label class="usa-label" for="{{form.start_datetime.id_for_label}}">Event start:</label>
                         <div class="usa-hint line-height-body-1 font-body-2xs">{{form.start_datetime.help_text}}</div>
-                        <input class="usa-input desktop:grid-col-3 grid-col-6" type="text" name="{{form.start_datetime.name}}" required="" id="{{form.start_datetime.id_for_label}}" value="{{form.start_datetime.value | date:'Y-m-d H:i'}}">
+                        <input class="usa-input desktop:grid-col-3 grid-col-6" type="text" name="{{form.start_datetime.name}}" required="" id="{{form.start_datetime.id_for_label}}" value="{{form.start_datetime.value | date:'Y-m-d H:i'}}" />
                     </div>
                     <div>
                         <label class="usa-label" for="{{form.end_datetime.id_for_label}}">Event end:</label>
                         <div class="usa-hint line-height-body-1 font-body-2xs">{{form.end_datetime.help_text}}</div>
-                        <input class="usa-input desktop:grid-col-3 grid-col-6" type="text" name="{{form.end_datetime.name}}" required="" id="{{form.end_datetime.id_for_label}}" value="{{form.end_datetime.value | date:'Y-m-d H:i'}}">
+                        <input class="usa-input desktop:grid-col-3 grid-col-6" type="text" name="{{form.end_datetime.name}}" required="" id="{{form.end_datetime.id_for_label}}" value="{{form.end_datetime.value | date:'Y-m-d H:i'}}" />
                     </div>          
                     {% if enable_recurrence %}
                     <span class="usa-hint line-height-body-1 font-body-2xs">{{ form.recurrences.help_text }}</span>
@@ -111,7 +111,7 @@
                     {% else %}
                     <input type="hidden" name="{{ form.recurrences.name }}" value="" />
                     {% endif %}
-                    </br>
+                    <br/>
                     <input type="submit" value="Submit" class="usa-button">
                 </fieldset>
             </form>

@@ -26,7 +26,7 @@ urlpatterns = [
     path('', index, name='index'),
     path('admin/', admin.site.urls),
     path('export/events/', views.export_events),
-    path('submit/', views.add_event),
+    path('submit/', views.SubmitEventView.as_view()),
     path('pending/', views.PendingList.as_view(), name = 'pending_list'),
     path('event/<int:pk>/update/', views.UpdateEvent.as_view(), name= 'event_update'),
     path('event/<int:pk>/delete/', views.DeleteEvent.as_view(), name= 'event_delete'),

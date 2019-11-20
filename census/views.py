@@ -7,6 +7,7 @@ import json
 from django.forms.models import model_to_dict
 from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse
 from django.shortcuts import render
+from django.views import View
 from django.views.generic import ListView
 from django.views.generic.edit import DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -152,28 +153,40 @@ def parse_event_queryset(event):
                 )
 
 
-def add_event(request):
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = EventForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/submit/')
-    # if a GET (or any other method) we'll create a blank form
-    else:
+class SubmitEventView(View):
+    template_name = 'event.html'
+
+    def get(self, request, *args, **kwargs):
         form = EventForm(initial={
             'languages': [constants.Languages.ENGLISH.name],
             'start_datetime': datetime.today().replace(hour=18, minute=0, second=0, microsecond=0),
             'end_datetime': datetime.today().replace(hour=19, minute=0, second=0, microsecond=0),
         })
 
-    enable_recurrence = request.GET.get('enable_recurrence', False)
-    return render(request, 'census/event_form.html', {
-        'form': form,
-        'enable_recurrence': enable_recurrence,
-    })
+        enable_recurrence = request.GET.get('enable_recurrence', False)
+        return render(request, self.template_name, {
+            'form': form,
+            'enable_recurrence': enable_recurrence,
+        })
+
+
+    def post(self, request, *args, **kwargs):
+        # create a form instance and populate it with data from the request:
+        form = EventForm(request.POST)
+
+        # check whether it's valid:
+        if form.is_valid():
+            form.save()
+            status_code = 201
+        else:
+            status_code = 400
+
+        return render(
+            request,
+            self.template_name,
+            {'form': form},
+            status=status_code,
+        )
 
 
 class UpdateEvent(LoginRequiredMixin, UpdateView):
