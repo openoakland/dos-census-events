@@ -1,7 +1,21 @@
 {% extends '_base.html' %}
 {% block content %}
-<form method="post">{% csrf_token %}
-    <p>Are you sure you want to delete "{{ object }}"?</p>
-    <input type="submit" value="Confirm">
-</form>
+<div class='grid-row'>
+  <div class='grid-col-8 grid-offset-2'>
+    <form class="grid-col-12" method="post">{% csrf_token %}
+        <div class="usa-alert usa-alert--error">
+          <div class="usa-alert__body">
+              <h3 class="usa-alert__heading">Warning you cannot get this event back</h3>
+              <p class="usa-alert__text">Are you sure you want to delete "{{ object }}"?</p>
+          </div>
+        </div>
+        <br/>
+        <br/>
+        <div class="grid-col-4 grid-offset-4">
+          <input class="usa-button usa-button--outline" type="submit" value="Go Back">
+          <input class="usa-button usa-button--secondary" type="submit" value="Delete">
+        </div>
+    </form>
+  </div>
+</div>
 {% endblock %}
