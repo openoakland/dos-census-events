@@ -1,6 +1,12 @@
 {% load static %}
 
 <header class="usa-header usa-header--basic">
+    <div class="grid-container">
+        {#  Census Logo #}
+        <div class="height-10 tablet:grid-col-12 bg-white border-bottom-05 border-gray-30">
+            <img class="height-9" src="../static/census/img/main-logo-sm-2x.png"/>
+        </div>
+    </div>
     <div class="usa-nav-container">
         <div class="usa-navbar">
             <div class="usa-logo" id="basic-logo">
@@ -12,7 +18,7 @@
         </div>
         <nav aria-label="Primary navigation" class="usa-nav">
             <button class="usa-nav__close"><img src="{% static 'uswds-2.0.2/img/close.svg' %}" alt="close"></button>
-            <ul class="usa-nav__primary usa-accordion"> 
+            <ul class="usa-nav__primary usa-accordion">
                 <li class="usa-nav__primary-item">
                     <a class="usa-nav__link" href="javascript:void(0)">
                         <span>Review Events</span>
