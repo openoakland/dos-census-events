@@ -57,6 +57,7 @@ def index(request):
     return render(request, 'index.html')
 
 from .forms import EventForm
+from .forms import EditEventForm
 from django.http import HttpResponseRedirect
 
 def add_event(request):
@@ -68,7 +69,6 @@ def add_event(request):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/submit/')
-
     # if a GET (or any other method) we'll create a blank form
     else:
         form = EventForm(initial={
@@ -78,7 +78,7 @@ def add_event(request):
         })
 
     enable_recurrence = request.GET.get('enable_recurrence', False)
-    return render(request, 'event.html', {
+    return render(request, 'census/event_form.html', {
         'form': form,
         'enable_recurrence': enable_recurrence,
     })
@@ -86,9 +86,9 @@ def add_event(request):
 
 class UpdateEvent(LoginRequiredMixin, UpdateView):
     model = models.Event
-    fields = '__all__'
     success_url = "/pending"
     login_url = '/login/'
+    form_class = EditEventForm
 
 class PendingList(ListView):
     model = models.Event
