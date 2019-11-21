@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.views.i18n import JavaScriptCatalog
 from .views import index
 
@@ -24,6 +24,7 @@ from . import views
 
 urlpatterns = [
     path('', index, name='index'),
+    path('i18n/', include('django.conf.urls.i18n')),
     path('admin/', admin.site.urls),
     path('export/events/', views.export_events),
     path('submit/', views.SubmitEventView.as_view()),
