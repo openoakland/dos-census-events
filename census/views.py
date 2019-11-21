@@ -13,6 +13,7 @@ from django.views.generic.edit import DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from pytz import timezone
 
+from django.conf import settings
 from . import constants, models
 from .forms import EditEventForm, EventForm
 
@@ -158,7 +159,7 @@ class SubmitEventView(View):
 
     def get(self, request, *args, **kwargs):
         form = EventForm(initial={
-            'languages': [constants.Languages.ENGLISH.name],
+            'languages': [language[0] for language in settings.LANGUAGES if language[1] == "English"],
             'start_datetime': datetime.today().replace(hour=18, minute=0, second=0, microsecond=0),
             'end_datetime': datetime.today().replace(hour=19, minute=0, second=0, microsecond=0),
         })

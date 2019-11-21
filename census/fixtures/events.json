@@ -15,7 +15,7 @@
             "lon": null,
             "is_census_equipped": false,
             "approval_status": "APPROVED",
-            "languages": "ENGLISH",
+            "languages": "en",
             "contact_name": null,
             "contact_email": null,
             "contact_phone": null
@@ -37,7 +37,7 @@
             "lon": null,
             "is_census_equipped": false,
             "approval_status": "PENDING",
-            "languages": "ENGLISH",
+            "languages": "en",
             "contact_name": null,
             "contact_email": null,
             "contact_phone": null

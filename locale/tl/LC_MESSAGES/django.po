@@ -1,0 +1,110 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-17 22:21-0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: census/settings.py:143
+msgid "English"
+msgstr ""
+
+#: census/settings.py:144
+msgid "Spanish"
+msgstr ""
+
+#: census/settings.py:145
+msgid "Vietnamese"
+msgstr ""
+
+#: census/settings.py:146
+msgid "Chinese"
+msgstr ""
+
+#: census/settings.py:147
+msgid "Tagalog"
+msgstr ""
+
+#: src/pipenv/tests/test_artifacts/git/jinja2/ext/django2jinja/templates/index.html:37
+#, python-format
+msgid ""
+"\n"
+"  This is %(book_t)s by %(author_t)s\n"
+"  "
+msgstr ""
+
+#: src/pipenv/tests/test_artifacts/git/jinja2/ext/django2jinja/templates/index.html:41
+#: src/pipenv/tests/test_artifacts/git/jinja2/ext/django2jinja/templates/index.html:47
+#, python-format
+msgid ""
+"\n"
+"  There is only one %(name)s object.\n"
+"  "
+msgid_plural ""
+"\n"
+"  There are %(counter)s %(name)s objects.\n"
+"  "
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/pipenv/tests/test_artifacts/git/jinja2/ext/django2jinja/templates/index.html:53
+#, python-format
+msgid "This string will have %(value)s inside."
+msgstr ""
+
+#: src/pipenv/tests/test_artifacts/git/jinja2/ext/django2jinja/templates/index.html:55
+msgid "This is the title."
+msgstr ""
+
+#: src/pipenv/tests/test_artifacts/git/pyinstaller/tests/unit/test_building_utils.py:28
+msgid "existing.txt"
+msgstr ""
+
+#: src/pipenv/tests/test_artifacts/git/pyinstaller/tests/unit/test_building_utils.py:29
+msgid "other.txt"
+msgstr ""
+
+#: src/pipenv/tests/test_artifacts/git/pyinstaller/tests/unit/test_building_utils.py:30
+msgid "*.log"
+msgstr ""
+
+#: src/pipenv/tests/test_artifacts/git/pyinstaller/tests/unit/test_building_utils.py:31
+msgid "a/*.log"
+msgstr ""
+
+#: src/pipenv/tests/test_artifacts/git/pyinstaller/tests/unit/test_building_utils.py:32
+msgid "a/here.tex"
+msgstr ""
+
+#: src/pipenv/tests/test_artifacts/git/pyinstaller/tests/unit/test_building_utils.py:33
+#: src/pipenv/tests/test_artifacts/git/pyinstaller/tests/unit/test_building_utils.py:65
+msgid "b/[abc].tex"
+msgstr ""
+
+#: src/pipenv/tests/test_artifacts/git/pyinstaller/tests/unit/test_building_utils.py:51
+msgid "not.txt"
+msgstr ""
+
+#: src/pipenv/tests/test_artifacts/git/pyinstaller/tests/unit/test_building_utils.py:52
+msgid "a/not.txt"
+msgstr ""
+
+#: src/pipenv/tests/test_artifacts/git/pyinstaller/tests/unit/test_building_utils.py:53
+msgid "b/not.txt"
+msgstr ""
+
+#: src/pipenv/tests/test_artifacts/git/pyinstaller/tests/unit/test_building_utils.py:75
+msgid "tex/not.txt"
+msgstr ""

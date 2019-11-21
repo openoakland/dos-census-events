@@ -3,8 +3,8 @@ Factory methods to help with creating valid test data.
 """
 
 from datetime import datetime
-
 from pytz import timezone
+from django.conf import settings
 
 from census import constants
 from census.models import Event
@@ -21,7 +21,7 @@ def event(**kwargs):
         end_datetime=datetime(2019, 11, 5, 21, 0, 0, 0, timezone('America/Los_Angeles')),
         recurrences=[],
         approval_status=constants.EventApprovalStatus.APPROVED,
-        languages=[constants.Languages.ENGLISH],
+        languages=[language for language in settings.LANGUAGES if language[1] == "English"],
     )
 
     data.update(kwargs)

@@ -15,6 +15,8 @@ import json
 
 import environ
 
+from django.utils.translation import ugettext_lazy as _
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -66,6 +68,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -135,6 +138,34 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
+LANGUAGES = [
+    ('en', _('English')),
+    ('es', _('Spanish')),
+    ('vi', _('Vietnamese')),
+    ('zh-cn', _('Chinese')),
+    ('tl', _('Tagalog')),
+]
+
+EXTRA_LANG_INFO = {
+    'tl': {
+        'bidi': False, # left-to-right
+        'code': 'tl',
+        'name': 'Tagalog',
+        'name_local': u'\u170f\u1712\u1703\u1705\u1714 \u1706\u1704\u170e\u1713\u1704\u1714', #unicode codepoints here
+    },
+}
+
+
+# Add custom languages not provided by Django
+import django.conf.locale
+LANG_INFO = dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO)
+django.conf.locale.LANG_INFO = LANG_INFO
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
 
 PHONENUMBER_DB_FORMAT = 'NATIONAL'
 PHONENUMBER_DEFAULT_REGION = 'US'
