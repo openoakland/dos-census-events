@@ -65,7 +65,7 @@ class CensusSubmitViewTest(TestCase):
             organization_name="OpenOakland",
             location="City Hall",
             event_type="WORKSHOP",
-            languages="ENGLISH",
+            languages="es",
             start_datetime="2019-11-15 15:00",
             end_datetime="2019-11-15 16:00",
             recurrences="",
@@ -87,7 +87,7 @@ class CensusSubmitViewTest(TestCase):
         self.assertEqual(event.organization_name, data['organization_name'])
         self.assertEqual(event.location, data['location'])
         self.assertEqual(event.event_type, data['event_type'])
-        self.assertEqual(event.languages, [constants.Languages.ENGLISH.name])
+        self.assertEqual(event.languages, ["es"])
         # There is an implicit assumption server time is America/Los_Angeles
         self.assertEqual(event.start_datetime.timestamp(), datetime(2019, 11, 15, 15, 0).astimezone(los_angeles).timestamp())
         self.assertEqual(event.end_datetime.timestamp(), datetime(2019, 11, 15, 16, 0).astimezone(los_angeles).timestamp())
@@ -105,7 +105,7 @@ class CensusSubmitViewTest(TestCase):
             organization_name="OpenOakland",
             location="City Hall",
             event_type="WORKSHOP",
-            languages="ENGLISH",
+            languages="en",
             end_datetime="2019-11-15 16:00",
             recurrences="",
             contact_email="hi@example.com",
@@ -152,7 +152,7 @@ class CensusSubmitViewTest(TestCase):
             organization_name="OpenOakland",
             location="City Hall",
             event_type="WORKSHOP",
-            languages="ENGLISH",
+            languages="es",
             start_datetime="2019-11-15 15:00",
             end_datetime="2019-11-15 16:00",
             recurrences="RRULE:FREQ=WEEKLY;BYDAY=TU",
