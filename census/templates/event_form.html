@@ -20,6 +20,8 @@
                     {% csrf_token %}
                     {{ form.media }}
 
+                    {% include 'includes/_form_errors.html' %}
+
                     <div>
                       <label class="usa-label" for="{{ form.title.id_for_label }}">{{form.title.label}}:</label>  
                       <span class="usa-hint line-height-body-1 font-body-2xs">{{form.title.help_text}}</span>            
