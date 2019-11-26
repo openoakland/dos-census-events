@@ -21,7 +21,7 @@ phonenumbers = "*"
 psycopg2-binary = "*"
 pytz = "*"
 whitenoise = "*"
-
+django-waffle = "*"
 
 [requires]
 python_version = "3.6"

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ed0d84d122e4e8bd36aaa978753495462fa9c073edacc22f164d78a301f46878"
+            "sha256": "2ccfaeb7ae2467f1046de84da0ae93cbb04469cffc59b0533651aff5e9ae9fe7"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -106,6 +106,14 @@
             ],
             "version": "==1.0.4"
         },
+        "django-waffle": {
+            "hashes": [
+                "sha256:5b8556dfde1caf66c33d754f0708f504fdcd0065a824d6be1f0c5d87d3a10d00",
+                "sha256:e1aafced6e0dc5cadeafe30047224840c591ffe3ff4aa5259ec74f0b82ceb64f"
+            ],
+            "index": "pypi",
+            "version": "==0.18.0"
+        },
         "google-api-python-client": {
             "hashes": [
                 "sha256:3121d55d106ef1a2756e8074239512055bd99eb44da417b3dd680f9a1385adec",
@@ -139,11 +147,11 @@
         },
         "gunicorn": {
             "hashes": [
-                "sha256:0806b5e8a2eb8ba9ac1be65d7b743ec896fc25f5d6cb16c5e051540157b315bb",
-                "sha256:ef69dea4814df95e64e3f40b47b7ffedc6911c5009233be9d01cfd0d14aa3f50"
+                "sha256:1d8012b859f4cd9e45753f1ccb33a94df1ab9e1b7af4f81ac871680b4042b08b",
+                "sha256:5c6f119298dd692ba49d83ea351aeefdb63d33e32179d91d173d942525115890"
             ],
             "index": "pypi",
-            "version": "==20.0.0"
+            "version": "==20.0.3"
         },
         "httplib2": {
             "hashes": [
@@ -168,11 +176,11 @@
         },
         "phonenumbers": {
             "hashes": [
-                "sha256:2430c95b35e330efe3483021955ed98d0c245bd07cdaff41fff4cc3630350de9",
-                "sha256:705dc7bbaa0d5932e9c010437c718bb3c0d7c93ab25b9710b4d9ae7370cc0121"
+                "sha256:32bfda8a0d33a5de47d6426ef1e2ec59baa574102a01708bdee0a78079392f42",
+                "sha256:b31916281b0819c1e24ee3c21561ecd8be5af9381088557a986af85051a243bf"
             ],
             "index": "pypi",
-            "version": "==8.10.22"
+            "version": "==8.10.23"
         },
         "psycopg2-binary": {
             "hashes": [

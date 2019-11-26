@@ -58,7 +58,8 @@ INSTALLED_APPS = [
     'recurrence',
     'census',
     'multiselectfield',
-    'phonenumber_field'
+    'phonenumber_field',
+    'waffle'
 ]
 
 if env('DEBUG'):
@@ -74,6 +75,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'waffle.middleware.WaffleMiddleware',
 ]
 
 if env('DEBUG'):
