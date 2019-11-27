@@ -201,6 +201,35 @@ class CensusPendingViewTest(TestCase):
         # Response contains the title of a pending event
         self.assertContains(response, self.pending_event.title)
 
+class CensusApprovedViewTest(TestCase):
+    """Test approved  list view returns a single approved event."""
+    def setUp(self):
+        self.url = "/approved/"
+        self.client = Client()
+        self.approved_event = factory.event(approval_status=constants.EventApprovalStatus.APPROVED.name)
+        self.approved_event.save()
+
+    def test_url_resolves_to_view(self):
+        found = resolve(self.url)
+        self.assertEqual(found.func.view_class, views.ApprovedList.as_view().view_class)
+
+    def test_get_approved(self):
+        factory = RequestFactory()
+        request = factory.get(self.url)
+        results = views.ApprovedList.as_view()(request)
+        approved_events = results.context_data["event_list"]
+
+        # Assumes 1 approved event in initial test data
+        self.assertEqual(len(approved_events), 1)
+        event = approved_events[0]
+        self.assertEqual(event, self.approved_event)
+
+    def test_template_content(self):
+        response = self.client.get(self.url)
+
+        # Response contains the title of a approved event
+        self.assertContains(response, self.approved_event.title)
+
 class CensusPendingViewWithRecurrenceTest(TestCase):
     """Given a recurring pending event, the event appears in the pending list"""
 
