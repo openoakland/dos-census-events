@@ -15,6 +15,7 @@ from pytz import timezone
 
 from . import constants, models
 from .forms import EditEventForm, EventForm
+from .google_calendar import google_publish_event, google_delete_event
 
 # TODO: Timezone has been set to US/Pacific, but we should probably
 #       fetch it from the users's browser
@@ -191,16 +192,48 @@ class SubmitEventView(View):
 
 class UpdateEvent(LoginRequiredMixin, UpdateView):
     model = models.Event
-    success_url = "/pending"
     login_url = '/login/'
     form_class = EditEventForm
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.prev_status = self.object.approval_status
+        return super().post(request, *args, **kwargs)
+
+    # If the status before the update was APPROVED then go to the approved list.
+    def get_success_url(self):
+        if self.prev_status == constants.EventApprovalStatus.APPROVED.name:
+            return "/approved"
+        return "/pending"
+    # Override the form_valid method to push event to google calendar
+    def form_valid(self, form):
+        self.object = form.save()
+        if form.instance.approval_status == constants.EventApprovalStatus.APPROVED.name:
+            google_publish_event(form.instance)
+        return HttpResponseRedirect(self.get_success_url())
 
 class PendingList(ListView):
     model = models.Event
     queryset = models.Event.objects.filter(approval_status = constants.EventApprovalStatus.PENDING.name)
     template_name = 'census/pending_list.html'
 
+class ApprovedList(ListView):
+    model = models.Event
+    queryset = models.Event.objects.filter(approval_status = constants.EventApprovalStatus.APPROVED.name)
+    template_name = 'census/approved_list.html'
+
 class DeleteEvent(LoginRequiredMixin, DeleteView):
     model = models.Event
     success_url = "/pending"
     login_url = '/login/'
+    # Override the delete method so we can delete for the google calendar
+    def delete(self, request, *args, **kwargs):
+        self.object = event = self.get_object()
+        success_url = self.get_success_url()
+        google_delete_event(event)
+        event.delete()
+        # Return to the list we came from.
+        if event.approval_status == constants.EventApprovalStatus.APPROVED.name:
+            return HttpResponseRedirect("/approved")
+        else:
+            return HttpResponseRedirect("/pending")
+

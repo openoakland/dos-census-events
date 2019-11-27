@@ -28,6 +28,7 @@ urlpatterns = [
     path('export/events/', views.export_events),
     path('submit/', views.SubmitEventView.as_view()),
     path('pending/', views.PendingList.as_view(), name = 'pending_list'),
+    path('approved/', views.ApprovedList.as_view(), name = 'approved_list'),
     path('event/<int:pk>/update/', views.UpdateEvent.as_view(), name= 'event_update'),
     path('event/<int:pk>/delete/', views.DeleteEvent.as_view(), name= 'event_delete'),
     url(r'^login/$', auth_views.LoginView.as_view(), name='login'),
