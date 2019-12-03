@@ -72,7 +72,7 @@ def add_event(request):
     # if a GET (or any other method) we'll create a blank form
     else:
         form = EventForm(initial={
-            'languages': [constants.Languages.ENGLISH.name],
+            'languages': [constants.Languages.ENGLISH],
             'start_datetime': datetime.today().replace(hour=18, minute=0, second=0, microsecond=0),
             'end_datetime': datetime.today().replace(hour=19, minute=0, second=0, microsecond=0),
         })
@@ -92,7 +92,7 @@ class UpdateEvent(LoginRequiredMixin, UpdateView):
 
 class PendingList(ListView):
     model = models.Event
-    queryset = models.Event.objects.filter(approval_status = constants.EventApprovalStatus.PENDING.name)
+    queryset = models.Event.objects.filter(approval_status = constants.EventApprovalStatus.PENDING)
     template_name = 'census/pending_list.html'
 
 class DeleteEvent(LoginRequiredMixin, DeleteView):

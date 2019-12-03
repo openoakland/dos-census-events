@@ -32,7 +32,7 @@ class CensusPendingViewTest(TestCase):
     def setUp(self):
         self.url = "/pending/"
         self.client = Client()
-        self.pending_event = factory.event(approval_status=constants.EventApprovalStatus.PENDING.name)
+        self.pending_event = factory.event(approval_status=constants.EventApprovalStatus.PENDING)
         self.pending_event.save()
 
     def test_url_resolves_to_view(self):
@@ -63,7 +63,7 @@ class CensusPendingViewWithRecurrenceTest(TestCase):
         self.url = "/pending/"
         self.client = Client()
         self.pending_event = factory.event(
-            approval_status=constants.EventApprovalStatus.PENDING.name,
+            approval_status=constants.EventApprovalStatus.PENDING,
             recurrences=recurrence.Recurrence(rrules=[recurrence.Rule(recurrence.DAILY)]),
         )
         self.pending_event.save()
