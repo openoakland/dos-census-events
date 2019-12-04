@@ -21,10 +21,17 @@
                     {{ form.media }}
 
                     {% include 'includes/_form_errors.html' %}
-
+                    {% if message %}
+                      <div class="usa-alert usa-alert--success" role="alert">
+                          <div class="usa-alert__body">
+                            <h3 class="usa-alert__heading">{{message}}</h3>
+                            <p class="usa-alert__text"> It is now pending approval.</p>
+                          </div>
+                      </div>
+                    {% endif %}
                     <div>
-                      <label class="usa-label" for="{{ form.title.id_for_label }}">{{form.title.label}}:</label>  
-                      <span class="usa-hint line-height-body-1 font-body-2xs">{{form.title.help_text}}</span>            
+                      <label class="usa-label" for="{{ form.title.id_for_label }}">{{form.title.label}}:</label>
+                      <span class="usa-hint line-height-body-1 font-body-2xs">{{form.title.help_text}}</span>
                       <input type="text" name="{{ form.title.name }}" maxlength="100" class="usa-input" required="" id="{{ form.title.id_for_label }}" value="{{ form.title.value|default_if_none:'' }}">
                     </div>
                     <div>

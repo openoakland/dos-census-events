@@ -173,10 +173,12 @@ class SubmitEventView(View):
     def post(self, request, *args, **kwargs):
         # create a form instance and populate it with data from the request:
         form = EventForm(request.POST)
+        message = ''
 
         # check whether it's valid:
         if form.is_valid():
             form.save()
+            message =request.POST['title'] + " successfully created."
             status_code = 201
             form = EventForm(initial={
                 'languages': [constants.Languages.ENGLISH.name],
@@ -189,7 +191,7 @@ class SubmitEventView(View):
         return render(
             request,
             self.template_name,
-            {'form': form},
+            {'form': form, 'message': message},
             status=status_code,
         )
 
