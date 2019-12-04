@@ -30,6 +30,8 @@ class Event(models.Model):
     contact_name = models.CharField(max_length=100, null=True, help_text="Name of contact for event", verbose_name="Contact Name")
     contact_email = models.EmailField(max_length=60, null=True, help_text="Email for contact", verbose_name="Contact Email")
     contact_phone = PhoneNumberField(null=True, help_text="Phone number for contact", verbose_name="Contact Phone Number")
+    is_private_event = models.BooleanField(default=False, help_text="Would you like to hide this event from the public?", verbose_name="Private Event")
+
 
     # If you need pending and active, use Event.with_pending instead of Event.objects
     #with_pending = models.Manager()
