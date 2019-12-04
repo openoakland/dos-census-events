@@ -20,6 +20,7 @@ class EventForm(ModelForm):
             'contact_name',
             'contact_email',
             'contact_phone',
+            'is_private_event'
         ]
         widgets = {
                 'start_datetime': forms.DateTimeInput(attrs={'type': 'datetime'}),
@@ -43,7 +44,8 @@ class EditEventForm(ModelForm):
             'contact_name',
             'contact_email',
             'contact_phone',
-            'approval_status'
+            'approval_status',
+            'is_private_event'
         ]
         widgets = {
                 'start_datetime': forms.DateTimeInput(attrs={'type': 'datetime'}),
