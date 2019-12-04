@@ -178,6 +178,11 @@ class SubmitEventView(View):
         if form.is_valid():
             form.save()
             status_code = 201
+            form = EventForm(initial={
+                'languages': [constants.Languages.ENGLISH.name],
+                'start_datetime': datetime.today().replace(hour=18, minute=0, second=0, microsecond=0),
+                'end_datetime': datetime.today().replace(hour=19, minute=0, second=0, microsecond=0),
+            })
         else:
             status_code = 400
 
