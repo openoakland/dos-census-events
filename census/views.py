@@ -154,7 +154,7 @@ def parse_event_queryset(event):
 
 
 class SubmitEventView(View):
-    template_name = 'event.html'
+    template_name = 'census/event_form.html'
 
     def get(self, request, *args, **kwargs):
         form = EventForm(initial={
@@ -194,6 +194,7 @@ class UpdateEvent(LoginRequiredMixin, UpdateView):
     success_url = "/pending"
     login_url = '/login/'
     form_class = EditEventForm
+    template_name = 'census/event_form.html'
 
 class PendingList(ListView):
     model = models.Event
