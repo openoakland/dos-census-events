@@ -1,0 +1,50 @@
+{% extends '_base.html' %}
+{% block content %}
+<div class='grid-row'>
+  <div class='grid-col-10 grid-offset-1'>
+    <h1 class='center-align'>Approved Events</h1>
+    {% if event_list %}
+      <table class="grid-col-12 usa-table usa-table--borderless">
+        <thead>
+          <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Organizer</th>
+            <th scope="col">Event Type</th>
+            <th scope="col">Event start</th>
+            <th scope="col">Event end</th>
+            <th scope="col">Repeats</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        {% for event in event_list %}
+          <tbody>
+            <tr>
+                <th scope="row">{{event.title}}</th>
+                <td>{{event.organization_name}}</td>
+                <td>{{event.event_type}}</td>
+                <td>{{event.start_datetime}}</td>
+                <td>{{event.end_datetime}}</td>
+                <td>
+                    {% for rrule in event.recurrences.rrules %}
+                        {{ rrule.to_text }}
+                    {% empty %}
+                        --
+                    {% endfor %}
+                </td>
+                <td>
+                  <a class="usa-button" href="/event/{{ event.id }}/update">Update</a>
+                </td>
+                <td>
+                  <a class="usa-button usa-button--secondary" href="/event/{{ event.id }}/delete">DELETE</a>
+                </td>
+            </tr>
+          </tbody>
+        {% endfor %}
+      </table>
+    {% else %}
+      <p>There are no approved  events.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
