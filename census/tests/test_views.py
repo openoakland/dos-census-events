@@ -46,7 +46,7 @@ class CensusSubmitViewTest(TestCase):
     def test_required_fields_exist(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'event.html')
+        self.assertTemplateUsed(response, 'census/event_form.html')
 
         # Maybe there's a more accurate way to test for input elements
         self.assertContains(response, 'name="languages"')
