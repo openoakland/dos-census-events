@@ -5,6 +5,9 @@ $(document).ready(function () {
         url: '/events/',
         method: 'GET',
         dataType: 'json',
+        headers: {
+            credentials: 'include'
+        },
         success: function (data) {
             render_event_template(data.events);
         }
@@ -81,10 +84,11 @@ function render_events(events) {
     for (var month in events) {
         if (events.hasOwnProperty(month)) {
             for (var j = 0; j < events[month].length; j++) {
+                var priv = events[month][j].is_private_event ? "(PRIVATE)" : ""
                 var label = "<label class='usa-label' for='title'>" + events[month][j].start_date + " " + events[month][j].start_time + "</label>";
                 var h2 = "<h2 class='usa-accordion__heading'>" +
                     "<button class='usa-accordion__button' aria-expanded='true' aria-controls='a" + events[month][j].id +
-                    "'>" + events[month][j].title + "</button>" + "</h2>"
+                    "'>" + events[month][j].title + priv + "</button>" + "</h2>"
                 var div = "<div id='a" + events[month][j].id + "' class='usa-accordion__content usa-prose'>" +
                     "<p>" + events[month][j].description + "</p>" + "</div>";
                 $('#event-list').append(label);
