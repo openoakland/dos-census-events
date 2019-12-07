@@ -21,16 +21,40 @@
                     {{ form.media }}
 
                     {% include 'includes/_form_errors.html' %}
-
+                    {% if message %}
+                      <div class="usa-alert usa-alert--success" role="alert">
+                          <div class="usa-alert__body">
+                            <h3 class="usa-alert__heading">{{message}}</h3>
+                            <p class="usa-alert__text"> It is now pending approval.</p>
+                          </div>
+                      </div>
+                    {% endif %}
                     <div>
-                      <label class="usa-label" for="{{ form.title.id_for_label }}">{{form.title.label}}:</label>  
-                      <span class="usa-hint line-height-body-1 font-body-2xs">{{form.title.help_text}}</span>            
+                      <label class="usa-label" for="{{ form.title.id_for_label }}">{{form.title.label}}:</label>
+                      <span class="usa-hint line-height-body-1 font-body-2xs">{{form.title.help_text}}</span>
                       <input type="text" name="{{ form.title.name }}" maxlength="100" class="usa-input" required="" id="{{ form.title.id_for_label }}" value="{{ form.title.value|default_if_none:'' }}">
                     </div>
                     <div>
                       <label class="usa-label" for="{{ form.description.id_for_label }}">{{ form.description.label }}:</label>
                       <span class="usa-hint line-height-body-1 font-body-2xs">{{form.description.help_text}}</span>
                       <textarea name="{{ form.description.name }}" cols="40" rows="10" class="usa-textarea" id="{{ form.description.id_for_label }}">{{form.description.value|default_if_none:''}}</textarea>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <div class="usa-label grid-col-12">{{form.is_private_event.label}}:</div>
+                        <div class="usa-hint font-body-2xs margin-y-1">{{form.is_private_event.help_text}}</div>
+                        <div class="usa-checkbox">
+                          <input 
+                            class="usa-checkbox__input" 
+                            id="{{form.is_private_event.id_for_label}}"
+                            type="checkbox"
+                            name="{{form.is_private_event.name}}"
+                            value="is_private_event"
+                            {% if form.is_private_event.value %}
+                            checked="checked"
+                            {% endif %}
+                            >
+                          <label class="usa-checkbox__label" for="{{form.is_private_event.id_for_label}}">Is This Event Private?</label>
+                        </div>
                     </div>
                     <div>
                         <label class="usa-label" for="{{form.organization_name.id_for_label}}">{{form.organization_name.label}}:</label>

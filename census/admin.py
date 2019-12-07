@@ -21,5 +21,6 @@ class EventAdmin(admin.ModelAdmin):
         'contact_name',
         'contact_email',
         'contact_phone',
+        'is_private_event'
     )
     list_display = ('title', 'start_datetime', 'end_datetime', 'recurrences', 'location')

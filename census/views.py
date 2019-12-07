@@ -77,6 +77,12 @@ def get_events(data):
     :return: HttpResponse object containing event data. Populate
     """
     query_params = data.GET.dict()
+
+    if data.user.is_authenticated:
+        base_events_query = models.Event.objects.filter(approval_status=constants.EventApprovalStatus.APPROVED.name)
+    else:
+        base_events_query = models.Event.objects.filter(approval_status=constants.EventApprovalStatus.APPROVED.name, is_private_event=0)
+
     if not query_params:
 
         # If no payload is passed to the request, simply fetch future approved events
@@ -87,9 +93,7 @@ def get_events(data):
         #      only events for the current day?
         end_date = datetime.now(timezone(TIMEZONE)) + timedelta(days=7)
 
-        events = models.Event.objects.filter(approval_status=constants.EventApprovalStatus.APPROVED.name,
-                                             start_datetime__range=(start_date, end_date))\
-                                      .order_by('start_datetime')
+        events = base_events_query.filter(start_datetime__range=(start_date, end_date)).order_by('start_datetime')
         return HttpResponse(json.dumps(make_events_data_response(events)))
 
     if 'isMonthly' in query_params and query_params['isMonthly'] == 'true':
@@ -99,9 +103,7 @@ def get_events(data):
 
         # TODO: Ensure that timezone differences are properly accounted for
         #       when using the `__month` filter
-        events = models.Event.objects.filter(approval_status=constants.EventApprovalStatus.APPROVED.name,
-                                             start_datetime__month=month)\
-                                     .order_by('start_datetime')
+        events = base_events_query.filter(start_datetime__month=month).order_by('start_datetime')
         return HttpResponse(json.dumps(make_events_data_response(events)))
 
     else:
@@ -113,8 +115,7 @@ def get_events(data):
         end_date = datetime.strptime(f"{year}-{month}-{day} 23:59:59", "%Y-%m-%d %H:%M:%S")
 
         current_timezone = timezone(TIMEZONE)
-        events = models.Event.objects.filter(approval_status=constants.EventApprovalStatus.APPROVED.name,
-                                             start_datetime__range=(current_timezone.localize(start_date),
+        events = base_events_query.filter(start_datetime__range=(current_timezone.localize(start_date),
                                                                     current_timezone.localize(end_date))) \
             .order_by('start_datetime')
         return HttpResponse(json.dumps(make_events_data_response(events)))
@@ -151,6 +152,7 @@ def parse_event_queryset(event):
                 end_date=end_date,
                 start_time=start_time,
                 end_time=end_time,
+                is_private_event = event.is_private_event
                 )
 
 
@@ -174,18 +176,25 @@ class SubmitEventView(View):
     def post(self, request, *args, **kwargs):
         # create a form instance and populate it with data from the request:
         form = EventForm(request.POST)
+        message = ''
 
         # check whether it's valid:
         if form.is_valid():
             form.save()
+            message =request.POST['title'] + " successfully created."
             status_code = 201
+            form = EventForm(initial={
+                'languages': [constants.Languages.ENGLISH.name],
+                'start_datetime': datetime.today().replace(hour=18, minute=0, second=0, microsecond=0),
+                'end_datetime': datetime.today().replace(hour=19, minute=0, second=0, microsecond=0),
+            })
         else:
             status_code = 400
 
         return render(
             request,
             self.template_name,
-            {'form': form},
+            {'form': form, 'message': message},
             status=status_code,
         )
 
