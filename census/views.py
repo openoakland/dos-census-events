@@ -83,7 +83,6 @@ def get_events(data):
         base_events_query = models.Event.objects.filter(approval_status=constants.EventApprovalStatus.APPROVED.name)
     else:
 
-        tz = timezone(settings.TIME_ZONE)
         base_events_query = models.Event.objects.filter(approval_status=constants.EventApprovalStatus.APPROVED.name, is_private_event=0)
 
     if not query_params:
@@ -163,6 +162,7 @@ class SubmitEventView(View):
     template_name = 'census/event_form.html'
 
     def get(self, request, *args, **kwargs):
+        tz = timezone(settings.TIME_ZONE)
         form = EventForm(initial={
             'languages': [constants.Languages.ENGLISH.name],
             'start_datetime': datetime.today().astimezone(tz).replace(hour=18, minute=0, second=0, microsecond=0),
