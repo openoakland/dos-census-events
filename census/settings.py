@@ -64,6 +64,7 @@ if env('DEBUG'):
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -165,11 +166,6 @@ LOGGING = {
     },
 }
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
-STATIC_URL = '/static/'
-STATIC_ROOT = 'static/'
 
 # The Id of the calendar to which events will be published.
 GOOGLE_CALENDAR_ID = env('GOOGLE_CALENDAR_ID')
@@ -177,6 +173,7 @@ GOOGLE_CALENDAR_ID = env('GOOGLE_CALENDAR_ID')
 # Path to the Google Service Account with read/write access to the Google
 # Calendar.
 GOOGLE_SERVICE_ACCOUNT_INFO = json.loads(env('GOOGLE_SERVICE_ACCOUNT_INFO')) if env('GOOGLE_SERVICE_ACCOUNT_INFO') else None
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
@@ -190,3 +187,4 @@ STATIC_URL = '/static/'
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+LOGIN_REDIRECT_URL = '/'

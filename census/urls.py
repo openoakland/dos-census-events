@@ -26,12 +26,15 @@ urlpatterns = [
     path('', index, name='index'),
     path('admin/', admin.site.urls),
     path('export/events/', views.export_events),
-    path('submit/', views.add_event),
+    path('submit/', views.SubmitEventView.as_view()),
     path('pending/', views.PendingList.as_view(), name = 'pending_list'),
+    path('approved/', views.ApprovedList.as_view(), name = 'approved_list'),
     path('event/<int:pk>/update/', views.UpdateEvent.as_view(), name= 'event_update'),
     path('event/<int:pk>/delete/', views.DeleteEvent.as_view(), name= 'event_delete'),
     url(r'^login/$', auth_views.LoginView.as_view(), name='login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
+    # this is to update list of events on the homepage based on datepicker selection
+    url(r'^events/$', views.get_events, name='get_events'),
 ]
 js_info_dict = {
     'packages': ('recurrence', ),

@@ -5,58 +5,40 @@
     </style>
 
     <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
-    <div class="grid-row">
-        <div class="height-10 tablet:grid-col-12"></div>
-        <div class="tablet:grid-col-12 bg-accent-cool-lighter" style="height:10rem;"></div>
-    </div>
+    <div class="grid-container bg-white">
 
-    <div class="grid-row">
 
-        <div class="grid-col-3 bg-gray-5"></div>
-        <div class="grid-col-4 bg-white">
-            <input class="-align-center grid-col-12" type="text" placeholder="Search for upcoming events...">
-            <br/><br/>
-            {% for i in '123'|make_list %}
-                <div class="grid-col-12 bg-white border-1">
-                    <table class="text-red">
-                        <tbody>
-                        <tr>
-                            <td style="width: 15%; vertical-align:top" rowspan="5">
-                                6:30 PM
-                            </td>
-                            <td>
-                                OPENOAKLAND: THE CODE FOR AMERICA BRIGADE IN OAKLAND
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: bold; font-size: 20px;">
-                                OpenOakland Civic Hack Night
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>City Hall, Hearing Room 4</td>
-                        </tr>
-                        <tr class="text-right">
-                            <td>
-                                <span onclick="toggleSave()">
-                                    <i class="fas fa-star text-green" title="Saved"></i>
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>25 civic innovators going</td>
-                        </tr>
-                        </tbody>
-                    </table>
+        <div class="grid-row bg-white" style="padding-bottom: 150px">
+            <div class="grid-col-10 margin-5">
+                <form class="usa-search usa-search--big">
+                    <div class="grid-offset-2" role="search">
+                        <label class="usa-sr-only" for="search-field-big">Search</label>
+                        <input class="usa-input" id="search-field-big" type="search" name="search">
+                        <button class="usa-button" type="submit">
+                            <span class="usa-search__submit-text">Search</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="grid-col-8">
+                <div id="no-events-alert" class="usa-alert usa-alert--info display-none">
+                    <div class="usa-alert__body">
+                        <h3 class="usa-alert__heading">No events found for selected date</h3>
+                        <p class="usa-alert__text"></p>
+                    </div>
                 </div>
-                <br/>
-            {% endfor %}
+                <div id="event-list" class="usa-accordion usa-accordion--bordered">
+                    {# This section is populated dynamically by events triggered#}
+                    {# in datepicker.js#}
+                </div>
+            </div>
+            <div class="grid-col-4">
+                <p class="text-center">Event Calendar</p>
+                <div id="datepicker"></div>
+            </div>
         </div>
-        <div class="grid-col-2 bg-gray-10">
-            <p class="text-center">Event Calendar</p>
-        </div>
-        <div class="grid-col-3 bg-gray-5"></div>
     </div>
-
+    </div>
     </main>
 {% endblock %}

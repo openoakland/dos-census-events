@@ -2,7 +2,7 @@
 {% block content %}
 <div class='grid-row'>
   <div class='grid-col-10 grid-offset-1'>
-    <h1 class='center-align'>Pending Events</h1>
+    <h1 class='center-align'>Approved Events</h1>
     {% if event_list %}
       <table class="grid-col-12 usa-table usa-table--borderless">
         <thead>
@@ -33,7 +33,7 @@
                     {% endfor %}
                 </td>
                 <td>
-                  <a class="usa-button" href="/event/{{ event.id }}/update">Review</a>
+                  <a class="usa-button" href="/event/{{ event.id }}/update">Update</a>
                 </td>
                 <td>
                   <a class="usa-button usa-button--secondary" href="/event/{{ event.id }}/delete">DELETE</a>
@@ -43,7 +43,7 @@
         {% endfor %}
       </table>
     {% else %}
-      <p>There are no pending events.</p>
+      <p>There are no approved  events.</p>
     {% endif %}
   </div>
 </div>
