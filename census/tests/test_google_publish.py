@@ -71,7 +71,7 @@ class GoogleCalendarPublishEvent(TestCase):
         payload = self.mock_events.insert.call_args[1]['body']
 
         self.assertEqual(payload['summary'], event.title)
-        self.assertEqual(payload['description'], event.description)
+        self.assertTrue(payload['description'].startswith(event.description))
         self.assertEqual(payload['start']['dateTime'], event.start_datetime.isoformat())
         self.assertEqual(payload['start']['timeZone'], 'America/Los_Angeles')
         self.assertEqual(payload['end']['dateTime'], event.end_datetime.isoformat())

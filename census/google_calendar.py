@@ -28,7 +28,10 @@ def google_publish_event(event):
     payload = {
       'summary': event.title,
       'location': event.location,
-      'description': event.description,
+      'description': event.description + "<a href=http://" +
+      # need to provide the right domain for the server
+      "localhost:8000" + "/event/" + str(event.id) +
+          "/details> Event Details</a>",
       'start': {
         'dateTime': event.start_datetime.isoformat(),
         'timeZone': settings.TIME_ZONE,

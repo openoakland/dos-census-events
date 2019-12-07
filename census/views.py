@@ -234,12 +234,10 @@ class ApprovedList(ListView):
 
 class DeleteEvent(LoginRequiredMixin, DeleteView):
     model = models.Event
-    success_url = "/pending"
     login_url = '/login/'
     # Override the delete method so we can delete for the google calendar
     def delete(self, request, *args, **kwargs):
         self.object = event = self.get_object()
-        success_url = self.get_success_url()
         google_delete_event(event)
         event.delete()
         # Return to the list we came from.
@@ -248,3 +246,12 @@ class DeleteEvent(LoginRequiredMixin, DeleteView):
         else:
             return HttpResponseRedirect("/pending")
 
+class ShowEvent(UpdateView):
+    model = models.Event
+    form_class = EditEventForm
+    template_name = 'census/event_form.html'
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        context['readonly'] = 'readonly'
+        return context

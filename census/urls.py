@@ -31,6 +31,7 @@ urlpatterns = [
     path('approved/', views.ApprovedList.as_view(), name = 'approved_list'),
     path('event/<int:pk>/update/', views.UpdateEvent.as_view(), name= 'event_update'),
     path('event/<int:pk>/delete/', views.DeleteEvent.as_view(), name= 'event_delete'),
+    path('event/<int:pk>/details/', views.ShowEvent.as_view(), name= 'event_detail'),
     url(r'^login/$', auth_views.LoginView.as_view(), name='login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
     # this is to update list of events on the homepage based on datepicker selection
