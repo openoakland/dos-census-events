@@ -4,6 +4,7 @@ import io
 from itertools import groupby
 import json
 
+from django.conf import settings
 from django.forms.models import model_to_dict
 from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse
 from django.shortcuts import render
@@ -81,6 +82,7 @@ def get_events(data):
     if data.user.is_authenticated:
         base_events_query = models.Event.objects.filter(approval_status=constants.EventApprovalStatus.APPROVED.name)
     else:
+
         base_events_query = models.Event.objects.filter(approval_status=constants.EventApprovalStatus.APPROVED.name, is_private_event=0)
 
     if not query_params:
@@ -160,10 +162,11 @@ class SubmitEventView(View):
     template_name = 'census/event_form.html'
 
     def get(self, request, *args, **kwargs):
+        tz = timezone(settings.TIME_ZONE)
         form = EventForm(initial={
             'languages': [constants.Languages.ENGLISH.name],
-            'start_datetime': datetime.today().replace(hour=18, minute=0, second=0, microsecond=0),
-            'end_datetime': datetime.today().replace(hour=19, minute=0, second=0, microsecond=0),
+            'start_datetime': datetime.today().astimezone(tz).replace(hour=18, minute=0, second=0, microsecond=0),
+            'end_datetime': datetime.today().astimezone(tz).replace(hour=19, minute=0, second=0, microsecond=0),
         })
 
         enable_recurrence = request.GET.get('enable_recurrence', False)

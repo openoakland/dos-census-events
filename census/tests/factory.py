@@ -4,10 +4,12 @@ Factory methods to help with creating valid test data.
 
 from datetime import datetime
 
-from pytz import timezone
+import pytz
 
 from census import constants
 from census.models import Event
+
+los_angeles = pytz.timezone('America/Los_Angeles')
 
 
 def event(**kwargs):
@@ -17,8 +19,8 @@ def event(**kwargs):
         organization_name="OpenOakland",
         location="Oakland City Hall",
         event_type=constants.EventType.WORKSHOP,
-        start_datetime=datetime(2019, 11, 5, 18, 0, 0, 0, timezone('America/Los_Angeles')),
-        end_datetime=datetime(2019, 11, 5, 21, 0, 0, 0, timezone('America/Los_Angeles')),
+        start_datetime=datetime(2019, 11, 5, 18, 0).astimezone(los_angeles),
+        end_datetime=datetime(2019, 11, 5, 21, 0).astimezone(los_angeles),
         recurrences=[],
         approval_status=constants.EventApprovalStatus.APPROVED,
         languages=[constants.Languages.ENGLISH],
