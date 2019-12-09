@@ -56,9 +56,8 @@
                             type="checkbox"
                             name="{{form.is_private_event.name}}"
                             value="is_private_event"
-                            {% if form.is_private_event.value %}
-                            checked="checked"
-                            {% endif %}
+                            {% if form.is_private_event.value %}checked="checked"{% endif %}
+                            {% if readonly %}disabled=""{% endif %}
                             >
                           <label class="usa-checkbox__label" for="{{form.is_private_event.id_for_label}}">Is This Event Private?</label>
                         </div>
@@ -113,9 +112,8 @@
                             type="checkbox"
                             name="{{form.is_census_equipped.name}}"
                             value="is_census_equipped"
-                            {% if form.is_census_equipped.value %}
-                            checked="checked"
-                            {% endif %}
+                            {% if form.is_census_equipped.value %}checked="checked"{% endif %}
+                            {% if readonly %}disabled=""{% endif %}
                             >
                           <label class="usa-checkbox__label" for="{{form.is_census_equipped.id_for_label}}">Is census equipped?</label>
                         </div>
