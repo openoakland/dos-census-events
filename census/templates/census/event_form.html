@@ -56,9 +56,8 @@
                             type="checkbox"
                             name="{{form.is_private_event.name}}"
                             value="is_private_event"
-                            {% if form.is_private_event.value %}
-                            checked="checked"
-                            {% endif %}
+                            {% if form.is_private_event.value %}checked="checked"{% endif %}
+                            {% if readonly %}disabled=""{% endif %}
                             >
                           <label class="usa-checkbox__label" for="{{form.is_private_event.id_for_label}}">Is This Event Private?</label>
                         </div>
@@ -91,7 +90,12 @@
                     </div>
                     <div>
                       <label class="usa-label" for="{{form.event_type.id_for_label}}">{{form.fields.event_type.label}}:</label>
-                      <select {{ readonly }} name="{{form.event_type.name}}" class="usa-input {{ readonly }} desktop:grid-col-3 grid-col-6" required="" id="{{form.event_type.id_for_label}}">
+                      <select
+                        {% if readonly %} disabled="" {% endif %}
+                        name="{{form.event_type.name}}"
+                        class="usa-input {{ readonly }} desktop:grid-col-3 grid-col-6"
+                        required=""
+                        id="{{form.event_type.id_for_label}}">
                           {% for value, display in form.fields.event_type.choices %}
                           <option {{ readonly }} value="{{ value }}" {% if form.event_type.value == value %}selected {{ readonly }}{% endif %}>{{ display }}</option>
                           {% endfor %}
@@ -102,15 +106,14 @@
                         <div class="usa-label grid-col-12">{{form.is_census_equipped.label}}:</div>
                         <div class="usa-hint font-body-2xs margin-y-1">{{form.is_census_equipped.help_text}}</div>
                         <div class="usa-checkbox">
-                          <input {{ readonly }}
+                          <input
                             class="usa-checkbox__input"
                             id="{{form.is_census_equipped.id_for_label}}"
                             type="checkbox"
                             name="{{form.is_census_equipped.name}}"
                             value="is_census_equipped"
-                            {% if form.is_census_equipped.value %}
-                            checked="checked"
-                            {% endif %}
+                            {% if form.is_census_equipped.value %}checked="checked"{% endif %}
+                            {% if readonly %}disabled=""{% endif %}
                             >
                           <label class="usa-checkbox__label" for="{{form.is_census_equipped.id_for_label}}">Is census equipped?</label>
                         </div>
@@ -130,6 +133,7 @@
                               {% if value in form.languages.value %}
                               checked="checked"
                               {% endif %}
+                              {% if readonly %}disabled=""{% endif %}
                               >
                               <label class="usa-checkbox__label" for="{{form.languages.id_for_label}}_{{ forloop.counter }}">{{ name }}</label>
                         </div>
@@ -160,9 +164,18 @@
                     {% if "/update/" in request.path  %}
                     <div>
                         <label class="usa-label" for="{{form.approval_status.id_for_label}}">{{form.approval_status.label}}:</label>
-                        <select name="{{form.approval_status.name}}" class="usa-input {{ readonly }} desktop:grid-col-3 grid-col-6" required="" id="{{form.approval_status.id_for_label}}">
+                        <select
+                          name="{{form.approval_status.name}}"
+                          class="usa-input desktop:grid-col-3 grid-col-6"
+                          required=""
+                          id="{{form.approval_status.id_for_label}}">
                             {% for value, display in form.fields.approval_status.choices %}
-                              <option {{ readonly }} value="{{ value }}" {% if form.approval_status.value == value %}selected{% endif %}>{{ display }}</option>
+                              <option 
+                                value="{{ value }}"
+                                {% if form.approval_status.value == value %}selected=""{% endif %}
+                                >
+                                  {{ display }}
+                              </option>
                             {% endfor %}
                         </select>
                     </div>
