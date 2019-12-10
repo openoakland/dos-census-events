@@ -4,6 +4,7 @@ import pickle
 import os.path
 
 from django.conf import settings
+from django.contrib.sites.models import Site
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 
@@ -30,7 +31,7 @@ def google_publish_event(event):
       'location': event.location,
       'description': event.description + "<a href=http://" +
       # need to provide the right domain for the server
-      "localhost:8000" + "/event/" + str(event.id) +
+      Site.objects.get_current().domain + "/event/" + str(event.id) +
           "/details> Event Details</a>",
       'start': {
         'dateTime': event.start_datetime.isoformat(),

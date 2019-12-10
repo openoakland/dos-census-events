@@ -159,6 +159,7 @@ Setup CSS file references with Django
 
     $ python manage.py collectstatic
 
+Setup Site configuration, go to http://localhost:8000/admin/sites/site/ and edit the site domain to be http://localhost:8000
 
 ### Starting the Django server locally:
 

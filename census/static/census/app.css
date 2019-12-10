@@ -18,3 +18,7 @@ body {
 .recurrence-widget {
   display: inline-block;
 }
+
+.usa-checkbox__input:disabled+.usa-checkbox__label {
+  color: #000000;
+}
