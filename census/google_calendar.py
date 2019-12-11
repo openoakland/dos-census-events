@@ -4,6 +4,7 @@ import pickle
 import os.path
 
 from django.conf import settings
+from django.urls import reverse
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 
@@ -28,7 +29,10 @@ def google_publish_event(event):
     payload = {
       'summary': event.title,
       'location': event.location,
-      'description': event.description,
+      'description': event.description + "\n<a href=http://" +
+          settings.SITE_DOMAIN +
+          reverse('event_detail', args = [event.id]) +
+          "> Event Details</a>",
       'start': {
         'dateTime': event.start_datetime.isoformat(),
         'timeZone': settings.TIME_ZONE,

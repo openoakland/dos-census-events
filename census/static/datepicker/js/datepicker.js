@@ -90,7 +90,9 @@ function render_events(events) {
                     "<button class='usa-accordion__button' aria-expanded='true' aria-controls='a" + events[month][j].id +
                     "'>" + events[month][j].title + priv + "</button>" + "</h2>"
                 var div = "<div id='a" + events[month][j].id + "' class='usa-accordion__content usa-prose'>" +
-                    "<p>" + events[month][j].description + "</p>" + "</div>";
+                  "<p>" + events[month][j].description + "</p>" +
+                  "<a href=/event/" + events[month][j].id + "/details> <b>Event Details</b></a>"
+                  "</div>";
                 $('#event-list').append(label);
                 $('#event-list').append(h2);
                 $('#event-list').append(div);
