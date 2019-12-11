@@ -27,6 +27,7 @@ env = environ.Env(
     LOG_LEVEL=(str, 'INFO'),
     DJANGO_LOG_LEVEL=(str, 'INFO'),
     TIME_ZONE=(str, 'America/Los_Angeles'),
+    SITE_DOMAIN=(str, 'localhost:8000'),
 )
 
 # Read additional environment variables from .env at the project root
@@ -42,6 +43,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = env('ALLOWED_HOSTS')
+SITE_DOMAIN = env('SITE_DOMAIN')
 
 
 # Application definition
