@@ -25,6 +25,11 @@
         <img src="{% static 'uswds-2.0.2/img/close.svg' %}" alt="close" />
       </button>
       <ul class="usa-nav__primary usa-accordion">
+        <li class="usa-nav__primary-item">
+          <a class="usa-nav__link" href="/submit">
+            <span>Submit a Census Event</span>
+          </a>
+        </li>
         {% if user.is_authenticated %}
         <li class="usa-nav__primary-item">
           <a class="usa-nav__link" href="/pending">
