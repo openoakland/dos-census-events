@@ -71,7 +71,7 @@ class HomepageView(View):
         """
         request.events = self.make_events_data_response(self.get_events(request))
         request.has_events = bool(request.events)
-        if request.GET.dict():
+        if request.GET.dict().get('search'):
             request.search_query = request.GET.dict().get('search').strip()
         else:
             request.search_query = None
