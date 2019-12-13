@@ -71,7 +71,10 @@ class HomepageView(View):
         """
         request.events = self.make_events_data_response(self.get_events(request))
         request.has_events = bool(request.events)
-        request.search_query = request.GET.dict().get('search') or None
+        if request.GET.dict():
+            request.search_query = request.GET.dict().get('search').strip()
+        else:
+            request.search_query = None
         return render(request, self.template_name)
 
     def get_events(self, data):
@@ -134,7 +137,7 @@ class HomepageView(View):
             elif param == 'search' \
                     and query_params['search'] \
                     and not query_params['search'].strip() == "":
-                valid_params['search'] = query_params['search']
+                valid_params['search'] = query_params['search'].strip()
             elif param == 'isMonthly':
                 if query_params['isMonthly'] == 'true':
                     valid_params['isMonthly'] = True
