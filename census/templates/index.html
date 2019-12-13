@@ -6,14 +6,16 @@
 
     <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
     <div class="grid-container bg-white">
-
-
         <div class="grid-row bg-white" style="padding-bottom: 150px">
             <div class="grid-col-10 margin-5">
-                <form class="usa-search usa-search--big">
+                <form class="usa-search usa-search--big" action="/" method="get" id="search-form">
                     <div class="grid-offset-2" role="search">
                         <label class="usa-sr-only" for="search-field-big">Search</label>
-                        <input class="usa-input" id="search-field-big" type="search" name="search">
+                        <input class="usa-input"
+                               id="search-field-big"
+                               type="search"
+                               name="search"
+                               value="{% if request.search_query %}{{ request.search_query }}{% endif %}">
                         <button class="usa-button" type="submit">
                             <span class="usa-search__submit-text">Search</span>
                         </button>
@@ -22,23 +24,49 @@
             </div>
 
             <div class="grid-col-8">
-                <div id="no-events-alert" class="usa-alert usa-alert--info display-none">
-                    <div class="usa-alert__body">
-                        <h3 class="usa-alert__heading">No events found for selected date</h3>
-                        <p class="usa-alert__text"></p>
+                {% if not request.has_events %}
+                    <div id="no-events-alert" class="usa-alert usa-alert--info">
+                        <div class="usa-alert__body">
+                            <h3 class="usa-alert__heading">No events found for selected date</h3>
+                            <p class="usa-alert__text"></p>
+                        </div>
                     </div>
-                </div>
-                <div id="event-list" class="usa-accordion usa-accordion--bordered">
-                    {# This section is populated dynamically by events triggered#}
-                    {# in datepicker.js#}
-                </div>
+                {% endif %}
+                {% if request.has_events %}
+                    <div id="event-list" class="usa-accordion usa-accordion--bordered">
+                        {% for event_data in request.events %}
+                            {# Each event data is a tuple with the 0th element  #}
+                            {# as the day and the 1st element as a list  #}
+                            {# of events  #}
+                            <label class="usa-label font-ui-sm text-bold" for="title">{{ event_data.0 }}</label>
+                            {% for event in event_data.1 %}
+                                <h2 class="usa-accordion__heading">
+                                    <button class="usa-accordion__button"
+                                            aria-expanded="true"
+                                            aria-controls="a{{ event.id }}">
+                                        <span>{{ event.start_time }} - {{ event.end_time }}</span>
+                                        <span class="text-normal">
+                                            {{ event.title }}
+                                            {% if event.is_private_event %}
+                                                (PRIVATE)
+                                            {% endif %}
+                                        </span>
+                                    </button>
+                                </h2>
+                                <div id="a{{ event.id }}" class="usa-accordion__content usa-prose">
+                                    <p>{{ event.description }}</p>
+                                    <a href="/event/{{ event.id }}/details"> <b>Event Details</b></a>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
-            <div class="grid-col-4">
+
+            <div class="grid-col-4 desktop:display-block mobile: display-none">
                 <p class="text-center">Event Calendar</p>
-                <div id="datepicker"></div>
+                <div id="datepicker"/>
             </div>
         </div>
     </div>
-    </div>
-    </main>
 {% endblock %}
