@@ -28,6 +28,7 @@ env = environ.Env(
     DJANGO_LOG_LEVEL=(str, 'INFO'),
     TIME_ZONE=(str, 'America/Los_Angeles'),
     SITE_DOMAIN=(str, 'localhost:8000'),
+    GOOGLE_MAPS_API_KEY=(str,None),
 )
 
 # Read additional environment variables from .env at the project root
