@@ -10,6 +10,7 @@ var placeSearch, autocomplete;
 var autoCompleteElemendId = 'id_location';
 lat_id = 'id_lat';
 lon_id = 'id_lon';
+site_name_id = 'id_site_name';
 
 function initAutocomplete() {
   // Create the autocomplete object, restricting the search predictions to
@@ -19,7 +20,7 @@ function initAutocomplete() {
 
   // Avoid paying for data that you don't need by restricting the set of
   // place fields that are returned to just the address components.
-  autocomplete.setFields(['address_component', 'geometry']);
+  autocomplete.setFields(['address_component', 'geometry', 'name']);
 
   // When the user selects an address from the drop-down, populate the
   // address fields in the form.
@@ -31,7 +32,9 @@ function fillInAddress() {
   // Get the place details from the autocomplete object.
   var place = autocomplete.getPlace();
   // https://developers-dot-devsite-v2-prod.appspot.com/maps/documentation/javascript/reference/coordinates#LatLngBounds
-  // var bounds = autocomplete.getBounds();
+  if (place.name) {
+    document.getElementById(site_name_id).value = place.name;
+  }
   lat = place.geometry.location.lat().toFixed(6)
   lon = place.geometry.location.lng().toFixed(6)
   lat_input = document.getElementById(lat_id);

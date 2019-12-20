@@ -17,6 +17,7 @@ class EventAdmin(admin.ModelAdmin):
         'recurrences',
         'lat',
         'lon',
+        'site_name',
         'approval_status',
         'contact_name',
         'contact_email',
