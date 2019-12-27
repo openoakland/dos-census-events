@@ -1,13 +1,14 @@
 import csv
 import io
-from datetime import datetime, timedelta
+import json
+from datetime import datetime
 from itertools import groupby
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.forms.models import model_to_dict
-from django.http import HttpResponseRedirect, StreamingHttpResponse
+from django.http import HttpResponse, HttpResponseRedirect, StreamingHttpResponse
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView
@@ -69,21 +70,43 @@ class HomepageView(View):
         """
         Homepage
         """
-        request.events = self.make_events_data_response(self.get_events(request))
-        request.has_events = bool(request.events)
-        if request.GET.dict().get('search'):
-            request.search_query = request.GET.dict().get('search').strip()
+        if request.is_ajax():
+            # We expect AJAX calls made from datepicker
+            return self.get_event_dates(request)
         else:
-            request.search_query = None
-        return render(request, self.template_name)
+            request.events = self.make_events_data_response(self.get_events(request))
+            request.has_events = bool(request.events)
+            if request.GET.dict().get('search'):
+                request.search_query = request.GET.dict().get('search').strip()
+            else:
+                request.search_query = None
+            return render(request, self.template_name)
+
+    def get_event_dates(self, request):
+        """
+        Given a request object, retrieve events matching the criteria specified
+        and return only dates.
+
+        :param request: Request object
+        :return: HttpResponse object containing list of unique days on which
+                 events occur
+        """
+        events = self.get_events(request)
+        dates = set()
+        for event in events:
+            localized_start_datetime = event.start_datetime.astimezone(current_timezone)
+            # %-d removes the leading 0 for single digit dates
+            day_of_month = datetime.strftime(localized_start_datetime, "%-d")
+            dates.add(day_of_month)
+        return HttpResponse(json.dumps(dict(dates=list(dates))))
 
     def get_events(self, data):
         """
-        This endpoint /events is called by the datepicker (census/static/datepicker/js/datepicker.js)
-        to retrieve a list of filtered events by selected date/month.
+        Given a request object, extract the filter criteria from it and
+        retrieve matching events.
 
         :param data: Request object
-        :return: HttpResponse object containing event data. Populate
+        :return: QuerySet object containing event data.
         """
         filter_args = dict()
         if data.GET.dict():
@@ -160,7 +183,7 @@ class HomepageView(View):
         search = kwargs.get('search')
         user_auth_status = kwargs.get('user_auth_status')
 
-        if user_auth_status:
+        if not user_auth_status:
             query = Q(approval_status=constants.EventApprovalStatus.APPROVED.name,
                            is_private_event=0)
         else:

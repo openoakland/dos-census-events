@@ -1,4 +1,8 @@
 function getQueryParams(name) {
+    /*
+    Given a query parameter name, this method will parse the current URL
+    an extract the value for the param if found else return false
+     */
     let results = new RegExp('[\?&]' + name + '=([^&#]*)')
         .exec(window.location.search);
 
@@ -10,6 +14,9 @@ function getQueryParams(name) {
 }
 
 function getSelectedDate() {
+    /*
+    Parse date query parameters of current URL and return a date object.
+     */
     if (!window.location.search) {
         return new Date();
     }
@@ -29,5 +36,8 @@ function getSelectedDate() {
 }
 
 function redirectUrl(query_params) {
+    /*
+    Redirect browser to URL with given query params
+     */
     window.location = "/?" + $.param(query_params);
 }
