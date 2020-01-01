@@ -19,12 +19,12 @@ def event(**kwargs):
         description="Single day event engaing community and technology",
         organization_name="OpenOakland",
         location="Oakland City Hall",
-        event_type=constants.EventType.WORKSHOP.name,
+        event_type=constants.EventType.WORKSHOP,
         start_datetime=datetime(2019, 11, 5, 18, 0).astimezone(los_angeles),
         end_datetime=datetime(2019, 11, 5, 21, 0).astimezone(los_angeles),
         recurrences=[],
-        approval_status=constants.EventApprovalStatus.APPROVED.name,
-        languages=[constants.Languages.ENGLISH.name],
+        approval_status=constants.EventApprovalStatus.APPROVED,
+        languages=[constants.Languages.ENGLISH],
     )
 
     data.update(kwargs)
@@ -43,7 +43,7 @@ def google_event(**kwargs):
     data = dict(
         google_calendar_id=uuid.uuid4(),
         event=event(),
-        published=datetime(2019, 11, 16, 14, 53, 27).astimezone(timezone('America/Los_Angeles')),
+        published=datetime(2019, 11, 16, 14, 53, 27).astimezone(pytz.timezone('America/Los_Angeles')),
     )
 
     data.update(kwargs)

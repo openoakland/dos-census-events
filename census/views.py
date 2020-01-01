@@ -184,10 +184,10 @@ class HomepageView(View):
         user_auth_status = kwargs.get('user_auth_status')
 
         if not user_auth_status:
-            query = Q(approval_status=constants.EventApprovalStatus.APPROVED.name,
+            query = Q(approval_status=constants.EventApprovalStatus.APPROVED,
                            is_private_event=0)
         else:
-            query = Q(approval_status=constants.EventApprovalStatus.APPROVED.name)
+            query = Q(approval_status=constants.EventApprovalStatus.APPROVED)
 
         if (bool(start_date) ^ bool(end_date)) or (bool(month) ^ bool(year)):
             # If start date is provided but not end date, or vice-versa, raise error
@@ -259,7 +259,7 @@ class SubmitEventView(View):
     def get(self, request, *args, **kwargs):
         tz = timezone(settings.TIME_ZONE)
         form = EventForm(initial={
-            'languages': [constants.Languages.ENGLISH.name],
+            'languages': [constants.Languages.ENGLISH],
             'start_datetime': datetime.today().astimezone(tz).replace(hour=18, minute=0, second=0, microsecond=0),
             'end_datetime': datetime.today().astimezone(tz).replace(hour=19, minute=0, second=0, microsecond=0),
         })
@@ -310,13 +310,13 @@ class UpdateEvent(LoginRequiredMixin, UpdateView):
 
     # If the status before the update was APPROVED then go to the approved list.
     def get_success_url(self):
-        if self.prev_status == constants.EventApprovalStatus.APPROVED.name:
+        if self.prev_status == constants.EventApprovalStatus.APPROVED:
             return "/approved"
         return "/pending"
     # Override the form_valid method to push event to google calendar
     def form_valid(self, form):
         self.object = form.save()
-        if form.instance.approval_status == constants.EventApprovalStatus.APPROVED.name:
+        if form.instance.approval_status == constants.EventApprovalStatus.APPROVED:
             google_publish_event(form.instance)
         return HttpResponseRedirect(self.get_success_url())
 
@@ -327,7 +327,7 @@ class PendingList(ListView):
 
 class ApprovedList(ListView):
     model = models.Event
-    queryset = models.Event.objects.filter(approval_status = constants.EventApprovalStatus.APPROVED.name)
+    queryset = models.Event.objects.filter(approval_status = constants.EventApprovalStatus.APPROVED)
     template_name = 'census/approved_list.html'
 
 class DeleteEvent(LoginRequiredMixin, DeleteView):
@@ -339,7 +339,7 @@ class DeleteEvent(LoginRequiredMixin, DeleteView):
         google_delete_event(event)
         event.delete()
         # Return to the list we came from.
-        if event.approval_status == constants.EventApprovalStatus.APPROVED.name:
+        if event.approval_status == constants.EventApprovalStatus.APPROVED:
             return HttpResponseRedirect("/approved")
         else:
             return HttpResponseRedirect("/pending")
