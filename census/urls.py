@@ -18,18 +18,19 @@ from django.contrib.auth import views as auth_views
 from django.urls import path
 from django.conf.urls import url
 from django.views.i18n import JavaScriptCatalog
-from .views import index
 
 from . import views
 
 urlpatterns = [
-    path('', index, name='index'),
+    path('', views.HomepageView.as_view(), name='index'),
     path('admin/', admin.site.urls),
     path('export/events/', views.export_events),
-    path('submit/', views.add_event),
+    path('submit/', views.SubmitEventView.as_view()),
     path('pending/', views.PendingList.as_view(), name = 'pending_list'),
+    path('approved/', views.ApprovedList.as_view(), name = 'approved_list'),
     path('event/<int:pk>/update/', views.UpdateEvent.as_view(), name= 'event_update'),
     path('event/<int:pk>/delete/', views.DeleteEvent.as_view(), name= 'event_delete'),
+    path('event/<int:pk>/details/', views.ShowEvent.as_view(), name= 'event_detail'),
     url(r'^login/$', auth_views.LoginView.as_view(), name='login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
 ]

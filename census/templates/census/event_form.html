@@ -1,14 +1,202 @@
 {% extends '_base.html' %}
+
 {% block content %}
+
 <script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
 <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
 <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
-<form method="post">
-  {% csrf_token %}
-  {{ form.media }}
-  {{ form.as_p }}
-  <input type="submit" value="Update">
-</form>
-{% endblock %}
+
+<style>
+.usa-checkbox__input:disabled+.usa-checkbox__label {
+    color: #000000;
+}
+</style>
+<div class="grid-container">
+    <div class="grid-row">
+        <section class='tablet:grid-col-8 tablet:grid-offset-2 section-card padding-x-4 padding-y-2 tablet:margin-4'>
+
+            <form method="post" class="">
+
+            {% if form.is_private_event.value and not user.is_authenticated %}
+            <legend class="usa-legend">This Event is Private</legend>
+            {% else %}
+                <fieldset class="usa-fieldset">
+                    {% if request.path == "/submit/" %}
+                    <legend class="usa-legend">New Event</legend>
+                    {% elif "/update/" in request.path  %}
+                    <legend class="usa-legend">Edit Event</legend>
+                    {% else %}
+                    <legend class="usa-legend">Event Details</legend>
+                    {% endif %}
+                    {% csrf_token %}
+                    {{ form.media }}
+
+                    {% include 'includes/_form_errors.html' %}
+                    {% if message %}
+                      <div class="usa-alert usa-alert--success" role="alert">
+                          <div class="usa-alert__body">
+                            <h3 class="usa-alert__heading">{{message}}</h3>
+                            <p class="usa-alert__text"> It is now pending approval.</p>
+                          </div>
+                      </div>
+                    {% endif %}
+                    <div>
+                      <label class="usa-label" for="{{ form.title.id_for_label }}">{{form.title.label}}:</label>
+                      <span class="usa-hint line-height-body-1 font-body-2xs">{{form.title.help_text}}</span>
+                      <input {{ readonly }} type="text" name="{{ form.title.name }}" maxlength="100" class="usa-input" required="" id="{{ form.title.id_for_label }}" value="{{ form.title.value|default_if_none:'' }}">
+                    </div>
+                    <div>
+                      <label class="usa-label" for="{{ form.description.id_for_label }}">{{ form.description.label }}:</label>
+                      <span class="usa-hint line-height-body-1 font-body-2xs">{{form.description.help_text}}</span>
+                      <textarea {{ readonly }} name="{{ form.description.name }}" cols="40" rows="10" class="usa-textarea" id="{{ form.description.id_for_label }}">{{form.description.value|default_if_none:''}}</textarea>
+                    </div>
+                    {% if readonly != 'readonly' or form.is_private_event.value %}
+                    <div class="checkbox-wrapper">
+                        <div class="usa-label grid-col-12">{{form.is_private_event.label}}:</div>
+                        <div class="usa-hint font-body-2xs margin-y-1">{{form.is_private_event.help_text}}</div>
+                        <div class="usa-checkbox">
+                          <input 
+                            class="usa-checkbox__input" 
+                            id="{{form.is_private_event.id_for_label}}"
+                            type="checkbox"
+                            name="{{form.is_private_event.name}}"
+                            value="is_private_event"
+                            {% if form.is_private_event.value %}checked="checked"{% endif %}
+                            {% if readonly %}disabled=""{% endif %}
+                            >
+                          <label class="usa-checkbox__label" for="{{form.is_private_event.id_for_label}}">Is This Event Private?</label>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div>
+                        <label class="usa-label" for="{{form.organization_name.id_for_label}}">{{form.organization_name.label}}:</label>
+                        <span class="usa-hint line-height-body-1 font-body-2xs">{{form.organization_name.help_text}}</span>
+                        <input {{ readonly }} type="text" name="{{ form.organization_name.name }}" maxlength="100" class="usa-input" required="" id="{{form.organization_name.id_for_label}}" value="{{form.organization_name.value|default_if_none:''}}">
+                    </div>
+                    <div>
+                      <label class="usa-label" for="{{form.location.id_for_label}}">Location:</label>
+                      <span class="usa-hint line-height-body-1 font-body-2xs">{{form.location.help_text}}</span>
+                      <input {{ readonly }} type="text" name="{{ form.location.name }}" maxlength="100" class="usa-input" required="" id="{{form.location.id_for_label}}" value="{{form.location.value|default_if_none:''}}">
+                    </div>
+                    <div>
+                      <label class="usa-label" for="{{ form.contact_name.id_for_label }}">{{form.contact_name.label}}:</label>
+                      <span class="usa-hint line-height-body-1 font-body-2xs">{{form.contact_name.help_text}}</span>
+                      <input {{ readonly }} type="text" name="{{ form.contact_name.name }}" maxlength="100" class="usa-input" required="" id="{{ form.contact_name.id_for_label }}"  value="{{form.contact_name.value|default_if_none:''}}">
+                    </div>
+                    <div>
+                      <label class="usa-label" for="{{ form.contact_email.id_for_label }}">{{form.contact_email.label}}:</label>
+                      <span class="usa-hint line-height-body-1 font-body-2xs">{{form.contact_email.help_text}}</span>
+                      <input {{ readonly }} type="email" name="{{ form.contact_email.name }}" maxlength="100" class="usa-input" required="" id="{{ form.contact_email.id_for_label }}" value="{{form.contact_email.value|default_if_none:''}}">
+                    </div>
+                    <div>
+                      <label class="usa-label" for="{{ form.contact_phone.id_for_label }}">{{form.contact_phone.label}}:</label>
+                      <span class="usa-hint line-height-body-1 font-body-2xs">{{form.contact_phone.help_text}}</span>
+                      <input {{ readonly }} type="tel" name="{{ form.contact_phone.name }}" maxlength="100" class="usa-input" required="" id="{{ form.contact_phone.id_for_label }}" value="{{form.contact_phone.value|default_if_none:''}}">
+                    </div>
+                    <div>
+                      <label class="usa-label" for="{{form.event_type.id_for_label}}">{{form.fields.event_type.label}}:</label>
+                      <select
+                        {% if readonly %} disabled="" {% endif %}
+                        name="{{form.event_type.name}}"
+                        class="usa-input {{ readonly }} desktop:grid-col-3 grid-col-6"
+                        required=""
+                        id="{{form.event_type.id_for_label}}">
+                          {% for value, display in form.fields.event_type.choices %}
+                          <option {{ readonly }} value="{{ value }}" {% if form.event_type.value == value %}selected {{ readonly }}{% endif %}>{{ display }}</option>
+                          {% endfor %}
+                      </select>
+                    </div>
+                    {% if readonly != 'readonly' or form.is_census_equipped.value %}
+                    <div class="checkbox-wrapper">
+                        <div class="usa-label grid-col-12">{{form.is_census_equipped.label}}:</div>
+                        <div class="usa-hint font-body-2xs margin-y-1">{{form.is_census_equipped.help_text}}</div>
+                        <div class="usa-checkbox">
+                          <input
+                            class="usa-checkbox__input"
+                            id="{{form.is_census_equipped.id_for_label}}"
+                            type="checkbox"
+                            name="{{form.is_census_equipped.name}}"
+                            value="is_census_equipped"
+                            {% if form.is_census_equipped.value %}checked="checked"{% endif %}
+                            {% if readonly %}disabled=""{% endif %}
+                            >
+                          <label class="usa-checkbox__label" for="{{form.is_census_equipped.id_for_label}}">Is census equipped?</label>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="checkbox-wrapper grid-row">
+                        <div class="usa-label grid-col-12 margin-bottom-2">{{form.languages.help_text}}</div>
+                        {% for value, name in form.languages.field.choices %}
+                        {% if readonly != 'readonly' or value in form.languages.value %}
+                        <div class="usa-checkbox grid-col-6">
+                            <input
+                              class="usa-checkbox__input"
+                              id="{{form.languages.id_for_label}}_{{ forloop.counter }}"
+                              type="checkbox"
+                              name="{{ form.languages.name }}"
+                              value="{{ value }}"
+                              {% if value in form.languages.value %}
+                              checked="checked"
+                              {% endif %}
+                              {% if readonly %}disabled=""{% endif %}
+                              >
+                              <label class="usa-checkbox__label" for="{{form.languages.id_for_label}}_{{ forloop.counter }}">{{ name }}</label>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="grid-row">
+                      <div class="desktop:grid-col-6">
+                          <label class="usa-label" for="{{form.start_datetime.id_for_label}}">{{form.start_datetime.label}}:</label>
+                          <div class="usa-hint line-height-body-1 font-body-2xs">{{form.start_datetime.help_text}}</div>
+                          <input {{ readonly }} class="usa-input grid-col-6" type="text" name="{{form.start_datetime.name}}" required="" id="{{form.start_datetime.id_for_label}}" value="{{form.start_datetime.value| date:'Y-m-d H:i'}}">
+                      </div>
+                      <div class="desktop:grid-col-6">
+                          <label class="usa-label" for="{{form.end_datetime.id_for_label}}">{{form.end_datetime.label}}:</label>
+                          <div class="usa-hint line-height-body-1 font-body-2xs">{{form.end_datetime.help_text}}</div>
+                          <input {{ readonly }} class="usa-input grid-col-6" type="text" name="{{form.end_datetime.name}}" required="" id="{{form.end_datetime.id_for_label}}" value="{{form.end_datetime.value| date:'Y-m-d H:i'}}">
+                      </div>
+                    </div>
+                    {% if enable_recurrence %}
+                    <span class="usa-hint line-height-body-1 font-body-2xs">{{ form.recurrences.help_text }}</span>
+                    <div class="grid-row">
+                        {{ form.recurrences }}
+                    </div>
+                    {% else %}
+                    <input {{ readonly }} type="hidden" name="{{ form.recurrences.name }}" value="" />
+                    {% endif %}
+
+                    {% if "/update/" in request.path  %}
+                    <div>
+                        <label class="usa-label" for="{{form.approval_status.id_for_label}}">{{form.approval_status.label}}:</label>
+                        <select
+                          name="{{form.approval_status.name}}"
+                          class="usa-input desktop:grid-col-3 grid-col-6"
+                          required=""
+                          id="{{form.approval_status.id_for_label}}">
+                            {% for value, display in form.fields.approval_status.choices %}
+                              <option 
+                                value="{{ value }}"
+                                {% if form.approval_status.value == value %}selected=""{% endif %}
+                                >
+                                  {{ display }}
+                              </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endif %}
+
+                    </br>
+                    {% if  readonly != 'readonly' %}
+                    <input type="submit" value="Submit" class="usa-button">
+                    {% endif %}
+                </fieldset>
+            {% endif %}
+            </form>
+        </section>
+    </div>
+</div>
+
+{% endblock content %}
 {% block media %}
-{% endblock %}
+{% endblock media %}

@@ -13,24 +13,24 @@ from . import constants
 #        '''
 #        return super(EventManager, self).get_queryset().filter(approval_status=constants.EventApprovalStatus.APPROVED)
 
-
 class Event(models.Model):
-    title = models.CharField(max_length=100, help_text="Title or short description of the event")
-    description = models.TextField(blank=True, help_text="Full description of the event")
-    recurrences = RecurrenceField(default=None, blank=True, help_text="This event occurs more than once.")
-    start_datetime = models.DateTimeField(help_text="When does the event start?")
-    end_datetime = models.DateTimeField(help_text="When does the event end?")
-    organization_name = models.CharField(max_length=100, help_text="Name of the hosting organization")
+    title = models.CharField(max_length=100, help_text="Title or short description of the event", verbose_name="Title")
+    description = models.TextField(blank=True, help_text="Full description of the event", verbose_name="Description")
+    recurrences = RecurrenceField(default=None, blank=True, help_text="This event occurs more than once.", verbose_name="Event Recurrence")
+    start_datetime = models.DateTimeField(help_text="When does the event start?", verbose_name="Event Start Time")
+    end_datetime = models.DateTimeField(help_text="When does the event end?", verbose_name="Event End Time")
+    organization_name = models.CharField(max_length=100, help_text="Name of the hosting organization", verbose_name="Organization Name")
     event_type = models.CharField(max_length=20, choices=[(t, t.value) for t in constants.EventType])
-    location = models.CharField(max_length=100, help_text="Location where the event will take place")
-    lat = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, default=None)
-    lon = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, default=None)
-    is_census_equipped = models.BooleanField(default=False, help_text="Is this event technologically equipped to allow people to take the census?")
+    location = models.CharField(max_length=100, help_text="Location where the event will take place", verbose_name="Location")
+    lat = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, default=None, verbose_name="Latitude")
+    lon = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, default=None, verbose_name="Longitude")
+    is_census_equipped = models.BooleanField(default=False, help_text="Is this event technologically equipped to allow people to take the census?", verbose_name="Census Equipment")
     approval_status = models.CharField(max_length=20, default=constants.EventApprovalStatus.PENDING, choices=[(t, t.value) for t in constants.EventApprovalStatus])
     languages = MultiSelectField(choices=[(t, t.value) for t in constants.Languages], help_text="Add languages supported at the event")
-    contact_name = models.CharField(max_length=100, null=True, help_text="Name of contact for event")
-    contact_email = models.EmailField(max_length=60, null=True, help_text="Email for contact")
-    contact_phone = PhoneNumberField(null=True, help_text="Phone number for contact")
+    contact_name = models.CharField(max_length=100, null=True, help_text="Name of contact for event", verbose_name="Contact Name")
+    contact_email = models.EmailField(max_length=60, null=True, help_text="Email for contact", verbose_name="Contact Email")
+    contact_phone = PhoneNumberField(null=True, help_text="Phone number for contact", verbose_name="Contact Phone Number")
+    is_private_event = models.BooleanField(default=False, help_text="Would you like to hide this event from the public?", verbose_name="Private Event")
 
     # If you need pending and active, use Event.with_pending instead of Event.objects
     #with_pending = models.Manager()

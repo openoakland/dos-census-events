@@ -27,6 +27,7 @@ env = environ.Env(
     LOG_LEVEL=(str, 'INFO'),
     DJANGO_LOG_LEVEL=(str, 'INFO'),
     TIME_ZONE=(str, 'America/Los_Angeles'),
+    SITE_DOMAIN=(str, 'localhost:8000'),
 )
 
 # Read additional environment variables from .env at the project root
@@ -42,6 +43,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = env('ALLOWED_HOSTS')
+SITE_DOMAIN = env('SITE_DOMAIN')
 
 
 # Application definition
@@ -95,7 +97,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'census.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -187,3 +188,5 @@ STATIC_URL = '/static/'
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
