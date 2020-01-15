@@ -12,6 +12,7 @@
 }
 </style>
 <div class="grid-container">
+
     <div class="grid-row">
         <section class='tablet:grid-col-8 tablet:grid-offset-2 section-card padding-x-4 padding-y-2 tablet:margin-4'>
 
@@ -74,10 +75,27 @@
                         <input {{ readonly }} type="text" name="{{ form.organization_name.name }}" maxlength="100" class="usa-input" required="" id="{{form.organization_name.id_for_label}}" value="{{form.organization_name.value|default_if_none:''}}">
                     </div>
                     <div>
-                      <label class="usa-label" for="{{form.location.id_for_label}}">Location:</label>
+                      <label class="usa-label" for="{{form.location.id_for_label}}">{{form.location.label}}:</label>
                       <span class="usa-hint line-height-body-1 font-body-2xs">{{form.location.help_text}}</span>
-                      <input {{ readonly }} type="text" name="{{ form.location.name }}" maxlength="100" class="usa-input" required="" id="{{form.location.id_for_label}}" value="{{form.location.value|default_if_none:''}}">
+                       <!-- See autocomplete.js for implementation details -->
+                      <input
+                        {{ readonly }}
+                        type="text"
+                        name="{{ form.location.name }}"
+                        maxlength="200"
+                        class="usa-input"
+                        required=""
+                        id="{{form.location.id_for_label}}"
+                        value="{{form.location.value|default_if_none:''}}">
                     </div>
+                    <div>
+                      <label class="usa-label" for="{{form.site_name.id_for_label}}">{{form.site_name.label}} (optional):</label>
+                      <span class="usa-hint line-height-body-1 font-body-2xs">{{form.site_name.help_text}}</span>
+                      <input {{ readonly }} type="text" name="{{ form.site_name.name }}" maxlength="100" class="usa-input" required="" id="{{form.site_name.id_for_label}}" value="{{form.site_name.value|default_if_none:''}}">
+                    </div>
+                    <input type="hidden" name="{{ form.lat.name }}" id="{{ form.lat.id_for_label }}" value="{{form.lat.value|default_if_none:''}}" />
+                    <input type="hidden" name="{{ form.lon.name }}" id="{{ form.lon.id_for_label }}" value="{{form.lon.value|default_if_none:''}}" />
+
                     <div>
                       <label class="usa-label" for="{{ form.contact_name.id_for_label }}">{{form.contact_name.label}}:</label>
                       <span class="usa-hint line-height-body-1 font-body-2xs">{{form.contact_name.help_text}}</span>
@@ -197,6 +215,7 @@
     </div>
 </div>
 
+<script src="https://maps.googleapis.com/maps/api/js?key={{google_maps_api_key}}&libraries=places&callback=initAutocomplete" async defer></script>
 {% endblock content %}
 {% block media %}
 {% endblock media %}

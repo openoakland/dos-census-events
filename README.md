@@ -15,7 +15,6 @@ Find census events and resources near you.
 Instead of re-creating a calendar tool, we're leveraging a fantastic and proven
 one: Google Calendar.
 
-
 ## Usage
 
 Census Events creates a publishing workflow around Google Calendar. Currently,
@@ -23,6 +22,7 @@ the publishing is one-way, from Census Events to Google Calendar.
 
 Workflow:
 ![Worflow Diagram](https://github.com/openoakland/dos-census-events/blob/master/docs/workflow.jpg)
+
 
 ### Setup Google Calendar
 
@@ -65,6 +65,16 @@ to publish events on your behalf.
 
 [Create an event](http://localhost:8000/admin/census/event/add/).
 
+### Setup Maps API
+In our event creation form we have the google autocomplete api available.
+
+1. Enable the [Maps Javascript API](https://console.cloud.google.com/apis/library/maps-backend.googleapis.com)
+1. Enable the [Places API](https://console.cloud.google.com/apis/library/places-backend.googleapis.com?q=places)
+1. Create an API Key: https://console.cloud.google.com/google/maps-apis/apis/maps-backend.googleapis.com/credentials
+1. Under **API restrictions**, you may restrict it to use only the **Maps Javascript API** and the **Places API**
+1. In the `.env` file, copy your API key to the `GOOGLE_MAPS_API_KEY` variable
+
+**Reference:** (Developer Reference)[https://developers.google.com/maps/documentation/javascript/places-autocomplete]
 
 ### Configuration
 
