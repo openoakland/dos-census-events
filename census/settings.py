@@ -28,6 +28,7 @@ env = environ.Env(
     DJANGO_LOG_LEVEL=(str, 'INFO'),
     TIME_ZONE=(str, 'America/Los_Angeles'),
     SITE_DOMAIN=(str, 'localhost:8000'),
+    GOOGLE_MAPS_API_KEY=(str,None),
 )
 
 # Read additional environment variables from .env at the project root
@@ -170,11 +171,11 @@ LOGGING = {
 
 # The Id of the calendar to which events will be published.
 GOOGLE_CALENDAR_ID = env('GOOGLE_CALENDAR_ID')
+GOOGLE_MAPS_API_KEY = env('GOOGLE_MAPS_API_KEY')
 
 # Path to the Google Service Account with read/write access to the Google
 # Calendar.
 GOOGLE_SERVICE_ACCOUNT_INFO = json.loads(env('GOOGLE_SERVICE_ACCOUNT_INFO')) if env('GOOGLE_SERVICE_ACCOUNT_INFO') else None
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/

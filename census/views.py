@@ -268,6 +268,7 @@ class SubmitEventView(View):
         return render(request, self.template_name, {
             'form': form,
             'enable_recurrence': enable_recurrence,
+            'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY
         })
 
 
@@ -302,6 +303,13 @@ class UpdateEvent(LoginRequiredMixin, UpdateView):
     login_url = '/login/'
     form_class = EditEventForm
     template_name = 'census/event_form.html'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # set our custom variables
+        context['google_maps_api_key'] = settings.GOOGLE_MAPS_API_KEY
+        return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
