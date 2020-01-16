@@ -11,12 +11,14 @@ var autoCompleteElemendId = 'id_location';
 lat_id = 'id_lat';
 lon_id = 'id_lon';
 site_name_id = 'id_site_name';
+city_id = 'id_city';
+zip_id = 'id_zip_code';
 
 function initAutocomplete() {
   // Create the autocomplete object, restricting the search predictions to
   // geographical location types.
   autocomplete = new google.maps.places.Autocomplete(
-      document.getElementById(autoCompleteElemendId));
+    document.getElementById(autoCompleteElemendId));
 
   // Avoid paying for data that you don't need by restricting the set of
   // place fields that are returned to just the address components.
@@ -34,6 +36,18 @@ function fillInAddress() {
   // https://developers-dot-devsite-v2-prod.appspot.com/maps/documentation/javascript/reference/coordinates#LatLngBounds
   if (place.name) {
     document.getElementById(site_name_id).value = place.name;
+  }
+  var cityComponent = place.address_components.find(obj => {
+    return obj.types.includes('locality')
+  })
+  if (typeof cityComponent !== 'undefined') {
+    document.getElementById(city_id).value = cityComponent.long_name
+  }
+  var zipComponent = place.address_components.find(obj => {
+    return obj.types.includes('postal_code')
+  })
+  if (typeof zipComponent !== 'undefined') {
+    document.getElementById(zip_id).value = zipComponent.long_name
   }
   lat = place.geometry.location.lat().toFixed(6)
   lon = place.geometry.location.lng().toFixed(6)

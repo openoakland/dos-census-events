@@ -95,21 +95,31 @@
                     </div>
                     <input type="hidden" name="{{ form.lat.name }}" id="{{ form.lat.id_for_label }}" value="{{form.lat.value|default_if_none:''}}" />
                     <input type="hidden" name="{{ form.lon.name }}" id="{{ form.lon.id_for_label }}" value="{{form.lon.value|default_if_none:''}}" />
+                    <div>
+                      <label class="usa-label" for="{{form.city.id_for_label}}">{{form.city.label}}:</label>
+                      <span class="usa-hint line-height-body-1 font-body-2xs">{{form.city.help_text}}</span>
+                      <input {{ readonly }} type="text" name="{{ form.city.name }}" maxlength="50" class="usa-input" required="" id="{{ form.city.id_for_label }}" value="{{ form.city.value|default_if_none:'' }}">
+                    </div>
+                    <div>
+                      <label class="usa-label" for="{{form.zip_code.id_for_label}}">{{form.zip_code.label}}:</label>
+                      <span class="usa-hint line-height-body-1 font-body-2xs">{{form.zip_code.help_text}}</span>
+                      <input {{ readonly }} type="text" name="{{ form.zip_code.name }}" maxlength="50" class="usa-input" required="" id="{{ form.zip_code.id_for_label }}" value="{{ form.zip_code.value|default_if_none:'' }}">
+                    </div>
 
                     <div>
-                      <label class="usa-label" for="{{ form.contact_name.id_for_label }}">{{form.contact_name.label}}:</label>
+                      <label class="usa-label" for="{{ form.contact_name.id_for_label }}">{{form.contact_name.label}} (optional):</label>
                       <span class="usa-hint line-height-body-1 font-body-2xs">{{form.contact_name.help_text}}</span>
-                      <input {{ readonly }} type="text" name="{{ form.contact_name.name }}" maxlength="100" class="usa-input" required="" id="{{ form.contact_name.id_for_label }}"  value="{{form.contact_name.value|default_if_none:''}}">
+                      <input {{ readonly }} type="text" name="{{ form.contact_name.name }}" maxlength="100" class="usa-input" id="{{ form.contact_name.id_for_label }}"  value="{{form.contact_name.value|default_if_none:''}}">
                     </div>
                     <div>
-                      <label class="usa-label" for="{{ form.contact_email.id_for_label }}">{{form.contact_email.label}}:</label>
+                      <label class="usa-label" for="{{ form.contact_email.id_for_label }}">{{form.contact_email.label}} (optional):</label>
                       <span class="usa-hint line-height-body-1 font-body-2xs">{{form.contact_email.help_text}}</span>
-                      <input {{ readonly }} type="email" name="{{ form.contact_email.name }}" maxlength="100" class="usa-input" required="" id="{{ form.contact_email.id_for_label }}" value="{{form.contact_email.value|default_if_none:''}}">
+                      <input {{ readonly }} type="email" name="{{ form.contact_email.name }}" maxlength="100" class="usa-input" id="{{ form.contact_email.id_for_label }}" value="{{form.contact_email.value|default_if_none:''}}">
                     </div>
                     <div>
-                      <label class="usa-label" for="{{ form.contact_phone.id_for_label }}">{{form.contact_phone.label}}:</label>
+                      <label class="usa-label" for="{{ form.contact_phone.id_for_label }}">{{form.contact_phone.label}} (optional):</label>
                       <span class="usa-hint line-height-body-1 font-body-2xs">{{form.contact_phone.help_text}}</span>
-                      <input {{ readonly }} type="tel" name="{{ form.contact_phone.name }}" maxlength="100" class="usa-input" required="" id="{{ form.contact_phone.id_for_label }}" value="{{form.contact_phone.value|default_if_none:''}}">
+                      <input {{ readonly }} type="tel" name="{{ form.contact_phone.name }}" maxlength="100" class="usa-input" id="{{ form.contact_phone.id_for_label }}" value="{{form.contact_phone.value|default_if_none:''}}">
                     </div>
                     <div>
                       <label class="usa-label" for="{{form.event_type.id_for_label}}">{{form.fields.event_type.label}}:</label>
@@ -139,6 +149,24 @@
                             {% if readonly %}disabled=""{% endif %}
                             >
                           <label class="usa-checkbox__label" for="{{form.is_census_equipped.id_for_label}}">Is census equipped?</label>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if readonly != 'readonly' or form.is_ada_compliant.value %}
+                    <div class="checkbox-wrapper">
+                        <div class="usa-label grid-col-12">{{form.is_ada_compliant.label}}:</div>
+                        <div class="usa-hint font-body-2xs margin-y-1">{{form.is_ada_compliant.help_text}}</div>
+                        <div class="usa-checkbox">
+                          <input
+                            class="usa-checkbox__input"
+                            id="{{form.is_ada_compliant.id_for_label}}"
+                            type="checkbox"
+                            name="{{form.is_ada_compliant.name}}"
+                            value="is_ada_compliant"
+                            {% if form.is_ada_compliant.value %}checked="checked"{% endif %}
+                            {% if readonly %}disabled=""{% endif %}
+                            >
+                          <label class="usa-checkbox__label" for="{{form.is_ada_compliant.id_for_label}}">Is ADA compliant?</label>
                         </div>
                     </div>
                     {% endif %}
