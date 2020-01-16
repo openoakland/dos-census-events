@@ -65,8 +65,8 @@ class CensusSubmitViewTest(TestCase):
             description="Civic technology event",
             organization_name="OpenOakland",
             location="City Hall",
-            event_type="WORKSHOP",
-            languages="ENGLISH",
+            event_type="Workshop",
+            languages="English",
             start_datetime="2019-11-15 15:00",
             end_datetime="2019-11-15 16:00",
             recurrences="",
@@ -88,14 +88,14 @@ class CensusSubmitViewTest(TestCase):
         self.assertEqual(event.organization_name, data['organization_name'])
         self.assertEqual(event.location, data['location'])
         self.assertEqual(event.event_type, data['event_type'])
-        self.assertEqual(event.languages, [constants.Languages.ENGLISH.name])
+        self.assertEqual(event.languages, [constants.Languages.ENGLISH])
         # There is an implicit assumption server time is America/Los_Angeles
         self.assertEqual(event.start_datetime.timestamp(), datetime(2019, 11, 15, 15, 0).astimezone(los_angeles).timestamp())
         self.assertEqual(event.end_datetime.timestamp(), datetime(2019, 11, 15, 16, 0).astimezone(los_angeles).timestamp())
 
         # The event has the right defaults
         self.assertEqual(event.recurrences, recurrence.Recurrence())
-        self.assertEqual(event.approval_status, constants.EventApprovalStatus.PENDING.name)
+        self.assertEqual(event.approval_status, constants.EventApprovalStatus.PENDING)
 
 
     def test_submit_without_start_fails(self):
@@ -105,8 +105,8 @@ class CensusSubmitViewTest(TestCase):
             description="Civic technology event",
             organization_name="OpenOakland",
             location="City Hall",
-            event_type="WORKSHOP",
-            languages="ENGLISH",
+            event_type="Workshop",
+            languages="English",
             end_datetime="2019-11-15 16:00",
             recurrences="",
             contact_email="hi@example.com",
@@ -128,7 +128,7 @@ class CensusSubmitViewTest(TestCase):
             description="Civic technology event",
             organization_name="OpenOakland",
             location="City Hall",
-            event_type="WORKSHOP",
+            event_type="Workshop",
             languages="",
             start_datetime="2019-11-15 15:00",
             end_datetime="2019-11-15 16:00",
@@ -152,8 +152,8 @@ class CensusSubmitViewTest(TestCase):
             description="Civic technology event",
             organization_name="OpenOakland",
             location="City Hall",
-            event_type="WORKSHOP",
-            languages="ENGLISH",
+            event_type="Workshop",
+            languages="English",
             start_datetime="2019-11-15 15:00",
             end_datetime="2019-11-15 16:00",
             recurrences="RRULE:FREQ=WEEKLY;BYDAY=TU",
@@ -178,7 +178,7 @@ class CensusPendingViewTest(TestCase):
     def setUp(self):
         self.url = "/pending/"
         self.client = Client()
-        self.pending_event = factory.event(approval_status=constants.EventApprovalStatus.PENDING.name)
+        self.pending_event = factory.event(approval_status=constants.EventApprovalStatus.PENDING)
         self.pending_event.save()
 
     def test_url_resolves_to_view(self):
@@ -207,7 +207,7 @@ class CensusApprovedViewTest(TestCase):
     def setUp(self):
         self.url = "/approved/"
         self.client = Client()
-        self.approved_event = factory.event(approval_status=constants.EventApprovalStatus.APPROVED.name)
+        self.approved_event = factory.event(approval_status=constants.EventApprovalStatus.APPROVED)
         self.approved_event.save()
 
     def test_url_resolves_to_view(self):
@@ -238,7 +238,7 @@ class CensusPendingViewWithRecurrenceTest(TestCase):
         self.url = "/pending/"
         self.client = Client()
         self.pending_event = factory.event(
-            approval_status=constants.EventApprovalStatus.PENDING.name,
+            approval_status=constants.EventApprovalStatus.PENDING,
             recurrences=recurrence.Recurrence(rrules=[recurrence.Rule(recurrence.DAILY)]),
         )
         self.pending_event.save()

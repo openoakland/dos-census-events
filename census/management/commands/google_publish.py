@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand, CommandError
 
 from census.models import Event, GoogleEvent
-from census.google_calendar import google_publish_event
+from census import constants, google_calendar
 
 log = logging.getLogger(__name__)
 
@@ -16,7 +16,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # TODO optimize the SQL query
         log.info('starting publish...')
-        for event in Event.objects.all():
+        for event in Event.objects.filter(approval_status=constants.EventApprovalStatus.APPROVED):
             try:
                 event.google_event
             except ObjectDoesNotExist:
@@ -28,4 +28,4 @@ class Command(BaseCommand):
                 continue
 
             log.info('event not yet published event=%s', event.id)
-            google_publish_event(event)
+            google_calendar.google_publish_event(event)

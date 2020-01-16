@@ -33,6 +33,7 @@ class GooglePublishCommandTest(TestCase):
 
         mock_google_publish_event.assert_called_with(approved_event)
 
+
     @mock.patch('census.google_calendar.google_publish_event')
     def test_pending_events(self, mock_google_publish_event):
         """Given pending event, the event should not be published"""
@@ -43,6 +44,21 @@ class GooglePublishCommandTest(TestCase):
         call_command('google_publish')
 
         mock_google_publish_event.assert_not_called()
+
+
+    @mock.patch('census.google_calendar.google_publish_event')
+    def test_published_events(self, mock_google_publish_event):
+        """Given a published event, the event should not be re-published"""
+
+        event = factory.event()
+        event.save()
+        published_event = factory.google_event(event=event)
+        published_event.save()
+
+        call_command('google_publish')
+
+        mock_google_publish_event.assert_not_called()
+
 
 class GoogleCalendarPublishEvent(TestCase):
     def setUp(self):
