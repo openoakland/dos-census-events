@@ -65,6 +65,8 @@ class CensusSubmitViewTest(TestCase):
             description="Civic technology event",
             organization_name="OpenOakland",
             location="City Hall",
+            city="Oakland",
+            zip_code="94612",
             event_type="Workshop",
             languages="English",
             start_datetime="2019-11-15 15:00",
@@ -89,6 +91,8 @@ class CensusSubmitViewTest(TestCase):
         self.assertEqual(event.location, data['location'])
         self.assertEqual(event.event_type, data['event_type'])
         self.assertEqual(event.languages, [constants.Languages.ENGLISH])
+        self.assertEqual(event.city, data['city'])
+        self.assertEqual(event.zip_code, data['zip_code'])
         # There is an implicit assumption server time is America/Los_Angeles
         self.assertEqual(event.start_datetime.timestamp(), datetime(2019, 11, 15, 15, 0).astimezone(los_angeles).timestamp())
         self.assertEqual(event.end_datetime.timestamp(), datetime(2019, 11, 15, 16, 0).astimezone(los_angeles).timestamp())
@@ -105,6 +109,8 @@ class CensusSubmitViewTest(TestCase):
             description="Civic technology event",
             organization_name="OpenOakland",
             location="City Hall",
+            city="Oakland",
+            zip_code="94612",
             event_type="Workshop",
             languages="English",
             end_datetime="2019-11-15 16:00",
@@ -128,6 +134,8 @@ class CensusSubmitViewTest(TestCase):
             description="Civic technology event",
             organization_name="OpenOakland",
             location="City Hall",
+            city="Oakland",
+            zip_code="94612",
             event_type="Workshop",
             languages="",
             start_datetime="2019-11-15 15:00",
@@ -152,6 +160,8 @@ class CensusSubmitViewTest(TestCase):
             description="Civic technology event",
             organization_name="OpenOakland",
             location="City Hall",
+            city="Oakland",
+            zip_code="94612",
             event_type="Workshop",
             languages="English",
             start_datetime="2019-11-15 15:00",
@@ -171,6 +181,30 @@ class CensusSubmitViewTest(TestCase):
 
         # The event created in the database matches the data we submitted
         self.assertEqual(str(event.recurrences), data['recurrences'])
+
+    def test_contact_not_required(self):
+        data = dict(
+            title="OpenOakland Hack Night",
+            description="Civic technology event",
+            organization_name="OpenOakland",
+            location="City Hall",
+            city="Oakland",
+            zip_code="94612",
+            event_type="Workshop",
+            languages="English",
+            start_datetime="2019-11-15 15:00",
+            end_datetime="2019-11-15 16:00",
+            recurrences="",
+        )
+
+        response = self.client.post(self.url, data)
+        self.assertEqual(response.status_code, 201)
+
+        event = Event.objects.all()[0]
+        self.assertEqual(event.contact_email, None)
+        self.assertEqual(event.contact_name, None)
+        self.assertEqual(event.contact_phone, None)
+
 
 
 class CensusPendingViewTest(TestCase):

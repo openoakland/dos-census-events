@@ -17,13 +17,16 @@ class EventForm(ModelForm):
             'lon',
             'site_name',
             'location',
+            'city',
+            'zip_code',
             'start_datetime',
             'end_datetime',
             'recurrences',
             'contact_name',
             'contact_email',
             'contact_phone',
-            'is_private_event'
+            'is_private_event',
+            'is_ada_compliant',
         ]
         widgets = {
                 'start_datetime': forms.DateTimeInput(attrs={'type': 'datetime'}),
@@ -44,6 +47,8 @@ class EditEventForm(ModelForm):
             'lon',
             'site_name',
             'location',
+            'city',
+            'zip_code',
             'start_datetime',
             'end_datetime',
             'recurrences',
@@ -51,7 +56,8 @@ class EditEventForm(ModelForm):
             'contact_email',
             'contact_phone',
             'approval_status',
-            'is_private_event'
+            'is_private_event',
+            'is_ada_compliant',
         ]
         widgets = {
                 'start_datetime': forms.DateTimeInput(attrs={'type': 'datetime'}),
