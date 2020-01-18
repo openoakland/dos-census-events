@@ -53,34 +53,28 @@
                       <h3>{{form.location.label}}:</h3>
                       <p>{{form.location.value|default_if_none:''}}</p>
 
-                      <h3>{{form.site_name.label}} <!--(optional)-->:</h3>
+                      <h3>{{form.site_name.label}}<!--(optional)-->:</h3>
                       <p>{{form.site_name.value|default_if_none:''}}</p>
 
-                      <h3>{{form.city.label}}:</h3>
-                      <p>{{ form.city.value|default_if_none:'' }}</p>
 
-                      <h3>{{form.zip_code.label}}:</h3>
-                      <p>{{ form.zip_code.value|default_if_none:'' }}</p>
-
-
-                      <h3>{{form.contact_name.label}} <!--(optional)-->:</h3>
+                      <h3>{{form.contact_name.label}}<!--(optional)-->:</h3>
                       <p>{{form.contact_name.value|default_if_none:''}}</p>
 
-                      <h3>{{form.contact_email.label}} <!--(optional)-->:</h3>
+                      <h3>{{form.contact_email.label}}<!--(optional)-->:</h3>
                       <p>{{form.contact_email.value|default_if_none:''}}</p>
 
-                      <h3>{{form.contact_phone.label}} <!--(optional)-->:</h3>
+                      <h3>{{form.contact_phone.label}}<!--(optional)-->:</h3>
                       <p>{{form.contact_phone.value|default_if_none:''}}</p>
 
                       <h3>{{form.fields.event_type.label}}:</h3>
                       <select
-                        {% if readonly %} disabled="" {% endif %}
+                        disabled=""
                         name="{{form.event_type.name}}"
-                        class="usa-input {{ readonly }} desktop:grid-col-3 grid-col-6"
+                        class="usa-input desktop:grid-col-3 grid-col-6"
                         required=""
                         id="{{form.event_type.id_for_label}}">
                           {% for value, display in form.fields.event_type.choices %}
-                          <option {{ readonly }} value="{{ value }}" {% if form.event_type.value == value %}selected {{ readonly }}{% endif %}>{{ display }}</option>
+                          <option value="{{ value }}" {% if form.event_type.value == value %}selected{% endif %}>{{ display }}</option>
                           {% endfor %}
                       </select>
 
@@ -89,13 +83,13 @@
                         {% endfor %}
                     </div>
                     <div class="grid-row">
-                      <div class="desktop:grid-col-6">
+                      <div class="desktop:grid-col-6 usa-prose">
                           <h3>{{form.start_datetime.label}}:</h3>
                           <p>{{form.start_datetime.value| date:'Y-m-d H:i'}}</p>
                       </div>
-                      <div class="desktop:grid-col-6">
+                      <div class="desktop:grid-col-6 usa-prose">
                           <h3>{{form.end_datetime.label}}:</h3>
-                          <p>value="{{form.end_datetime.value| date:'Y-m-d H:i'}}</p>
+                          <p>{{form.end_datetime.value| date:'Y-m-d H:i'}}</p>
                       </div>
                     </div>
                     {% if enable_recurrence %}
@@ -104,7 +98,7 @@
                         {{ form.recurrences }}
                     </div>
                     {% else %}
-                    <input {{ readonly }} type="hidden" name="{{ form.recurrences.name }}" value="" />
+                    <input type="hidden" name="{{ form.recurrences.name }}" value="" />
                     {% endif %}
 
                     {% if "/update/" in request.path  %}
