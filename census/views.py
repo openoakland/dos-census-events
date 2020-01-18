@@ -355,7 +355,7 @@ class DeleteEvent(LoginRequiredMixin, DeleteView):
 class ShowEvent(UpdateView):
     model = models.Event
     form_class = EditEventForm
-    template_name = 'census/event_form.html'
+    template_name = 'census/event_detail.html'
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)

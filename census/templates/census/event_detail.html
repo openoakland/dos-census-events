@@ -1,0 +1,141 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
+<script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+
+<style>
+.usa-checkbox__input:disabled+.usa-checkbox__label {
+    color: #000000;
+}
+</style>
+<div class="grid-container">
+
+    <div class="grid-row">
+        <section class='tablet:grid-col-8 tablet:grid-offset-2 section-card padding-x-4 padding-y-2 tablet:margin-4'>
+
+            <div>
+
+            {% if form.is_private_event.value and not user.is_authenticated %}
+            <h1>This Event is Private</h1>
+            {% else %}
+                <div class="usa-prose">
+                    {% if request.path == "/submit/" %}
+                    <h1>New Event</h1>
+                    {% elif "/update/" in request.path  %}
+                    <h1>Edit Event</h1>
+                    {% else %}
+                    <h1>Event Details</h1>
+                    {% endif %}
+                    {% csrf_token %}
+                    {{ form.media }}
+
+                    {% include 'includes/_form_errors.html' %}
+                    {% if message %}
+                      <div class="usa-alert usa-alert--success" role="alert">
+                          <div class="usa-alert__body">
+                            <h3 class="usa-alert__heading">{{message}}</h3>
+                            <p class="usa-alert__text"> It is now pending approval.</p>
+                          </div>
+                      </div>
+                    {% endif %}
+                      <h3>{{form.title.label}}:</h3>
+                      <p>{{ form.title.value|default_if_none:'' }}</p>
+
+                      <h3>{{ form.description.label }}:</h3>
+                      <p>{{form.description.value|default_if_none:''}}</p>
+
+                      <h3>{{form.organization_name.label}}:</h3>
+                      <p>{{form.organization_name.value|default_if_none:''}}</p>
+
+                      <h3>{{form.location.label}}:</h3>
+                      <p>{{form.location.value|default_if_none:''}}</p>
+
+                      <h3>{{form.site_name.label}} <!--(optional)-->:</h3>
+                      <p>{{form.site_name.value|default_if_none:''}}</p>
+
+                      <h3>{{form.city.label}}:</h3>
+                      <p>{{ form.city.value|default_if_none:'' }}</p>
+
+                      <h3>{{form.zip_code.label}}:</h3>
+                      <p>{{ form.zip_code.value|default_if_none:'' }}</p>
+
+
+                      <h3>{{form.contact_name.label}} <!--(optional)-->:</h3>
+                      <p>{{form.contact_name.value|default_if_none:''}}</p>
+
+                      <h3>{{form.contact_email.label}} <!--(optional)-->:</h3>
+                      <p>{{form.contact_email.value|default_if_none:''}}</p>
+
+                      <h3>{{form.contact_phone.label}} <!--(optional)-->:</h3>
+                      <p>{{form.contact_phone.value|default_if_none:''}}</p>
+
+                      <h3>{{form.fields.event_type.label}}:</h3>
+                      <select
+                        {% if readonly %} disabled="" {% endif %}
+                        name="{{form.event_type.name}}"
+                        class="usa-input {{ readonly }} desktop:grid-col-3 grid-col-6"
+                        required=""
+                        id="{{form.event_type.id_for_label}}">
+                          {% for value, display in form.fields.event_type.choices %}
+                          <option {{ readonly }} value="{{ value }}" {% if form.event_type.value == value %}selected {{ readonly }}{% endif %}>{{ display }}</option>
+                          {% endfor %}
+                      </select>
+
+                    <div class="checkbox-wrapper grid-row">
+                        {% for value, name in form.languages.field.choices %}
+                        {% endfor %}
+                    </div>
+                    <div class="grid-row">
+                      <div class="desktop:grid-col-6">
+                          <h3>{{form.start_datetime.label}}:</h3>
+                          <p>{{form.start_datetime.value| date:'Y-m-d H:i'}}</p>
+                      </div>
+                      <div class="desktop:grid-col-6">
+                          <h3>{{form.end_datetime.label}}:</h3>
+                          <p>value="{{form.end_datetime.value| date:'Y-m-d H:i'}}</p>
+                      </div>
+                    </div>
+                    {% if enable_recurrence %}
+                    <span class="usa-hint line-height-body-1 font-body-2xs">{{ form.recurrences.help_text }}</span>
+                    <div class="grid-row">
+                        {{ form.recurrences }}
+                    </div>
+                    {% else %}
+                    <input {{ readonly }} type="hidden" name="{{ form.recurrences.name }}" value="" />
+                    {% endif %}
+
+                    {% if "/update/" in request.path  %}
+                    <div>
+                        <label class="usa-label" for="{{form.approval_status.id_for_label}}">{{form.approval_status.label}}:</label>
+                        <select
+                          name="{{form.approval_status.name}}"
+                          class="usa-input desktop:grid-col-3 grid-col-6"
+                          required=""
+                          id="{{form.approval_status.id_for_label}}">
+                            {% for value, display in form.fields.approval_status.choices %}
+                              <option
+                                value="{{ value }}"
+                                {% if form.approval_status.value == value %}selected=""{% endif %}
+                                >
+                                  {{ display }}
+                              </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endif %}
+
+                    </br>
+                </div>
+            {% endif %}
+            </div>
+        </section>
+    </div>
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key={{google_maps_api_key}}&libraries=places&callback=initAutocomplete" async defer></script>
+{% endblock content %}
+{% block media %}
+{% endblock media %}
