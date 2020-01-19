@@ -7,6 +7,13 @@
 <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
 
 <style>
+.usa-prose>h2 {
+  font-size: 1.2rem;
+  margin-top: 1em;
+}
+.usa-prose>h2+p, p.event-details-custom + p.event-details-custom {
+    margin-top: 0.5em;
+}
 .usa-checkbox__input:disabled+.usa-checkbox__label {
     color: #000000;
 }
@@ -22,15 +29,9 @@
             <h1>This Event is Private</h1>
             {% else %}
                 <div class="usa-prose">
-                    {% if request.path == "/submit/" %}
-                    <h1>New Event</h1>
-                    {% elif "/update/" in request.path  %}
-                    <h1>Edit Event</h1>
-                    {% else %}
-                    <h1>Event Details</h1>
-                    {% endif %}
+                    <h1>{{ form.title.value|default_if_none:'' }}</h1>
                     {% csrf_token %}
-                    {{ form.media }}
+                    {{form.media}}
 
                     {% include 'includes/_form_errors.html' %}
                     {% if message %}
@@ -41,57 +42,27 @@
                           </div>
                       </div>
                     {% endif %}
-                      <h3>{{form.title.label}}:</h3>
-                      <p>{{ form.title.value|default_if_none:'' }}</p>
-
-                      <h3>{{ form.description.label }}:</h3>
                       <p>{{form.description.value|default_if_none:''}}</p>
 
-                      <h3>{{form.organization_name.label}}:</h3>
-                      <p>{{form.organization_name.value|default_if_none:''}}</p>
+                      <h2>{{form.location.label}}</h2>
+                      <p>{{form.site_name.value|default_if_none:''}}<br>
+                      { form.location.value|default_if_none:''}}</p>
 
-                      <h3>{{form.location.label}}:</h3>
-                      <p>{{form.location.value|default_if_none:''}}</p>
+                      <h2>Time</h2>
+                      <p>Starts {{form.start_datetime.value| date:'H:i'}} on {{form.start_datetime.value| date:'m-d-Y'}}<br> Ends {{form.end_datetime.value| date:'H:i'}} on {{form.end_datetime.value| date:'m-d-Y'}}</p>
 
-                      <h3>{{form.site_name.label}}<!--(optional)-->:</h3>
-                      <p>{{form.site_name.value|default_if_none:''}}</p>
+                      <h2>Event Details</h2>
+                      <p><strong>Languages supported:</strong><br>
+                      {{form.languages.value|default_if_none:''}}</p>
+                      <p><strong>{{form.fields.event_type.label}}:</strong><br>
+                      {{form.event_type.value|default_if_none:''}}</p>
 
+                      <h2>Contact</h2>
+                      <p>{{form.organization_name.value|default_if_none:''}}<br>
+                      {{form.contact_name.value|default_if_none:''}}<br>
+                      {{form.contact_email.value|default_if_none:''}}<br>
+                      {{form.contact_phone.value|default_if_none:''}}</p>
 
-                      <h3>{{form.contact_name.label}}<!--(optional)-->:</h3>
-                      <p>{{form.contact_name.value|default_if_none:''}}</p>
-
-                      <h3>{{form.contact_email.label}}<!--(optional)-->:</h3>
-                      <p>{{form.contact_email.value|default_if_none:''}}</p>
-
-                      <h3>{{form.contact_phone.label}}<!--(optional)-->:</h3>
-                      <p>{{form.contact_phone.value|default_if_none:''}}</p>
-
-                      <h3>{{form.fields.event_type.label}}:</h3>
-                      <select
-                        disabled=""
-                        name="{{form.event_type.name}}"
-                        class="usa-input desktop:grid-col-3 grid-col-6"
-                        required=""
-                        id="{{form.event_type.id_for_label}}">
-                          {% for value, display in form.fields.event_type.choices %}
-                          <option value="{{ value }}" {% if form.event_type.value == value %}selected{% endif %}>{{ display }}</option>
-                          {% endfor %}
-                      </select>
-
-                    <div class="checkbox-wrapper grid-row">
-                        {% for value, name in form.languages.field.choices %}
-                        {% endfor %}
-                    </div>
-                    <div class="grid-row">
-                      <div class="desktop:grid-col-6 usa-prose">
-                          <h3>{{form.start_datetime.label}}:</h3>
-                          <p>{{form.start_datetime.value| date:'Y-m-d H:i'}}</p>
-                      </div>
-                      <div class="desktop:grid-col-6 usa-prose">
-                          <h3>{{form.end_datetime.label}}:</h3>
-                          <p>{{form.end_datetime.value| date:'Y-m-d H:i'}}</p>
-                      </div>
-                    </div>
                     {% if enable_recurrence %}
                     <span class="usa-hint line-height-body-1 font-body-2xs">{{ form.recurrences.help_text }}</span>
                     <div class="grid-row">
@@ -121,7 +92,7 @@
                     </div>
                     {% endif %}
 
-                    </br>
+                    <br>
                 </div>
             {% endif %}
             </div>
