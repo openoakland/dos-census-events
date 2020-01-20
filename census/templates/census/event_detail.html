@@ -46,7 +46,7 @@
 
                       <h2>{{form.location.label}}</h2>
                       <p>{{form.site_name.value|default_if_none:''}}<br>
-                      { form.location.value|default_if_none:''}}</p>
+                      {{form.location.value|default_if_none:''}}</p>
 
                       <h2>Time</h2>
                       <p>Starts {{form.start_datetime.value| date:'H:i'}} on {{form.start_datetime.value| date:'m-d-Y'}}<br> Ends {{form.end_datetime.value| date:'H:i'}} on {{form.end_datetime.value| date:'m-d-Y'}}</p>
