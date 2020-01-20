@@ -70,9 +70,10 @@ In our event creation form we have the google autocomplete api available.
 
 1. Enable the [Maps Javascript API](https://console.cloud.google.com/apis/library/maps-backend.googleapis.com)
 1. Enable the [Places API](https://console.cloud.google.com/apis/library/places-backend.googleapis.com?q=places)
-1. Create an API Key: https://console.cloud.google.com/google/maps-apis/apis/maps-backend.googleapis.com/credentials
+1. Create an [API Key](https://console.cloud.google.com/google/maps-apis/apis/maps-backend.googleapis.com/credentials)
 1. Under **API restrictions**, you may restrict it to use only the **Maps Javascript API** and the **Places API**
 1. In the `.env` file, copy your API key to the `GOOGLE_MAPS_API_KEY` variable
+1. You must link a [billing account](https://console.cloud.google.com/billing/) to your project
 
 **Reference:** (Developer Reference)[https://developers.google.com/maps/documentation/javascript/places-autocomplete]
 
