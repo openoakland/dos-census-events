@@ -70,7 +70,6 @@ class HomepageView(View):
         """
         Homepage
         """
-        print(request.GET.dict())
         if request.is_ajax():
             # We expect AJAX calls made from datepicker
             return self.get_event_dates(request)
@@ -199,7 +198,7 @@ class HomepageView(View):
         year = kwargs.get('year')
         search = kwargs.get('search')
         city = kwargs.get('city')
-        languages = kwargs.get('languages')
+        languages = kwargs.get('languages', [])
         user_auth_status = kwargs.get('user_auth_status')
 
         if not user_auth_status:
