@@ -70,6 +70,7 @@ class HomepageView(View):
         """
         Homepage
         """
+        print(request.GET.dict())
         if request.is_ajax():
             # We expect AJAX calls made from datepicker
             return self.get_event_dates(request)
@@ -80,6 +81,11 @@ class HomepageView(View):
                 request.search_query = request.GET.dict().get('search').strip()
             else:
                 request.search_query = None
+            if request.GET.dict().get('city'):
+                request.search_city = request.GET.dict().get('city').strip()
+            else:
+                request.search_city = None
+            print(request.search_query, request.search_city)
             return render(request, self.template_name)
 
     def get_event_dates(self, request):
@@ -113,6 +119,8 @@ class HomepageView(View):
             query_params = self.get_valid_params(data.GET.dict())
             if query_params.get('search'):
                 filter_args['search'] = query_params.get('search')
+            if query_params.get('city'):
+                filter_args['city'] = query_params.get('city')
             if query_params.get('isMonthly'):
                 # Fetch events for the whole month
                 # TODO: Test to ensure that timezone differences are properly accounted for
@@ -150,22 +158,22 @@ class HomepageView(View):
         :return: Dictionary containing only valid parameters
         """
         valid_params = {}
-        for param in query_params:
-            if param == 'day' and query_params['day'].isdigit():
-                valid_params['day'] = int(query_params['day'])
-            elif param == 'month' and query_params['month'].isdigit():
-                valid_params['month'] = int(query_params['month'])
-            elif param == 'year' and query_params['year'].isdigit():
-                valid_params['year'] = int(query_params['year'])
-            elif param == 'search' \
-                    and query_params['search'] \
-                    and not query_params['search'].strip() == "":
-                valid_params['search'] = query_params['search'].strip()
-            elif param == 'isMonthly':
-                if query_params['isMonthly'] == 'true':
+        for name, value in query_params.items():
+            if name == 'day' and value.isdigit():
+                valid_params['day'] = int(value)
+            elif name == 'month' and value.isdigit():
+                valid_params['month'] = int(value)
+            elif name == 'year' and value.isdigit():
+                valid_params['year'] = int(value)
+            elif name == 'search' and value and not value.strip() == "":
+                valid_params['search'] = value.strip()
+            elif name == 'isMonthly':
+                if value == 'true':
                     valid_params['isMonthly'] = True
-                elif query_params['isMonthly'] == 'false':
+                elif value == 'false':
                     valid_params['isMonthly'] = False
+            elif name == 'city' and value and not value.strip() == "":
+                valid_params['city'] = value.strip()
         return valid_params
 
     def fetch_events_from_db(self, **kwargs):
@@ -181,6 +189,7 @@ class HomepageView(View):
         month = kwargs.get('month')
         year = kwargs.get('year')
         search = kwargs.get('search')
+        city = kwargs.get('city')
         user_auth_status = kwargs.get('user_auth_status')
 
         if not user_auth_status:
@@ -200,6 +209,8 @@ class HomepageView(View):
                                                      current_timezone.localize(end_date)))
         if search:
             query = query & (Q(title__icontains=search) | Q(description__icontains=search))
+        if city:
+            query = query & Q(city=city)
 
         return models.Event.objects.filter(query).order_by('start_datetime')
 

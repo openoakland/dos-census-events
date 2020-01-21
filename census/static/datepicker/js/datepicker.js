@@ -49,6 +49,10 @@ $(function () {
             if (search_string !== false) {
                 data['search'] = search_string;
             }
+            let city_string = getQueryParams('city');
+            if (city_string !== false) {
+                data['city'] = city_string;
+            }
 
             redirectUrl(data);
         },
@@ -63,6 +67,10 @@ $(function () {
             let search_string = getQueryParams('search');
             if (search_string !== false) {
                 data['search'] = search_string;
+            }
+            let city_string = getQueryParams('city');
+            if (city_string !== false) {
+                data['city'] = city_string;
             }
             redirectUrl(data);
         },
@@ -91,10 +99,10 @@ function highlightMonthEvents(month, year) {
         success: function (data) {
             let eventDates = data.dates;
 
-            $('#datepicker').find(`[data-month='`+(month-1)+`']`)
+            $('#datepicker').find(`[data-month='` + (month - 1) + `']`)
                 .find("a").filter(function () {
-                return eventDates.indexOf($(this).text()) > -1;
-            }).addClass('ui-datepicker-active-events');
+                    return eventDates.indexOf($(this).text()) > -1;
+                }).addClass('ui-datepicker-active-events');
         }
     });
 }
