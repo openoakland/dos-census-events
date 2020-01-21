@@ -20,7 +20,7 @@ class Event(models.Model):
     start_datetime = models.DateTimeField(help_text="When does the event start?", verbose_name="Event Start Time")
     end_datetime = models.DateTimeField(help_text="When does the event end?", verbose_name="Event End Time")
     organization_name = models.CharField(max_length=100, help_text="Name of the hosting organization", verbose_name="Organization Name")
-    event_type = models.CharField(max_length=20, choices=constants.event_type_choices)
+    event_type = models.CharField(max_length=40, choices=constants.event_type_choices)
     site_name = models.CharField(max_length=100, null=True, blank=True, default=None,  help_text="Name of the location where the event will take place", verbose_name="Location Name") 
     location = models.CharField(max_length=100, help_text="Postal address where the event will take place", verbose_name="Location Address")
     city = models.CharField(max_length=50, help_text="City where the event will take place", verbose_name="City")

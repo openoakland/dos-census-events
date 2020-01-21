@@ -126,7 +126,7 @@
                       <select
                         {% if readonly %} disabled="" {% endif %}
                         name="{{form.event_type.name}}"
-                        class="usa-input {{ readonly }} desktop:grid-col-3 grid-col-6"
+                        class="usa-input {{ readonly }}"
                         required=""
                         id="{{form.event_type.id_for_label}}">
                           {% for value, display in form.fields.event_type.choices %}
