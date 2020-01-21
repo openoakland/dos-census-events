@@ -21,6 +21,19 @@
                             type="search"
                             name="city"
                             value="{% if request.search_city %}{{ request.search_city }}{% endif %}">
+                    {% for language in request.languages %}
+                        <input
+                            class="usa-checkbox__input"
+                            id="search-language-{{ forloop.counter }}"
+                            type="checkbox"
+                            name="languages"
+                            value="{{ language.name }}"
+                            {% if language.value %}
+                                checked="checked"
+                            {% endif %}
+                            >
+                            <label class="usa-checkbox__label" for="search-language-{{ forloop.counter }}">{{ language.name }}</label>
+                    {% endfor %}
                     <button class="usa-button" type="submit">
                         <span class="usa-search__submit-text">Search</span>
                     </button>

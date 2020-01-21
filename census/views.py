@@ -85,7 +85,14 @@ class HomepageView(View):
                 request.search_city = request.GET.dict().get('city').strip()
             else:
                 request.search_city = None
-            print(request.search_query, request.search_city)
+            languages = [
+                {
+                    "name": choice[0],
+                    "value": choice[1] in request.GET.getlist('languages'),
+                }
+                for choice in constants.language_choices
+            ]
+            request.languages = languages
             return render(request, self.template_name)
 
     def get_event_dates(self, request):
@@ -116,7 +123,8 @@ class HomepageView(View):
         """
         filter_args = dict()
         if data.GET.dict():
-            query_params = self.get_valid_params(data.GET.dict())
+            query_params = self.get_valid_params(data.GET)
+            filter_args['languages'] = query_params['languages']
             if query_params.get('search'):
                 filter_args['search'] = query_params.get('search')
             if query_params.get('city'):
@@ -158,7 +166,8 @@ class HomepageView(View):
         :return: Dictionary containing only valid parameters
         """
         valid_params = {}
-        for name, value in query_params.items():
+        valid_params['languages'] = query_params.getlist('languages')
+        for name, value in query_params.dict().items():
             if name == 'day' and value.isdigit():
                 valid_params['day'] = int(value)
             elif name == 'month' and value.isdigit():
@@ -190,6 +199,7 @@ class HomepageView(View):
         year = kwargs.get('year')
         search = kwargs.get('search')
         city = kwargs.get('city')
+        languages = kwargs.get('languages')
         user_auth_status = kwargs.get('user_auth_status')
 
         if not user_auth_status:
@@ -211,6 +221,10 @@ class HomepageView(View):
             query = query & (Q(title__icontains=search) | Q(description__icontains=search))
         if city:
             query = query & Q(city=city)
+        language_query = Q()
+        for language in languages:
+            language_query = language_query | Q(languages__contains=language)
+        query = query & language_query
 
         return models.Event.objects.filter(query).order_by('start_datetime')
 
