@@ -87,7 +87,7 @@ class HomepageView(View):
             languages = [
                 {
                     "name": choice[0],
-                    "value": choice[1] in request.GET.getlist('languages'),
+                    "selected": choice[0] == request.GET.get('language'),
                 }
                 for choice in constants.language_choices
             ]
@@ -123,7 +123,8 @@ class HomepageView(View):
         filter_args = dict()
         if data.GET.dict():
             query_params = self.get_valid_params(data.GET)
-            filter_args['languages'] = query_params['languages']
+            if query_params.get('language'):
+                filter_args['language'] = query_params.get('language')
             if query_params.get('search'):
                 filter_args['search'] = query_params.get('search')
             if query_params.get('city'):
@@ -165,7 +166,6 @@ class HomepageView(View):
         :return: Dictionary containing only valid parameters
         """
         valid_params = {}
-        valid_params['languages'] = query_params.getlist('languages')
         for name, value in query_params.dict().items():
             if name == 'day' and value.isdigit():
                 valid_params['day'] = int(value)
@@ -182,6 +182,8 @@ class HomepageView(View):
                     valid_params['isMonthly'] = False
             elif name == 'city' and value and not value.strip() == "":
                 valid_params['city'] = value.strip()
+            elif name == 'language' and value:
+                valid_params['language'] = query_params.get('language')
         return valid_params
 
     def fetch_events_from_db(self, **kwargs):
@@ -198,7 +200,7 @@ class HomepageView(View):
         year = kwargs.get('year')
         search = kwargs.get('search')
         city = kwargs.get('city')
-        languages = kwargs.get('languages', [])
+        language = kwargs.get('language')
         user_auth_status = kwargs.get('user_auth_status')
 
         if not user_auth_status:
@@ -220,12 +222,11 @@ class HomepageView(View):
             query = query & (Q(title__icontains=search) | Q(description__icontains=search))
         if city:
             query = query & Q(city=city)
-        language_query = Q()
-        for language in languages:
-            language_query = language_query | Q(languages__contains=language)
-        query = query & language_query
+        if language:
+            query = query & Q(languages__contains=language)
 
-        return models.Event.objects.filter(query).order_by('start_datetime')
+        results = models.Event.objects.filter(query).order_by('start_datetime')
+        return results
 
     def make_events_data_response(self, events):
         """
