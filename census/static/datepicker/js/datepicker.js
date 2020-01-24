@@ -28,6 +28,13 @@
 }(jQuery));
 
 $(function () {
+
+    $('form#search-form').submit(function () {
+        $(':input', this).each(function () {
+            this.disabled = !($(this).val());
+        });
+    });
+
     $('#datepicker').datepicker({
         inline: true,
         showOtherMonths: true,
@@ -52,6 +59,10 @@ $(function () {
             let city_string = getQueryParams('city');
             if (city_string !== false) {
                 data['city'] = city_string;
+            }
+            let language_string = getQueryParams('language');
+            if (language_string !== false) {
+                data['language'] = language_string;
             }
 
             redirectUrl(data);
