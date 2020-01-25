@@ -9,17 +9,32 @@
         <div class="grid-row bg-white" style="padding-bottom: 150px">
             <div class="grid-col-10 margin-5">
                 <form class="usa-search usa-search--big" action="/" method="get" id="search-form">
-                    <div class="grid-offset-2" role="search">
-                        <label class="usa-sr-only" for="search-field-big">Search</label>
-                        <input class="usa-input"
-                               id="search-field-big"
-                               type="search"
-                               name="search"
-                               value="{% if request.search_query %}{{ request.search_query }}{% endif %}">
-                        <button class="usa-button" type="submit">
-                            <span class="usa-search__submit-text">Search</span>
-                        </button>
-                    </div>
+                    <label class="usa-label" for="search-field-big">Title/Description</label>
+                    <input class="usa-input"
+                            id="search-field-big"
+                            type="search"
+                            name="search"
+                            value="{% if request.search_query %}{{ request.search_query }}{% endif %}">
+                    <label class="usa-label" for="search-city-big">City</label>
+                    <input class="usa-input" 
+                            id="search-city-big"
+                            type="search"
+                            name="city"
+                            value="{% if request.search_city %}{{ request.search_city }}{% endif %}">
+                    <label class="usa-label" for="search-language">Language</label>
+                    <select
+                        id="search-language"
+                        name="language"
+                        class="usa-select"
+                        >
+                        <option value> Select </option>
+                        {% for language in request.languages %}
+                            <option value="{{ language.name }}" {% if language.selected %} selected="selected" {% endif %}>{{ language.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <button class="usa-button" type="submit">
+                        <span class="usa-search__submit-text">Search</span>
+                    </button>
                 </form>
             </div>
 
