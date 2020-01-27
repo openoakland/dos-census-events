@@ -12,13 +12,13 @@
                     <label class="usa-label" for="search-field-big">Title/Description</label>
                     <input class="usa-input"
                             id="search-field-big"
-                            type="search"
+                            type="text"
                             name="search"
                             value="{% if request.search_query %}{{ request.search_query }}{% endif %}">
                     <label class="usa-label" for="search-city-big">City</label>
                     <input class="usa-input" 
                             id="search-city-big"
-                            type="search"
+                            type="text"
                             name="city"
                             value="{% if request.search_city %}{{ request.search_city }}{% endif %}">
                     <label class="usa-label" for="search-language">Language</label>
