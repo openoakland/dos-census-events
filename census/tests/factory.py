@@ -25,6 +25,8 @@ def event(**kwargs):
         recurrences=[],
         approval_status=constants.EventApprovalStatus.APPROVED,
         languages=[constants.Languages.ENGLISH],
+        city="Oakland",
+        zip_code=94612,
     )
 
     data.update(kwargs)

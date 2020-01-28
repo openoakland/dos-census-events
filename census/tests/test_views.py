@@ -326,110 +326,112 @@ class CensusHomepageViewTest(TestCase):
     def setUp(self):
         self.url = '/'
         self.client = Client()
+        self.current_date = datetime.now()
+        self.localized_time = los_angeles.localize(self.current_date)
+        self.approved_event = factory.event(start_datetime=self.localized_time,
+                                            end_datetime=self.localized_time+timedelta(hours=2))
+        self.approved_event.save()
 
     def test_url_resolves_to_view(self):
         found = resolve(self.url)
         self.assertEqual(found.func.view_class, views.HomepageView.as_view().view_class)
 
     def test_get(self):
-        current_date = datetime.now()
-        localized_time = los_angeles.localize(current_date)
-        self.approved_event = factory.event(start_datetime=localized_time,
-                                            end_datetime=localized_time+timedelta(hours=2))
-        self.approved_event.save()
-
         response = self.client.get(self.url)
 
         start_datetime = self.approved_event.start_datetime.astimezone(los_angeles)
         end_datetime = self.approved_event.end_datetime.astimezone(los_angeles)
-        assert response.context['request'].events == [
-            (self.approved_event.start_datetime.strftime('%A, %B %d'),
-             [{'id': ANY,
-               'title': self.approved_event.title,
-               'description': self.approved_event.description,
-               'month': localized_time.month,
-               'start_date': datetime.strftime(start_datetime, "%Y-%m-%d"),
-               'end_date': datetime.strftime(end_datetime, "%Y-%m-%d"),
-               'start_time': datetime.strftime(start_datetime, "%I:%M %p"),
-               'end_time': datetime.strftime(end_datetime, "%I:%M %p"),
-               'is_private_event': False,
-               }
-              ]),
-        ]
+        self.assertEqual(
+            response.context['request'].events[0][0], 
+            self.approved_event.start_datetime.strftime('%A, %B %d')
+        )
+        event = response.context['request'].events[0][1][0]
+        self.assertEqual(event["title"], self.approved_event.title)
+        self.assertEqual(event["description"], self.approved_event.description)
+        self.assertEqual(event["month"], self.localized_time.month)
+        self.assertEqual(event["start_date"], datetime.strftime(start_datetime, "%Y-%m-%d"))
+        self.assertEqual(event["end_time"], datetime.strftime(end_datetime, "%I:%M %p"))
+        self.assertEqual(event["start_time"], datetime.strftime(start_datetime, "%I:%M %p"))
+        self.assertEqual(event["end_time"], datetime.strftime(end_datetime, "%I:%M %p"))
+        self.assertEqual(event["is_private_event"], False)
+        self.assertEqual(event["city"], self.approved_event.city)
+        self.assertEqual(event["zip_code"], str(self.approved_event.zip_code))
 
     def test_get_with_query_params(self):
-        current_date = datetime.now()
-        localized_time = los_angeles.localize(current_date)
-        self.approved_event = factory.event(start_datetime=localized_time,
-                                            end_datetime=localized_time + timedelta(hours=2))
-        self.approved_event.save()
-
         data = {
             'isMonthly': 'false',
-            'day': current_date.day,
-            'month': current_date.month,
-            'year': current_date.year
+            'day': self.current_date.day,
+            'month': self.current_date.month,
+            'year': self.current_date.year
         }
         response = self.client.get(self.url, data)
 
         start_datetime = self.approved_event.start_datetime.astimezone(los_angeles)
         end_datetime = self.approved_event.end_datetime.astimezone(los_angeles)
-        assert response.context['request'].events == [
-            (self.approved_event.start_datetime.strftime('%A, %B %d'),
-             [{'id': ANY,
-               'title': self.approved_event.title,
-               'description': self.approved_event.description,
-               'month': localized_time.month,
-               'start_date': datetime.strftime(start_datetime, "%Y-%m-%d"),
-               'end_date': datetime.strftime(end_datetime, "%Y-%m-%d"),
-               'start_time': datetime.strftime(start_datetime, "%I:%M %p"),
-               'end_time': datetime.strftime(end_datetime, "%I:%M %p"),
-               'is_private_event': False,
-               }]),
-        ]
+        self.assertEqual(
+            response.context['request'].events[0][0], 
+            self.approved_event.start_datetime.strftime('%A, %B %d')
+        )
+        event = response.context['request'].events[0][1][0]
+        self.assertEqual(event["title"], self.approved_event.title)
+        self.assertEqual(event["description"], self.approved_event.description)
+        self.assertEqual(event["month"], self.localized_time.month)
+        self.assertEqual(event["start_date"], datetime.strftime(start_datetime, "%Y-%m-%d"))
+        self.assertEqual(event["end_time"], datetime.strftime(end_datetime, "%I:%M %p"))
+        self.assertEqual(event["start_time"], datetime.strftime(start_datetime, "%I:%M %p"))
+        self.assertEqual(event["end_time"], datetime.strftime(end_datetime, "%I:%M %p"))
+        self.assertEqual(event["is_private_event"], False)
+        self.assertEqual(event["city"], self.approved_event.city)
+        self.assertEqual(event["zip_code"], str(self.approved_event.zip_code))
 
     def test_get_monthly_results(self):
-        current_date = datetime.now().replace(month=3)
-        localized_time = los_angeles.localize(current_date)
-        self.approved_event = factory.event(start_datetime=localized_time,
-                                            end_datetime=localized_time + timedelta(hours=2))
-        self.approved_event.save()
-
         data = {
             'isMonthly': 'true',
-            'month': 3,
-            'year': current_date.year
+            'month': self.current_date.month,
+            'year': self.current_date.year
         }
         response = self.client.get(self.url, data)
 
         start_datetime = self.approved_event.start_datetime.astimezone(los_angeles)
         end_datetime = self.approved_event.end_datetime.astimezone(los_angeles)
-        assert response.context['request'].events == [
-            (self.approved_event.start_datetime.strftime('%A, %B %d'),
-             [{'id': ANY,
-               'title': self.approved_event.title,
-               'description': self.approved_event.description,
-               'month': localized_time.month,
-               'start_date': datetime.strftime(start_datetime, "%Y-%m-%d"),
-               'end_date': datetime.strftime(end_datetime, "%Y-%m-%d"),
-               'start_time': datetime.strftime(start_datetime, "%I:%M %p"),
-               'end_time': datetime.strftime(end_datetime, "%I:%M %p"),
-               'is_private_event': False,
-               }]),
-        ]
+        self.assertEqual(
+            response.context['request'].events[0][0], 
+            self.approved_event.start_datetime.strftime('%A, %B %d')
+        )
+        event = response.context['request'].events[0][1][0]
+        self.assertEqual(event["title"], self.approved_event.title)
+        self.assertEqual(event["description"], self.approved_event.description)
+        self.assertEqual(event["month"], self.localized_time.month)
+        self.assertEqual(event["start_date"], datetime.strftime(start_datetime, "%Y-%m-%d"))
+        self.assertEqual(event["end_time"], datetime.strftime(end_datetime, "%I:%M %p"))
+        self.assertEqual(event["start_time"], datetime.strftime(start_datetime, "%I:%M %p"))
+        self.assertEqual(event["end_time"], datetime.strftime(end_datetime, "%I:%M %p"))
+        self.assertEqual(event["is_private_event"], False)
+        self.assertEqual(event["city"], self.approved_event.city)
+        self.assertEqual(event["zip_code"], str(self.approved_event.zip_code))
 
     def test_get_search_query(self):
-        current_date = datetime.now()
-        localized_time = los_angeles.localize(current_date)
-        self.approved_event = factory.event(start_datetime=localized_time,
-                                            end_datetime=localized_time + timedelta(hours=2))
-
-        self.approved_event.save()
         self.approved_event_two = factory.event(title="some title")
         self.approved_event_two.save()
 
         response = self.client.get(self.url, {'search': 'oak'})
 
-        assert len(response.context['request'].events) == 1
-        assert len(response.context['request'].events[0][1]) == 1
-        assert response.context['request'].events[0][1][0]['title'] == self.approved_event.title
+        self.assertEqual(len(response.context['request'].events), 1)
+        self.assertEqual(len(response.context['request'].events[0][1]), 1)
+        self.assertEqual(response.context['request'].events[0][1][0]['title'], self.approved_event.title)
+
+    def test_filter_case_insensitive(self):
+        data = {
+            "search": self.approved_event.title.lower(),
+            "city": self.approved_event.city.lower(),
+        }
+
+        response = self.client.get(self.url)
+
+    
+        self.assertEqual(len(response.context['request'].events), 1)
+        
+        event = response.context['request'].events[0][1][0]
+        
+        self.assertEqual(event["title"], self.approved_event.title)
+        self.assertEqual(event["city"], self.approved_event.city)

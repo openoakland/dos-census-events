@@ -221,7 +221,7 @@ class HomepageView(View):
         if search:
             query = query & (Q(title__icontains=search) | Q(description__icontains=search))
         if city:
-            query = query & Q(city=city)
+            query = query & Q(city__iexact=city)
         if language:
             query = query & Q(languages__contains=language)
 
@@ -275,6 +275,8 @@ class HomepageView(View):
                     end_date=end_date,
                     start_time=start_time,
                     end_time=end_time,
+                    city=event.city,
+                    zip_code=event.zip_code,
                     )
 
 
