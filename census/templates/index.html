@@ -32,6 +32,10 @@
                             <option value="{{ language.name }}" {% if language.selected %} selected="selected" {% endif %}>{{ language.name }}</option>
                         {% endfor %}
                     </select>
+                    <input id="form-day" type="hidden" name="day" value="{{ request.day }}" />
+                    <input id="form-month" type="hidden" name="month" value="{{ request.month }}" />
+                    <input id="form-year" type="hidden" name="year" value="{{ request.year }}"/>
+                    <input id="form-isMonthly" type="hidden" name="isMonthly" value="{{ request.is_monthly }}"/>
                     <button class="usa-button" type="submit">
                         <span class="usa-search__submit-text">Search</span>
                     </button>
