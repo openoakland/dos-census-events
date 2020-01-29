@@ -47,6 +47,9 @@
                       <h2>{{form.location.label}}</h2>
                       <p>{{form.site_name.value|default_if_none:''}}<br>
                       {{form.location.value|default_if_none:''}}</p>
+                      {% if form.is_ada_compliant.value %}
+                      Location is ADA compliant
+                      {% endif %}
 
                       <h2>Time</h2>
                       <p>Starts {{form.start_datetime.value| date:'H:i'}} on {{form.start_datetime.value| date:'m-d-Y'}}<br> Ends {{form.end_datetime.value| date:'H:i'}} on {{form.end_datetime.value| date:'m-d-Y'}}</p>
@@ -56,6 +59,9 @@
                       {{form.languages.value|default_if_none:''}}</p>
                       <p><strong>{{form.fields.event_type.label}}:</strong><br>
                       {{form.event_type.value|default_if_none:''}}</p>
+                      {% if form.is_census_equipped.value %}
+                      Census can be completed.
+                      {% endif %}
 
                       <h2>Contact</h2>
                       <p>{{form.organization_name.value|default_if_none:''}}<br>
@@ -70,26 +76,6 @@
                     </div>
                     {% else %}
                     <input type="hidden" name="{{ form.recurrences.name }}" value="" />
-                    {% endif %}
-
-                    {% if "/update/" in request.path  %}
-                    <div>
-                        <label class="usa-label" for="{{form.approval_status.id_for_label}}">{{form.approval_status.label}}:</label>
-                        <select
-                          name="{{form.approval_status.name}}"
-                          class="usa-input desktop:grid-col-3 grid-col-6"
-                          required=""
-                          id="{{form.approval_status.id_for_label}}">
-                            {% for value, display in form.fields.approval_status.choices %}
-                              <option
-                                value="{{ value }}"
-                                {% if form.approval_status.value == value %}selected=""{% endif %}
-                                >
-                                  {{ display }}
-                              </option>
-                            {% endfor %}
-                        </select>
-                    </div>
                     {% endif %}
 
                     <br>
