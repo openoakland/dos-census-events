@@ -353,6 +353,55 @@ class UpdateEvent(LoginRequiredMixin, UpdateView):
             google_publish_event(form.instance)
         return HttpResponseRedirect(self.get_success_url())
 
+class CopyEvent(LoginRequiredMixin, View):
+    login_url = '/login/'
+    form_class = EditEventForm
+    template_name = 'census/copy_event.html'
+
+    def get(self, request, *args, **kwargs):
+        event_id = kwargs.get("pk")
+        event = models.Event.objects.get(id=event_id)
+        form = EventForm(instance=event)
+        # import pdb; pdb.set_trace()
+        return render(request, self.template_name, {
+            'form': form,
+        })
+
+    def post(self, request, *args, **kwargs):
+        errors = []
+        start_datetime = request.POST.get("start_datetime")
+        end_datetime = request.POST.get("end_datetime")
+        event_id = kwargs.get("pk")
+        event_data = models.Event.objects.filter(id=event_id).values()[0]
+        existing_start = event_data["start_datetime"].astimezone(current_timezone).strftime("%Y-%m-%d %H:%M")
+        existing_end = event_data["end_datetime"].astimezone(current_timezone).strftime("%Y-%m-%d %H:%M")
+        if existing_start == start_datetime and \
+                existing_end == end_datetime:
+            error = {
+                "message": "Need to change start or end time",
+                "field": "start_datetime"
+            }
+            errors.append(error)
+
+        event_data.pop('id')
+
+        form = EventForm(request.POST)
+        event = models.Event.objects.get(id=event_id)
+        if form.is_valid() and not errors:
+            form.save()
+            return HttpResponseRedirect("/pending")
+        if errors:
+            for error in errors:
+                field_errors = form._errors.get(error["field"], [])
+                field_errors.append(error["message"])
+                form._errors[error["field"]] = field_errors
+        form["start_datetime"].value = event.start_datetime
+        form["end_datetime"].value = event.end_datetime
+        return render(request, self.template_name, {
+            'form': form,
+        })
+
+
 class PendingList(ListView):
     model = models.Event
     queryset = models.Event.objects.filter(approval_status = constants.EventApprovalStatus.PENDING)
