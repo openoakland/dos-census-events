@@ -59,9 +59,12 @@
                                     <button class="usa-accordion__button"
                                             aria-expanded="true"
                                             aria-controls="a{{ event.id }}">
-                                        <span>{{ event.start_time }} - {{ event.end_time }}</span>
-                                        <span class="text-normal">
-                                            {{ event.title }}
+                                        <span style="line-height: 1.5;">{{ event.title }}</span>
+                                        <br />
+                                        <span class="text-normal" style="line-height: 1.2;">
+                                            {{ event.start_time }} - {{ event.end_time }}
+                                            <br />
+                                            {{ event.location }}
                                             {% if event.is_private_event %}
                                                 (PRIVATE)
                                             {% endif %}
