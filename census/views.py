@@ -147,7 +147,7 @@ class HomepageView(View):
 
                 filter_args['start_date'] = start_date
                 filter_args['end_date'] = end_date
-        if not filter_args.get('month'):
+        if not (filter_args.get('month') or filter_args.get('start_date')):
             # If no payload is passed to the request, simply fetch current and
             # future approved events
             # filter_args['start_date'] = datetime.now().replace(hour=0, minute=0, second=0)
