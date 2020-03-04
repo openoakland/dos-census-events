@@ -277,6 +277,7 @@ class HomepageView(View):
                     end_time=end_time,
                     city=event.city,
                     zip_code=event.zip_code,
+                    location=event.location,
                     )
 
 
