@@ -38,6 +38,7 @@ urlpatterns = [
 
 handler400 = views.ErrorView.handler400
 handler404 = views.ErrorView.handler404
+handler500 = views.ErrorView.handler500
 
 js_info_dict = {
     'packages': ('recurrence', ),

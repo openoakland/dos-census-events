@@ -466,3 +466,6 @@ class ErrorView(View):
 
     def handler404(request, exception, template_name="error.html"):
         return render(request, template_name)
+
+    def handler500(request, template_name="error.html"):
+        return render(request, template_name)
