@@ -148,10 +148,7 @@ class HomepageView(View):
                 filter_args['start_date'] = start_date
                 filter_args['end_date'] = end_date
         if not (filter_args.get('month') or filter_args.get('start_date')):
-            # If no payload is passed to the request, simply fetch current and
-            # future approved events
-            # filter_args['start_date'] = datetime.now().replace(hour=0, minute=0, second=0)
-            # filter_args['end_date'] = datetime.now() + timedelta(days=7)
+            # If month is not passed, fetch events for current month
             filter_args['month'] = datetime.now().month
             filter_args['year'] = datetime.now().year
         filter_args['user_auth_status'] = data.user.is_authenticated
