@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 from unittest.mock import ANY
 
 import pytz
@@ -435,3 +436,29 @@ class CensusHomepageViewTest(TestCase):
         
         self.assertEqual(event["title"], self.approved_event.title)
         self.assertEqual(event["city"], self.approved_event.city)
+
+    def test_filter_future_month_day(self):
+        future_event = self.approved_event
+        future_event.id = None
+        future_event.start_datetime += relativedelta(months=1)
+        future_event.end_datetime += relativedelta(months=1)
+        future_event.title = "Future Event"
+        future_event.save()
+        
+        data = {
+            'isMonthly': 'false',
+            'day': future_event.start_datetime.day,
+            'month': future_event.start_datetime.month,
+            'year': future_event.start_datetime.year
+        }
+
+        response = self.client.get(self.url, data)
+
+        start_datetime = future_event.start_datetime
+        end_datetime = future_event.end_datetime
+        self.assertEqual(
+            response.context['request'].events[0][0], 
+            future_event.start_datetime.strftime('%A, %B %d')
+        )
+        event = response.context['request'].events[0][1][0]
+        self.assertEqual(event["title"], future_event.title)
