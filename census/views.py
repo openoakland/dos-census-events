@@ -5,6 +5,7 @@ from datetime import datetime
 from itertools import groupby
 
 from django.conf import settings
+from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.forms.models import model_to_dict
@@ -30,15 +31,30 @@ def export_events(request):
     '''
     fields = [
         'title',
-        'recurrences',
+        'description',
         'start_datetime',
+        'recurrences',
         'end_datetime',
+        'organization_name',
+        'event_type',
+        'site_name',
         'location',
+        'city',
+        'zip_code',
         'lat',
         'lon',
-        'description',
+        'is_census_equipped',
+        'approval_status',
+        'languages',
+        'contact_name',
+        'contact_email',
+        'contact_phone',
+        'is_private_event',
+        'is_ada_compliant',
     ]
 
+    if not request.user.is_authenticated:
+       return redirect('/login/?next=%s' % (request.path))
     events = models.Event.objects.all()
     csv_buffer = io.StringIO()
     writer = csv.DictWriter(csv_buffer, fieldnames=fields, dialect='excel')
