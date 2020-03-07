@@ -1,21 +1,21 @@
 {% extends '_base.html' %}
 {% block content %}
-    <style type="text/css">
-
-    </style>
-
-    <div class="grid-container bg-white">
+    <div class="grid-container">
         <div class="usa-alert usa-alert--error" role="alert">
             <div class="usa-alert__body">
-                <h3 class="usa-alert__heading">Something went wrong</h3>
+                <h3 class="usa-alert__heading">
+                    Something went wrong
+                </h3>
                 <p class="usa-alert__text">
                     Sorry, the page you requested could not be found. Click
                     the button below to go back.
                 </p>
             </div>
         </div>
-        <button class="usa-button" onclick="history.back()">Go Back</button>
+        <br/>
+        <br/>
+        <div class="grid-col-4 grid-offset-4">
+          <button class="usa-button usa-button--outline" onclick="history.back()">Go Back</button>
+        </div>
     </div>
-
-
 {% endblock %}
