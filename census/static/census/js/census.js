@@ -34,10 +34,3 @@ function getSelectedDate() {
     }
     return date;
 }
-
-function redirectUrl(query_params) {
-    /*
-    Redirect browser to URL with given query params
-     */
-    window.location = "/?" + $.param(query_params);
-}

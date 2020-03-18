@@ -108,6 +108,10 @@ class HomepageView(View):
                 for choice in constants.language_choices
             ]
             request.languages = languages
+            request.is_monthly = request.GET.dict().get('isMonthly') or ''
+            request.year = request.GET.dict().get('year') or ''
+            request.month = request.GET.dict().get('month') or ''
+            request.day = request.GET.dict().get('day') or ''
             return render(request, self.template_name)
 
     def get_event_dates(self, request):
@@ -161,6 +165,8 @@ class HomepageView(View):
                 end_date = datetime.strptime(f"{year}-{month}-{day} 23:59:59",
                                              "%Y-%m-%d %H:%M:%S")
 
+                filter_args['month'] = month
+                filter_args['year'] = year
                 filter_args['start_date'] = start_date
                 filter_args['end_date'] = end_date
         if not (filter_args.get('month') or filter_args.get('start_date')):
@@ -293,7 +299,6 @@ class HomepageView(View):
                     location=event.location,
                     )
 
-
 class SubmitEventView(View):
     template_name = 'census/event_form.html'
 
@@ -337,7 +342,6 @@ class SubmitEventView(View):
             {'form': form, 'message': message},
             status=status_code,
         )
-
 
 class UpdateEvent(LoginRequiredMixin, UpdateView):
     model = models.Event
@@ -423,10 +427,12 @@ class PendingList(ListView):
     queryset = models.Event.objects.filter(approval_status = constants.EventApprovalStatus.PENDING)
     template_name = 'census/pending_list.html'
 
+
 class ApprovedList(ListView):
     model = models.Event
     queryset = models.Event.objects.filter(approval_status = constants.EventApprovalStatus.APPROVED)
     template_name = 'census/approved_list.html'
+
 
 class DeleteEvent(LoginRequiredMixin, DeleteView):
     model = models.Event
@@ -442,6 +448,7 @@ class DeleteEvent(LoginRequiredMixin, DeleteView):
         else:
             return HttpResponseRedirect("/pending")
 
+
 class ShowEvent(UpdateView):
     model = models.Event
     form_class = EditEventForm
@@ -451,3 +458,14 @@ class ShowEvent(UpdateView):
         context = super().get_context_data(**kwargs)
         context['readonly'] = 'readonly'
         return context
+
+
+class ErrorView(View):
+    def handler400(request, exception, template_name="error.html"):
+        return render(request, template_name)
+
+    def handler404(request, exception, template_name="error.html"):
+        return render(request, template_name)
+
+    def handler500(request, template_name="error.html"):
+        return render(request, template_name)

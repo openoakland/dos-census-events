@@ -35,6 +35,11 @@ urlpatterns = [
     url(r'^login/$', auth_views.LoginView.as_view(), name='login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
 ]
+
+handler400 = views.ErrorView.handler400
+handler404 = views.ErrorView.handler404
+handler500 = views.ErrorView.handler500
+
 js_info_dict = {
     'packages': ('recurrence', ),
 }

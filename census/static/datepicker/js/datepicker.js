@@ -46,44 +46,20 @@ $(function () {
 
         // Event that is triggered when user selects a specific date
         onSelect: function (dateText, inst) {
-            let data = {
-                isMonthly: false,
-                day: inst.selectedDay,
-                month: inst.selectedMonth + 1,
-                year: inst.selectedYear,
-            };
-            let search_string = getQueryParams('search');
-            if (search_string !== false) {
-                data['search'] = search_string;
-            }
-            let city_string = getQueryParams('city');
-            if (city_string !== false) {
-                data['city'] = city_string;
-            }
-            let language_string = getQueryParams('language');
-            if (language_string !== false) {
-                data['language'] = language_string;
-            }
-
-            redirectUrl(data);
+            $('#form-day').val(inst.selectedDay);
+            $('#form-month').val(inst.selectedMonth + 1);
+            $('#form-year').val(inst.selectedYear);
+            $("#form-isMonthly").val('false');
+            $('form#search-form').submit();
         },
 
         // Event that is triggered when the user switches to the next/prev month
         onChangeMonthYear: function (year, month, inst) {
-            let data = {
-                isMonthly: true,
-                month: inst.selectedMonth + 1,
-                year: inst.selectedYear,
-            };
-            let search_string = getQueryParams('search');
-            if (search_string !== false) {
-                data['search'] = search_string;
-            }
-            let city_string = getQueryParams('city');
-            if (city_string !== false) {
-                data['city'] = city_string;
-            }
-            redirectUrl(data);
+            $("#form-isMonthly").val('true');
+            $('#form-month').val(inst.selectedMonth + 1);
+            $('#form-year').val(inst.selectedYear);
+            $('form#search-form').submit();
+
         },
         defaultDate: getSelectedDate(),
     });
@@ -117,4 +93,3 @@ function highlightMonthEvents(month, year) {
         }
     });
 }
-
